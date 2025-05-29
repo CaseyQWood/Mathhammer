@@ -68,13 +68,15 @@ export async function calculateAttack(
   }
 
   // To invulnerable or armour save
-
-  if (defenseStats.save + attackStats.armourPiercing > 6) {
-    if (statCheck(rollD6(), defenseStats.invulnerable)) {
+  if (
+    defenseStats.save > 0 &&
+    defenseStats.save + attackStats.armourPiercing > 6
+  ) {
+    if (statCheck(rollD6(), defenseStats.save + attackStats.armourPiercing)) {
       return 0;
     }
-  } else {
-    if (statCheck(rollD6(), defenseStats.save + attackStats.armourPiercing)) {
+  } else if (defenseStats.invulnerable > 0) {
+    if (statCheck(rollD6(), defenseStats.invulnerable)) {
       return 0;
     }
   }
@@ -90,7 +92,6 @@ export async function calculateAttack(
     return totalDamage;
   }
 
-  console.log("succesful attack: ", attackDamage);
   // Successful attack
   return attackDamage;
 }

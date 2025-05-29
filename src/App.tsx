@@ -39,10 +39,27 @@ function App() {
     }));
   };
 
-  const totalAttacks = Array.from(
-    { length: attackStats.attacks },      // e.g. 100
-    () => calculateAttack(attackStats, defenseStats)
-  );
+  // const totalAttacks = Array.from(
+  //   { length: attackStats.attacks },      // e.g. 100
+  //   () => calculateAttack(attackStats, defenseStats)
+  // );
+
+  const runSimulation = async (iterations = 10) => {
+    const results = []
+    for (let i = 0; i < iterations; i++) {
+      const newAttacks = Array.from(
+        { length: attackStats.attacks },
+        () => calculateAttack(attackStats, defenseStats)
+      );
+      await Promise.all(newAttacks)
+        .then((values) => {
+          // console.log(values)
+          const filterResults = values.filter((wound) => wound === 1)
+          results.push(filterResults)
+        })
+    }
+    console.log(results)
+  }
 
   return (
     <CssVarsProvider>
@@ -88,21 +105,7 @@ function App() {
         </Stack>
         <Button
           fullWidth={false}
-          onClick={async () => {
-            const results = []
-            for (let i = 0; i < 100; i++) {
-              const newAttacks = Array.from(
-                { length: attackStats.attacks },
-                () => calculateAttack(attackStats, defenseStats)
-              );
-              await Promise.all(newAttacks)
-                .then((values) => {
-                  const results = values.filter((wound) => wound === 1)
-                  results.push(values)
-                })
-            }
-            console.log(results)
-          }}
+          onClick={() => { runSimulation() }}
 
         >
           Submit</Button>
