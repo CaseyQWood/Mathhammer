@@ -6,14 +6,16 @@ interface InputProps {
     value: number;
     min: number;
     max: number;
-    setValue: React.Dispatch<React.SetStateAction<number>>
+    damageDecorator?: boolean;
+    setValue: (value: number) => void;
 }
 
 function stripNonNumbers(input: string): string {
     return input.replace(/\D+/g, '');
 }
 
-export default function InputField({ title, value, setValue, min, max }: InputProps) {
+export default function InputField({ title, value, setValue, min, max, damageDecorator }: InputProps) {
+    const decorator = damageDecorator ? "damage" : "none"
 
     function handleChange(input: string, min: number, max: number) {
         const strippedInput = stripNonNumbers(input)
@@ -38,6 +40,7 @@ export default function InputField({ title, value, setValue, min, max }: InputPr
                 variant="outlined"
                 placeholder="Toughness"
                 type="number"
+                startDecorator={{ damage: 'D|', none: null }[decorator]}
                 onFocus={e => e.target.select()}
                 value={value}
                 onChange={(e) => handleChange(e.target.value, min, max)}
