@@ -1,5 +1,5 @@
 import { orangePalette } from "@mui/x-charts/colorPalettes"
-import { BarChart, barElementClasses } from '@mui/x-charts/BarChart';
+import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
 
@@ -9,33 +9,30 @@ interface BarChartProps {
 }
 
 export default function ResultsBarChart({ results }: BarChartProps) {
-    const colors: string[] = ['#006BD6', '#EC407A'];
 
     const resultsTitles: string[] = Object.keys(results)
-    const resultsValue = Object.values(results).map((x) => {
-        return { data: [x] }
+    const resultsValue: (number | null)[] = Object.values(results).map((x) => {
+        return (Number(x) / 50000) * 100
     })
-    console.log(resultsValue)
+    console.log("result values", resultsValue)
 
     return (
         <BarChart
             xAxis={[{
-                data: resultsTitles, colorMap: {
-                    type: 'piecewise',
-                    thresholds: [100, 300, 400],
-                    colors: ['blue', 'red', 'blue'],
-                }
+                label: "Wounds",
+                data: resultsTitles
             }]}
             yAxis={[{
+                label: "Percent",
                 colorMap: {
                     type: 'piecewise',            // or 'continuous' / 'ordinal'
-                    thresholds: [10, 50, 100],     // split the scale at these Y values
-                    colors: ['#ef5350',           // < 0   → red
-                        '#ffca28',           // 0–50 → amber
-                        '#66bb6a']           // >50  → green
+                    thresholds: [10, 30, 50],     // split the scale at these Y values
+                    colors: ['#ef5350',
+                        '#ffca28',
+                        '#66bb6a']
                 }
             }]}
-            series={[{ data: Object.values(results) }]}
+            series={[{ data: resultsValue }]}
             height={500}
             colors={orangePalette}
             sx={() => ({
@@ -48,6 +45,9 @@ export default function ResultsBarChart({ results }: BarChartProps) {
                     [`.${axisClasses.tickLabel}`]: {
                         fill: '#ffffff',
                     },
+                    [`.${axisClasses.label}`]: {
+                        stroke: "#ffffff"
+                    }
                 },
 
             })}

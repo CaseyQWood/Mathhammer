@@ -90,7 +90,7 @@ function App() {
         >
           <InputField title="Attacks" value={attackStats.attacks} setValue={(value) => handleAttackChange('attacks', value)} min={1} max={150} />
           <Divider orientation="vertical" />
-          <InputField title="Weapon skill" value={attackStats.weaponSkill} setValue={(value) => handleAttackChange('weaponSkill', value)} min={2} max={6} />
+          <InputField title="WS/BS" value={attackStats.weaponSkill} setValue={(value) => handleAttackChange('weaponSkill', value)} min={2} max={6} />
           <InputField title="Strength" value={attackStats.strength} setValue={(value) => handleAttackChange('strength', value)} min={1} max={20} />
           <InputField title="Armour piercing" value={attackStats.armourPiercing} setValue={(value) => handleAttackChange('armourPiercing', value)} min={0} max={6} />
           <Stack
