@@ -1,4 +1,4 @@
-import type { attackStats, defenseStats } from "../types/unitStats";
+import type { AttackStats, DefenseStats } from "../types/unitStats";
 
 function rollD6() {
   const min = 1;
@@ -24,8 +24,8 @@ function statCheck(value: number, passingThreshold: number): boolean {
 }
 
 export async function calculateAttack(
-  attackStats: attackStats,
-  defenseStats: defenseStats
+  attackStats: AttackStats,
+  defenseStats: DefenseStats
 ): Promise<number> {
   const attackDamage =
     attackStats.damage +

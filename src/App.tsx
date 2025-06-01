@@ -4,20 +4,23 @@ import './App.css'
 import { Stack, Divider, Button } from '@mui/joy';
 import InputField from "./components/inputField"
 import { calculateAttack } from './utils/caclulateAttack';
+import { findDistribution } from './utils/findDistribution'
 
-import type { attackStats, defenseStats } from './types/unitStats';
+import type { AttackStats, DefenseStats } from './types/unitStats';
+import ResultsBarChart from './components/resultsBarChart';
 
 function App() {
+  const [simData, setSimData] = useState(null)
 
-  const [defenseStats, setdefenseStats] = useState<defenseStats>({
+  const [defenseStats, setdefenseStats] = useState<DefenseStats>({
     toughness: 4,
     save: 3,
     invulnerable: 0,
     feelNoPain: 0,
   })
 
-  const [attackStats, setAttackStats] = useState<attackStats>({
-    attacks: 1,
+  const [attackStats, setAttackStats] = useState<AttackStats>({
+    attacks: 10,
     weaponSkill: 3,
     strength: 4,
     armourPiercing: 1,
@@ -25,27 +28,23 @@ function App() {
     damage: 1
   })
 
-  const handleDefenseChange = (stat: keyof defenseStats, value: number) => {
+  const handleDefenseChange = (stat: keyof DefenseStats, value: number) => {
     setdefenseStats(prevStats => ({
       ...prevStats,
       [stat]: value
     }));
   };
 
-  const handleAttackChange = (stat: keyof attackStats, value: number) => {
+  const handleAttackChange = (stat: keyof AttackStats, value: number) => {
     setAttackStats(prevStats => ({
       ...prevStats,
       [stat]: value
     }));
   };
 
-  // const totalAttacks = Array.from(
-  //   { length: attackStats.attacks },      // e.g. 100
-  //   () => calculateAttack(attackStats, defenseStats)
-  // );
 
-  const runSimulation = async (iterations = 10) => {
-    const results = []
+  const runSimulation = async (iterations = 50000) => {
+    const results: number[][] = []
     for (let i = 0; i < iterations; i++) {
       const newAttacks = Array.from(
         { length: attackStats.attacks },
@@ -58,7 +57,8 @@ function App() {
           results.push(filterResults)
         })
     }
-    console.log(results)
+
+    setSimData(findDistribution(results))
   }
 
   return (
@@ -100,16 +100,24 @@ function App() {
             <div>
               +
             </div>
-            <InputField title="" value={attackStats.damage} setValue={(value) => handleAttackChange('damage', value)} min={1} max={10} />
+            <InputField title="" value={attackStats.damage} setValue={(value) => handleAttackChange('damage', value)} min={0} max={10} />
           </Stack>
         </Stack>
         <Button
           fullWidth={false}
-          onClick={() => { runSimulation() }}
-
+          onClick={() => {
+            runSimulation()
+          }}
         >
           Submit</Button>
+        {simData ?
+
+          <ResultsBarChart results={simData} />
+
+          : null
+        }
       </section>
+
     </CssVarsProvider>
   )
 }

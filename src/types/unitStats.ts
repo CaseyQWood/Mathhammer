@@ -1,4 +1,4 @@
-export interface attackStats {
+export interface AttackStats {
   attacks: number;
   weaponSkill: number;
   strength: number;
@@ -7,7 +7,7 @@ export interface attackStats {
   damage: number;
 }
 
-export interface defenseStats {
+export interface DefenseStats {
   toughness: number;
   save: number;
   invulnerable: number;
