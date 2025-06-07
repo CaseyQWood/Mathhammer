@@ -1,4 +1,5 @@
-.stat-input {
+.inputField__wrapper {
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;

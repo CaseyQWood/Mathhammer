@@ -1,0 +1,5 @@
+.results__span {
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem 0;
+}

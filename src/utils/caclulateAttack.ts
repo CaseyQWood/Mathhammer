@@ -70,12 +70,19 @@ export async function calculateAttack(
   // To invulnerable or armour save
   if (
     defenseStats.save > 0 &&
-    defenseStats.save + attackStats.armourPiercing > 6
+    defenseStats.save + attackStats.armourPiercing <= 6 &&
+    !(
+      defenseStats.invulnerable &&
+      defenseStats.save + attackStats.armourPiercing <=
+        defenseStats.invulnerable
+    )
   ) {
+    // armour save
     if (statCheck(rollD6(), defenseStats.save + attackStats.armourPiercing)) {
       return 0;
     }
   } else if (defenseStats.invulnerable > 0) {
+    //invulnerable save
     if (statCheck(rollD6(), defenseStats.invulnerable)) {
       return 0;
     }

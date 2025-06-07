@@ -1,5 +1,5 @@
-import { Input } from '@mui/joy';
-import "./inputField.module.css"
+import { Input, FormLabel } from '@mui/joy';
+import styles from "./inputField.module.css"
 
 interface InputProps {
     title: string;
@@ -33,12 +33,11 @@ export default function InputField({ title, value, setValue, min, max, damageDec
     }
 
     return (
-        <div className='stat-input'>
-            <h4>{title}</h4>
+        <div className={styles.inputField__wrapper}>
+            <FormLabel sx={{ color: 'orange', marginBottom: '0.5rem' }}>{title}</FormLabel>
             <Input
                 size="md"
                 variant="outlined"
-                placeholder="Toughness"
                 type="number"
                 startDecorator={{ damage: 'D|', none: null }[decorator]}
                 onFocus={e => e.target.select()}
@@ -50,6 +49,13 @@ export default function InputField({ title, value, setValue, min, max, damageDec
                         max: 14,
                         step: 1,
                     },
+                }}
+                sx={{
+                    backgroundColor: 'transparent',
+                    color: 'orange',
+                    outline: 'orange',
+                    borderColor: 'orange',
+                    width: 'auto'
                 }}
             />
         </div>

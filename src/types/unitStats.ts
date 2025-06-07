@@ -1,4 +1,5 @@
 export interface AttackStats {
+  models: number;
   attacks: number;
   weaponSkill: number;
   strength: number;
