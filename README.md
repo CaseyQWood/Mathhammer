@@ -4,6 +4,7 @@ TODO:
 - - seperate attacks and number of models attacking
 - Update attacking stats to have attackers and attacks seperate
 - - update attacks to accept a d3/6 value
+- Update damage to include d3/6 values
 - add modyfiers
 - - Letal hits
 - - Devistating wounds

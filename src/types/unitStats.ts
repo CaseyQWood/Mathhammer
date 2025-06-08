@@ -14,3 +14,5 @@ export interface DefenseStats {
   invulnerable: number;
   feelNoPain: number;
 }
+
+export type WoundTallies = Record<number, number>;

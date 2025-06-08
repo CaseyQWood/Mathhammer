@@ -34,7 +34,7 @@ export default function InputField({ title, value, setValue, min, max, damageDec
 
     return (
         <div className={styles.inputField__wrapper}>
-            <FormLabel sx={{ color: 'orange', marginBottom: '0.5rem' }}>{title}</FormLabel>
+            <FormLabel sx={{ marginBottom: '0.5rem' }}>{title}</FormLabel>
             <Input
                 size="md"
                 variant="outlined"
@@ -51,10 +51,6 @@ export default function InputField({ title, value, setValue, min, max, damageDec
                     },
                 }}
                 sx={{
-                    backgroundColor: 'transparent',
-                    color: 'orange',
-                    outline: 'orange',
-                    borderColor: 'orange',
                     width: 'auto'
                 }}
             />
