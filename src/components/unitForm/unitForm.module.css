@@ -11,15 +11,3 @@
   grid-template-columns: repeat(6, 1fr);
   width: 100%;
 }
-
-.damage__wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.attacks__wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}

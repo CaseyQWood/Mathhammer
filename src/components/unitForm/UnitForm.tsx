@@ -16,7 +16,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         invulnerable: 0,
         feelNoPain: 0,
     })
-    const handleDefenseChange = (stat: keyof DefenseStats, value: number) => {
+    const handleDefenseChange = (stat: string, value: number) => {
         setdefenseStats(prevStats => ({
             ...prevStats,
             [stat]: value
@@ -32,7 +32,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         damage: 1
     })
 
-    const handleAttackChange = (stat: keyof AttackStats, value: number) => {
+    const handleAttackChange = (stat: string, value: number) => {
         setAttackStats(prevStats => ({
             ...prevStats,
             [stat]: value
@@ -48,7 +48,6 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                 fullWidth={false}
                 onClick={() => {
                     runSimulation(25000, attackStats, defenseStats).then((results) => {
-                        // console.log("simulation state: ", results)
                         setSimData(results)
                     })
                 }}

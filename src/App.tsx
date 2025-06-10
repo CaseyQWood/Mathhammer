@@ -4,25 +4,31 @@ import { Sheet } from '@mui/joy';
 import './App.css'
 import ResultsBarChart from './components/resultsBarChart';
 import UnitForm from './components/unitForm/UnitForm';
+import Header from './components/header';
 type WoundTallies = Record<number, number>;
 
 
 function App() {
   const [simData, setSimData] = useState<WoundTallies>()
+  const [openAside, setOpenAside] = useState<boolean>(false)
 
   return (
     <CssVarsProvider defaultMode="dark">
-      <Sheet>
-        <section className="page">
-          <UnitForm setSimData={setSimData} />
-          {simData ?
-            <ResultsBarChart results={simData} />
-            : null
-          }
-        </section>
+      <Sheet sx={{ height: '100%' }}>
+        <Header openAside={openAside} setOpenAside={setOpenAside} />
+        <div id="main">
+          {openAside ? <aside>aside</aside> : null}
+          <article>
+            <UnitForm setSimData={setSimData} />
+            {simData ?
+              <ResultsBarChart results={simData} />
+              : null
+            }
+          </article>
+
+        </div>
+        <footer>Footer</footer>
       </Sheet>
-
-
     </CssVarsProvider>
   )
 }

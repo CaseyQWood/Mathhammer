@@ -1,0 +1,10 @@
+.variableInput__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input__wrapper {
+  display: flex;
+  align-items: center;
+}
