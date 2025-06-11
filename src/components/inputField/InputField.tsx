@@ -51,7 +51,7 @@ export default function InputField({ title, value, setValue, min, max, damageDec
                     },
                 }}
                 sx={{
-                    width: 'auto'
+                    width: '100%'
                 }}
             />
         </div>

@@ -13,23 +13,21 @@ function App() {
   const [openAside, setOpenAside] = useState<boolean>(false)
 
   return (
-    <CssVarsProvider defaultMode="dark">
-      <Sheet sx={{ height: '100%' }}>
-        <Header openAside={openAside} setOpenAside={setOpenAside} />
-        <div id="main">
-          {openAside ? <aside>aside</aside> : null}
-          <article>
-            <UnitForm setSimData={setSimData} />
-            {simData ?
-              <ResultsBarChart results={simData} />
-              : null
-            }
-          </article>
+    <Sheet >
+      <Header openAside={openAside} setOpenAside={setOpenAside} />
+      <div id="main">
+        {openAside ? <aside>aside</aside> : null}
+        <article>
+          <UnitForm setSimData={setSimData} />
+          {simData ?
+            <ResultsBarChart results={simData} />
+            : null
+          }
+        </article>
 
-        </div>
-        <footer>Footer</footer>
-      </Sheet>
-    </CssVarsProvider>
+      </div>
+      <footer>Footer</footer>
+    </Sheet>
   )
 }
 

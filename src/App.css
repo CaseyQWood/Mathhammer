@@ -31,3 +31,9 @@ footer {
   background: #196774;
   height: 10vh;
 }
+
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
