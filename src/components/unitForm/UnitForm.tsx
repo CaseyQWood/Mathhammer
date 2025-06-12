@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies } from "../../types/unitStats";
 import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails } from "@mui/joy";
 import DefenseInputs from './DefenseInputs'
@@ -24,21 +24,29 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
     };
     const [attackStats, setAttackStats] = useState<AttackStats>({
         models: 1,
-        attacks: 10,
+        attacks: {
+            variable: "0",
+            value: 1
+        },
         weaponSkill: 3,
         strength: 4,
         armourPiercing: 1,
-        variableDamage: 0,
-        damage: 1
+        damage: {
+            variable: "0",
+            value: 1
+        }
     })
 
-    const handleAttackChange = (stat: string, value: number) => {
+    const handleAttackChange = useCallback((stat: string, value: number | { variable: string; value: number } | null) => {
         setAttackStats(prevStats => ({
             ...prevStats,
             [stat]: value
         }));
-    };
+    }, [setAttackStats]);
 
+    useEffect(() => {
+        console.log("attack stats: ", attackStats)
+    }, [attackStats])
 
     return (
         <>

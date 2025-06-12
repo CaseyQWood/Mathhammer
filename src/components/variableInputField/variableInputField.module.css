@@ -8,4 +8,10 @@
 .input__wrapper {
   display: flex;
   align-items: center;
+  width: 100%;
+}
+
+.plusSign {
+  width: auto;
+  padding: 0.5rem;
 }

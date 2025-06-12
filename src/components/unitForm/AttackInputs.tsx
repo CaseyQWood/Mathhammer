@@ -5,14 +5,14 @@ import style from './unitForm.module.css'
 
 interface AttackStatsProps {
     attackStats: AttackStats
-    handleAttackChange: (stat: string, value: number) => void
+    handleAttackChange: (stat: string, value: number | { variable: string; value: number } | null) => void
 }
 
 export default function AttackInputs({ attackStats, handleAttackChange }: AttackStatsProps) {
 
     return (
         <div className={style.attackingStats__wrapper}>
-            <div>
+            <div className={style.test}>
                 <InputField
                     title="Models"
                     value={attackStats.models}
@@ -21,11 +21,39 @@ export default function AttackInputs({ attackStats, handleAttackChange }: Attack
                     max={20}
                 />
             </div>
-            <VariableInputField title='Attacks' value={attackStats.attacks} handleChange={handleAttackChange} />
-            <InputField title="WS/BS" value={attackStats.weaponSkill} setValue={(value) => handleAttackChange('weaponSkill', value)} min={2} max={6} />
-            <InputField title="Strength" value={attackStats.strength} setValue={(value) => handleAttackChange('strength', value)} min={1} max={20} />
-            <InputField title="AP" value={attackStats.armourPiercing} setValue={(value) => handleAttackChange('armourPiercing', value)} min={0} max={6} />
-            <VariableInputField title='damage' value={attackStats.damage} handleChange={handleAttackChange} />
+            <VariableInputField
+                title='Attacks'
+                value={attackStats.attacks}
+                stateKey="attacks"
+                handleChange={handleAttackChange}
+            />
+            <InputField
+                title="WS/BS"
+                value={attackStats.weaponSkill}
+                setValue={(value) => handleAttackChange('weaponSkill', value)}
+                min={2}
+                max={6}
+            />
+            <InputField
+                title="Strength"
+                value={attackStats.strength}
+                setValue={(value) => handleAttackChange('strength', value)}
+                min={1}
+                max={20}
+            />
+            <InputField
+                title="AP"
+                value={attackStats.armourPiercing}
+                setValue={(value) => handleAttackChange('armourPiercing', value)}
+                min={0}
+                max={6}
+            />
+            <VariableInputField
+                title='Damage'
+                value={attackStats.damage}
+                stateKey="damage"
+                handleChange={handleAttackChange}
+            />
         </div>
     );
 }

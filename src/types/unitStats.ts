@@ -1,11 +1,10 @@
 export interface AttackStats {
   models: number;
-  attacks: number;
+  attacks: { variable: string; value: number };
   weaponSkill: number;
   strength: number;
   armourPiercing: number;
-  variableDamage: number;
-  damage: number;
+  damage: { variable: string; value: number };
 }
 
 export interface DefenseStats {

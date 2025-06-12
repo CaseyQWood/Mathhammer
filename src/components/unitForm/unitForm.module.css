@@ -11,6 +11,10 @@
   flex-wrap: wrap;
 }
 
-.attackingStats__wrapper div {
+.attackingStats__wrapper {
+  width: 100%;
+}
+
+.test {
   width: 100%;
 }

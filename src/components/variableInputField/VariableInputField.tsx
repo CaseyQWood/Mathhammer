@@ -1,23 +1,56 @@
-import { Select, Option } from '@mui/joy'
-import InputField from '../inputField'
+import { Select, Option, Input } from '@mui/joy'
 import style from './variableInputField.module.css'
+import { useEffect, useState } from 'react'
 
 interface VariableInputFieldProps {
     title: string
-    value: number
-    handleChange: (stat: string, value: number) => void
+    value: { variable: string; value: number }
+    stateKey: string
+    handleChange: (key: string, value: { variable: string; value: number }) => void
 }
 
-export default function VariableInputField({ title, value, handleChange }: VariableInputFieldProps) {
+export default function VariableInputField({ title, stateKey, handleChange }: VariableInputFieldProps) {
+    const [value, setValue] = useState({
+        variable: "0",
+        value: 1
+    })
+
+    const handleVariableChange = (
+        _event: unknown,
+        newVal: string | null,
+    ) => {
+        setValue(prev => ({
+            ...prev,
+            variable: newVal ?? prev.variable,
+        }));
+    };
+
+    const handleValueChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        const num = Number(e.target.value);
+        setValue(prev => ({
+            ...prev,
+            value: Number.isNaN(num) ? prev.value : num,
+        }));
+    };
+
+
+    useEffect(() => {
+        handleChange(stateKey, value)
+    }, [value, handleChange])
+
     return (
         <div className={style.variableInput__wrapper}>
             <div>{title}</div>
             <div className={style.input__wrapper} >
-                <Select defaultValue="0"
+                <Select
+                    value={value.variable}
+                    onChange={handleVariableChange}
                     size="md"
                     variant="outlined"
                     sx={{
-                        width: 'auto',
+                        width: '45%',
                         alignContent: 'center',
                         padding: '0.5rem'
                     }}
@@ -26,10 +59,27 @@ export default function VariableInputField({ title, value, handleChange }: Varia
                     <Option value="D3">D3</Option>
                     <Option value="D6">D6</Option>
                 </Select>
-                <div>
+                <div className={style.plusSign}>
                     +
                 </div>
-                <InputField title="" value={value} setValue={(value) => handleChange('attacks', value)} min={0} max={150} />
+                <Input
+                    size="md"
+                    variant="outlined"
+                    type="number"
+                    onFocus={e => e.target.select()}
+                    value={value.value}
+                    onChange={handleValueChange}
+                    slotProps={{
+                        input: {
+                            min: 1,
+                            max: 14,
+                            step: 1,
+                        },
+                    }}
+                    sx={{
+                        width: '100%'
+                    }}
+                />
             </div>
         </div >)
 }
