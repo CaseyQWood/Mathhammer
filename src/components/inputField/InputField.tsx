@@ -42,8 +42,8 @@ export default function InputField({ title, value, setValue, min, max }: InputPr
                 onChange={(e) => handleChange(e.target.value, min, max)}
                 slotProps={{
                     input: {
-                        min: 1,
-                        max: 14,
+                        min: 0,
+                        max: 20,
                         step: 1,
                     },
                 }}

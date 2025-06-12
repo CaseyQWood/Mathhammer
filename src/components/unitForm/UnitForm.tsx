@@ -23,10 +23,10 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         }));
     };
     const [attackStats, setAttackStats] = useState<AttackStats>({
-        models: 1,
+        models: 10,
         attacks: {
             variable: "0",
-            value: 1
+            value: 4
         },
         weaponSkill: 3,
         strength: 4,
@@ -70,7 +70,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                 <Button
                     fullWidth={false}
                     onClick={() => {
-                        runSimulation(25000, attackStats, defenseStats).then((results) => {
+                        runSimulation(1, attackStats, defenseStats).then((results) => {
                             setSimData(results)
                         })
                     }}

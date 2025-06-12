@@ -38,7 +38,7 @@ export default function VariableInputField({ title, stateKey, handleChange }: Va
 
     useEffect(() => {
         handleChange(stateKey, value)
-    }, [value, handleChange])
+    }, [value, handleChange, stateKey])
 
     return (
         <div className={style.variableInput__wrapper}>

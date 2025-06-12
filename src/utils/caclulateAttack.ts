@@ -27,78 +27,123 @@ export async function calculateAttack(
   attackStats: AttackStats,
   defenseStats: DefenseStats
 ): Promise<number> {
-  const attackDamage =
-    attackStats.damage +
+  const weaponSkill = attackStats.weaponSkill;
+  const strength = attackStats.strength;
+  const toughness = defenseStats.toughness;
+  const save = defenseStats.save;
+  const armourPiercing = attackStats.armourPiercing;
+  const invulnerable = defenseStats.invulnerable;
+  const feelNoPain = defenseStats.feelNoPain;
+
+  const lethalHits = false;
+  const sustainedHits = { value: false, variable: "1" };
+  const devistatingWounds = true;
+
+  const torrent = false;
+  const reRollWounds = false;
+  const reRollHits = false;
+
+  let attacks =
+    attackStats.attacks.value +
     Number(
-      attackStats.variableDamage === 0
+      attackStats.attacks.variable === "0"
         ? 0
-        : attackStats.variableDamage === 6
+        : attackStats.attacks.variable === "D6"
           ? rollD6()
           : rollD3()
     );
-
-  // To hit
-  if (!statCheck(rollD6(), attackStats.weaponSkill)) {
-    return 0;
-  }
-
-  // To wound
-  /*
-  if stats match 4+
-  if strength higher 3 +
-  if strength lower 5+
-  if strength double 2+
-  if toughness double 6+
-  */
-  const toWound =
-    attackStats.strength === defenseStats.toughness
-      ? 4
-      : attackStats.strength === defenseStats.toughness - 1
-        ? 5
-        : attackStats.strength === defenseStats.toughness + 1
-          ? 3
-          : attackStats.strength >= defenseStats.toughness
-            ? 2
-            : attackStats.strength <= defenseStats.toughness
-              ? 6
-              : 0;
-
-  if (rollD6() < toWound) {
-    return 0;
-  }
-
-  // To invulnerable or armour save
-  if (
-    defenseStats.save > 0 &&
-    defenseStats.save + attackStats.armourPiercing <= 6 &&
-    !(
-      defenseStats.invulnerable &&
-      defenseStats.save + attackStats.armourPiercing <=
-        defenseStats.invulnerable
-    )
-  ) {
-    // armour save
-    if (statCheck(rollD6(), defenseStats.save + attackStats.armourPiercing)) {
-      return 0;
-    }
-  } else if (defenseStats.invulnerable > 0) {
-    //invulnerable save
-    if (statCheck(rollD6(), defenseStats.invulnerable)) {
-      return 0;
-    }
-  }
-
-  // Feel no pain
-  if (defenseStats.feelNoPain) {
-    let totalDamage: number = 0;
-    for (let i = 0; i < attackDamage; i++) {
-      if (statCheck(rollD6(), defenseStats.feelNoPain)) {
-        totalDamage++;
+  // console.log("attacks: ", attacks);
+  let finalDamage = 0;
+  for (let i = 0; i < attacks; i++) {
+    let toHitRoll = rollD6();
+    if (!torrent) {
+      if (!statCheck(toHitRoll, weaponSkill)) {
+        if (reRollHits) {
+          toHitRoll = rollD6();
+          if (!statCheck(toHitRoll, weaponSkill)) {
+            continue;
+          }
+        } else {
+          continue;
+        }
       }
     }
-    return totalDamage;
+
+    if (sustainedHits.value && toHitRoll === 6) {
+      attacks = attacks + Number(sustainedHits.variable);
+    }
+
+    const toWound =
+      strength === toughness
+        ? 4
+        : strength === toughness - 1
+          ? 5
+          : strength === toughness + 1
+            ? 3
+            : strength >= toughness
+              ? 2
+              : strength <= toughness
+                ? 6
+                : 0;
+
+    let toWoundRoll = rollD6();
+    if (!(lethalHits && toHitRoll === 6)) {
+      if (toWoundRoll < toWound) {
+        if (reRollWounds) {
+          toWoundRoll = rollD6();
+          if (toWoundRoll < toWound) {
+            continue;
+          }
+        } else {
+          continue;
+        }
+      }
+    }
+    console.log("wound roll made:  ", toWoundRoll);
+
+    if (!(devistatingWounds && toWoundRoll === 6)) {
+      console.log("Saves Rolls made: ");
+      if (
+        save > 0 &&
+        save + armourPiercing <= 6 &&
+        !(invulnerable && save + armourPiercing <= invulnerable)
+      ) {
+        const toSaveRoll = rollD6();
+        if (statCheck(toSaveRoll, save + armourPiercing)) {
+          continue;
+        }
+      } else if (invulnerable > 0) {
+        const toInvulnerableSave = rollD6();
+        if (statCheck(toInvulnerableSave, invulnerable)) {
+          continue;
+        }
+      }
+    }
+
+    const attackDamage =
+      attackStats.damage.value +
+      Number(
+        attackStats.damage.variable === "0"
+          ? 0
+          : attackStats.damage.variable === "D6"
+            ? rollD6()
+            : rollD3()
+      );
+
+    if (feelNoPain) {
+      let totalDamage: number = 0;
+      for (let i = 0; i < attackDamage; i++) {
+        if (statCheck(rollD6(), feelNoPain)) {
+          totalDamage++;
+        }
+      }
+      finalDamage = finalDamage + totalDamage;
+      continue;
+    }
+    finalDamage = finalDamage + attackDamage;
   }
 
-  // Successful attack
-  return attackDamage;
+  // console.log("attack damage: ", finalDamage);
+
+  return finalDamage;
 }
