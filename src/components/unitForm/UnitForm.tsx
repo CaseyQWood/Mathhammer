@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import type { DefenseStats, AttackStats, WoundTallies } from "../../types/unitStats";
+import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails } from "@mui/joy";
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
+import AttackModifiers from "./AttackModifiers";
 import { runSimulation } from "../../utils/runSimulation";
 
 interface UnitFormProps {
@@ -44,6 +45,22 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         }));
     }, [setAttackStats]);
 
+    const [modifiers, setModifiers] = useState<Modifiers>({
+        lethalHits: false,
+        sustainedHits: { value: false, variable: "1" },
+        devistatingWounds: false,
+        torrent: false,
+        reRollHit: false,
+        reRollWound: false,
+    })
+
+    const handleModifiersChange = useCallback((stat: string, value: boolean | { value: boolean; variable: string }) => {
+        setModifiers(prevStats => ({
+            ...prevStats,
+            [stat]: value
+        }));
+    }, [])
+
     useEffect(() => {
         console.log("attack stats: ", attackStats)
     }, [attackStats])
@@ -65,12 +82,13 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     <AccordionSummary>Attack Stats</AccordionSummary>
                     <AccordionDetails>
                         <AttackInputs attackStats={attackStats} handleAttackChange={handleAttackChange} />
+                        <AttackModifiers attackStats={attackStats} handleModifiersChange={handleModifiersChange} />
                     </AccordionDetails>
                 </Accordion>
                 <Button
                     fullWidth={false}
                     onClick={() => {
-                        runSimulation(1, attackStats, defenseStats).then((results) => {
+                        runSimulation(5000, attackStats, defenseStats, modifiers).then((results) => {
                             setSimData(results)
                         })
                     }}

@@ -12,7 +12,7 @@ export default function AttackInputs({ attackStats, handleAttackChange }: Attack
 
     return (
         <div className={style.attackingStats__wrapper}>
-            <div className={style.test}>
+            <div className={style.modelsInput}>
                 <InputField
                     title="Models"
                     value={attackStats.models}

@@ -7,6 +7,15 @@ export interface AttackStats {
   damage: { variable: string; value: number };
 }
 
+export interface Modifiers {
+  lethalHits: boolean;
+  sustainedHits: { value: boolean; variable: string };
+  devistatingWounds: boolean;
+  torrent: boolean;
+  reRollHit: boolean;
+  reRollWound: boolean;
+}
+
 export interface DefenseStats {
   toughness: number;
   save: number;

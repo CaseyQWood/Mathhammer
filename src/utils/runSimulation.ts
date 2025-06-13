@@ -1,12 +1,13 @@
 import { calculateAttack } from "./caclulateAttack";
-import type { AttackStats, DefenseStats } from "../types/unitStats";
+import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
 
 type WoundTallies = Record<number, number>;
 
 export async function runSimulation(
   iterations: number,
   attackStats: AttackStats,
-  defenseStats: DefenseStats
+  defenseStats: DefenseStats,
+  modifiers: Modifiers
 ): Promise<WoundTallies> {
   // a series of runs where each case creates an array of promises the length of model count
   // filters out all cases of no wounds
@@ -14,7 +15,7 @@ export async function runSimulation(
   const results: number[][] = [];
   for (let i = 0; i < iterations; i++) {
     const newAttacks = Array.from({ length: attackStats.models }, () =>
-      calculateAttack(attackStats, defenseStats)
+      calculateAttack(attackStats, defenseStats, modifiers)
     );
     await Promise.all(newAttacks).then((values) => {
       const filterResults = values.filter((wound) => wound != 0);
@@ -22,7 +23,7 @@ export async function runSimulation(
     });
   }
 
-  console.log("results: ", results);
+  // console.log("results: ", results);
 
   // Sums the wounds from each iteration to form a single array
   const resultsArray: number[] = [];
@@ -34,7 +35,7 @@ export async function runSimulation(
     resultsArray.push(totalWounds);
   }
 
-  console.log("results array: ", resultsArray);
+  // console.log("results array: ", resultsArray);
 
   // Creates a object with keys set as the wound amount and the key as the amount of cases it happened
   const aggrigatedObject: WoundTallies = {};
@@ -48,7 +49,7 @@ export async function runSimulation(
     }
   }
 
-  console.log("aggrigrated Object: ", aggrigatedObject);
+  // console.log("aggrigrated Object: ", aggrigatedObject);
   // convert the values of object to percentages
   const percentObject: WoundTallies = {};
   for (const [key, value] of Object.entries(aggrigatedObject)) {
@@ -56,6 +57,6 @@ export async function runSimulation(
       ((value / iterations) * 100).toFixed(1)
     );
   }
-  console.log("percent Object: ", percentObject);
+  // console.log("percent Object: ", percentObject);
   return percentObject;
 }

@@ -1,4 +1,4 @@
-import type { AttackStats, DefenseStats } from "../types/unitStats";
+import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
 
 function rollD6() {
   const min = 1;
@@ -25,8 +25,10 @@ function statCheck(value: number, passingThreshold: number): boolean {
 
 export async function calculateAttack(
   attackStats: AttackStats,
-  defenseStats: DefenseStats
+  defenseStats: DefenseStats,
+  modifiers: Modifiers
 ): Promise<number> {
+  // console.log(modifiers);
   const weaponSkill = attackStats.weaponSkill;
   const strength = attackStats.strength;
   const toughness = defenseStats.toughness;
@@ -35,13 +37,13 @@ export async function calculateAttack(
   const invulnerable = defenseStats.invulnerable;
   const feelNoPain = defenseStats.feelNoPain;
 
-  const lethalHits = false;
-  const sustainedHits = { value: false, variable: "1" };
-  const devistatingWounds = true;
+  const lethalHits = modifiers.lethalHits;
+  const sustainedHits = modifiers.sustainedHits;
+  const devistatingWounds = modifiers.devistatingWounds;
 
-  const torrent = false;
-  const reRollWounds = false;
-  const reRollHits = false;
+  const torrent = modifiers.torrent;
+  const reRollWounds = modifiers.reRollWound;
+  const reRollHits = modifiers.lethalHits;
 
   let attacks =
     attackStats.attacks.value +
@@ -54,9 +56,11 @@ export async function calculateAttack(
     );
   // console.log("attacks: ", attacks);
   let finalDamage = 0;
+  console.log("number of attacks: ", attacks);
   for (let i = 0; i < attacks; i++) {
     let toHitRoll = rollD6();
     if (!torrent) {
+      console.log("torent not working");
       if (!statCheck(toHitRoll, weaponSkill)) {
         if (reRollHits) {
           toHitRoll = rollD6();
@@ -99,10 +103,10 @@ export async function calculateAttack(
         }
       }
     }
-    console.log("wound roll made:  ", toWoundRoll);
+    // console.log("wound roll made:  ", toWoundRoll);
 
     if (!(devistatingWounds && toWoundRoll === 6)) {
-      console.log("Saves Rolls made: ");
+      // console.log("Saves Rolls made: ");
       if (
         save > 0 &&
         save + armourPiercing <= 6 &&
