@@ -1,6 +1,6 @@
 import type { DefenseStats } from "../../types/unitStats";
 import InputField from "../inputField";
-import style from './UnitForm.module.css'
+import style from './unitForm.module.css'
 
 interface DefenseStatsProps {
   defenseStats: DefenseStats
