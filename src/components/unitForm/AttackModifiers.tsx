@@ -1,21 +1,32 @@
 import style from "./unitForm.module.css"
 import { useEffect, useState } from "react";
 import { Chip, Checkbox } from "@mui/joy";
-import type { AttackStats } from "../../types/unitStats";
+import type { Modifiers } from "../../types/unitStats";
 
 interface AttackModifierProps {
-    attackStats: AttackStats
+    modifiers: Modifiers
     handleModifiersChange: (stat: string, value: boolean | { value: boolean; variable: string }) => void
 }
 
-function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
+function getKeyByValue(object, value): keyof Modifiers {
+    const key = Object.keys(object).find(key => object[key] === value);
+
+    if (key === undefined) {
+        throw new Error("Value not found in object");
+    }
+
+    return key;
+
 }
 
-export default function AttackModifiers({ attackStats, handleModifiersChange }: AttackModifierProps) {
+
+
+// pull down modifiers to manage toggle 
+
+export default function AttackModifiers({ modifiers, handleModifiersChange }: AttackModifierProps) {
     const [selected, setSelected] = useState<string[]>([]);
 
-    const modifiers = {
+    const modifiersData = {
         lethalHits: 'Lethal Hits',
         sustainedHits: 'Sustained Hits',
         devistatingWounds: 'Devistating Wounds',
@@ -25,24 +36,39 @@ export default function AttackModifiers({ attackStats, handleModifiersChange }: 
     }
 
     useEffect(() => {
-        for (let i = 0; i < selected.length; i++) {
-            const test = String(getKeyByValue(modifiers, selected[i]))
-            if (test === "sustainedHits") {
-                handleModifiersChange(test, { value: true, variable: "1" })
-                console.log(test)
+        console.log(selected)
 
-                continue;
+        // const test: keyof Modifiers = getKeyByValue(modifiersData, selected[i])
+
+        for (let i = 0; i < Object.keys(modifiersData).length; i++) {
+            const key: keyof Modifiers = Object.values(modifiersData)[i]
+            if (selected.includes(key)) {
+                if (Object.keys(modifiers)[i] === "sustainedHits") {
+                    handleModifiersChange(Object.keys(modifiers)[i], { value: true, variable: "1" })
+                    continue
+                }
+
+                handleModifiersChange(Object.keys(modifiers)[i], true)
+                continue
             }
-            console.log(test)
 
-            handleModifiersChange(test, true)
+            if (!selected.includes(key)) {
+                if (Object.keys(modifiers)[i] === "sustainedHits") {
+                    handleModifiersChange(Object.keys(modifiers)[i], { value: false, variable: "1" })
+                    continue
+                }
+
+                handleModifiersChange(Object.keys(modifiers)[i], false)
+                continue
+
+
+            }
         }
-
-    }, [selected, attackStats])
+    }, [selected, handleModifiersChange])
 
     return (
         <div className={style.chip__wrapper}>
-            {Object.values(modifiers).map((name) => {
+            {Object.values(modifiersData).map((name) => {
                 const checked = selected.includes(name);
                 return (
                     <Chip

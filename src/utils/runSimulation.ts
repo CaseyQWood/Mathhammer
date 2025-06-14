@@ -9,6 +9,8 @@ export async function runSimulation(
   defenseStats: DefenseStats,
   modifiers: Modifiers
 ): Promise<WoundTallies> {
+  console.log("modifiers", modifiers);
+
   // a series of runs where each case creates an array of promises the length of model count
   // filters out all cases of no wounds
   // captures results into a matrix

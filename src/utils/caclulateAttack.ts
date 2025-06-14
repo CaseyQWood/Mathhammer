@@ -28,7 +28,6 @@ export async function calculateAttack(
   defenseStats: DefenseStats,
   modifiers: Modifiers
 ): Promise<number> {
-  // console.log(modifiers);
   const weaponSkill = attackStats.weaponSkill;
   const strength = attackStats.strength;
   const toughness = defenseStats.toughness;
@@ -43,7 +42,7 @@ export async function calculateAttack(
 
   const torrent = modifiers.torrent;
   const reRollWounds = modifiers.reRollWound;
-  const reRollHits = modifiers.lethalHits;
+  const reRollHits = modifiers.reRollHit;
 
   let attacks =
     attackStats.attacks.value +
@@ -56,11 +55,11 @@ export async function calculateAttack(
     );
   // console.log("attacks: ", attacks);
   let finalDamage = 0;
-  console.log("number of attacks: ", attacks);
+  // console.log("number of attacks: ", attacks);
   for (let i = 0; i < attacks; i++) {
     let toHitRoll = rollD6();
     if (!torrent) {
-      console.log("torent not working");
+      // console.log("torent not working");
       if (!statCheck(toHitRoll, weaponSkill)) {
         if (reRollHits) {
           toHitRoll = rollD6();
@@ -91,7 +90,9 @@ export async function calculateAttack(
                 : 0;
 
     let toWoundRoll = rollD6();
+    // console.log("tohit: ", toHitRoll);
     if (!(lethalHits && toHitRoll === 6)) {
+      // console.log("to wound roll");
       if (toWoundRoll < toWound) {
         if (reRollWounds) {
           toWoundRoll = rollD6();

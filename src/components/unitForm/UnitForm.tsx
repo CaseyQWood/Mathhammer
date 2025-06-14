@@ -82,7 +82,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     <AccordionSummary>Attack Stats</AccordionSummary>
                     <AccordionDetails>
                         <AttackInputs attackStats={attackStats} handleAttackChange={handleAttackChange} />
-                        <AttackModifiers attackStats={attackStats} handleModifiersChange={handleModifiersChange} />
+                        <AttackModifiers modifiers={modifiers} handleModifiersChange={handleModifiersChange} />
                     </AccordionDetails>
                 </Accordion>
                 <Button
