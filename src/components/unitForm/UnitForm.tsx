@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
+import style from './unitForm.module.css'
 import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails } from "@mui/joy";
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
@@ -8,6 +9,10 @@ import { runSimulation } from "../../utils/runSimulation";
 
 interface UnitFormProps {
     setSimData: (result: WoundTallies) => void
+}
+
+const accordionStyles = {
+    borderRadius: "1rem"
 }
 
 export default function UnitForm({ setSimData }: UnitFormProps) {
@@ -51,7 +56,9 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         devistatingWounds: false,
         torrent: false,
         reRollHit: false,
+        reRollOneToHit: false,
         reRollWound: false,
+        reRollOneToWound: false
     })
 
     const handleModifiersChange = useCallback((stat: string, value: boolean | { value: boolean; variable: string }) => {
@@ -66,19 +73,20 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
     }, [attackStats])
 
     return (
-        <>
+        <div className={style.unitForm__wrapper} >
             <AccordionGroup
                 color="neutral"
                 size="lg"
                 variant="plain"
+                sx={{ gap: "1rem" }}
             >
-                <Accordion>
+                <Accordion variant="soft" sx={accordionStyles}>
                     <AccordionSummary>Defence Stats</AccordionSummary>
                     <AccordionDetails>
                         <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
                     </AccordionDetails>
                 </Accordion>
-                <Accordion>
+                <Accordion variant="soft" sx={accordionStyles}>
                     <AccordionSummary>Attack Stats</AccordionSummary>
                     <AccordionDetails>
                         <AttackInputs attackStats={attackStats} handleAttackChange={handleAttackChange} />
@@ -87,17 +95,18 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                 </Accordion>
                 <Button
                     fullWidth={false}
+                    variant="soft"
+                    color="warning"
                     onClick={() => {
-                        runSimulation(5000, attackStats, defenseStats, modifiers).then((results) => {
+                        runSimulation(10000, attackStats, defenseStats, modifiers).then((results) => {
                             setSimData(results)
                         })
                     }}
+
                 >
                     Submit
-                </Button>
+                </Button >
             </AccordionGroup>
-
-
-        </>
+        </div >
     )
 }

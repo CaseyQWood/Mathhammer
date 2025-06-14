@@ -19,14 +19,12 @@ export default function AttackModifiers({ modifiers, handleModifiersChange }: At
         devistatingWounds: 'Devistating Wounds',
         torrent: 'Torrent',
         reRollHit: 'Re-roll to Hit',
+        reRollOneToHit: "Re-roll 1 to Hit",
         reRollWound: 'Re-roll to Wound',
+        reRollOneToWound: "Re-roll 1 to Wound"
     }
 
     useEffect(() => {
-        console.log(selected)
-
-        // const test: keyof Modifiers = getKeyByValue(modifiersData, selected[i])
-
         for (let i = 0; i < Object.keys(modifiersData).length; i++) {
             const key = Object.values(modifiersData)[i]
             if (selected.includes(key)) {
