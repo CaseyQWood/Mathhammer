@@ -1,0 +1,26 @@
+.defensiveStats__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.attackingStats__wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.attackingStats__wrapper {
+  width: 100%;
+}
+
+.modelsInput {
+  width: 100%;
+}
+
+.chip__wrapper {
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem;
+}
