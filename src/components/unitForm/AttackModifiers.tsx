@@ -8,19 +8,6 @@ interface AttackModifierProps {
     handleModifiersChange: (stat: string, value: boolean | { value: boolean; variable: string }) => void
 }
 
-function getKeyByValue(object, value): keyof Modifiers {
-    const key = Object.keys(object).find(key => object[key] === value);
-
-    if (key === undefined) {
-        throw new Error("Value not found in object");
-    }
-
-    return key;
-
-}
-
-
-
 // pull down modifiers to manage toggle 
 
 export default function AttackModifiers({ modifiers, handleModifiersChange }: AttackModifierProps) {
@@ -41,7 +28,7 @@ export default function AttackModifiers({ modifiers, handleModifiersChange }: At
         // const test: keyof Modifiers = getKeyByValue(modifiersData, selected[i])
 
         for (let i = 0; i < Object.keys(modifiersData).length; i++) {
-            const key: keyof Modifiers = Object.values(modifiersData)[i]
+            const key = Object.values(modifiersData)[i]
             if (selected.includes(key)) {
                 if (Object.keys(modifiers)[i] === "sustainedHits") {
                     handleModifiersChange(Object.keys(modifiers)[i], { value: true, variable: "1" })
