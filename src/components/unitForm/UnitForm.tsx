@@ -30,7 +30,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         }));
     };
     const [attackStats, setAttackStats] = useState<AttackStats>({
-        models: 10,
+        models: 1,
         attacks: {
             variable: "0",
             value: 4

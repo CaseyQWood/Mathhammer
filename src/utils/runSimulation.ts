@@ -1,4 +1,4 @@
-import { calculateAttack } from "./caclulateAttack";
+import { calculateAttack } from "./calculateAttack";
 import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
 
 type WoundTallies = Record<number, number>;
