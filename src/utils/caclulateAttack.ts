@@ -16,6 +16,32 @@ function rollD3() {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
+function variableCalculator(variable: string) {
+  switch (variable) {
+    case "0":
+      return 0;
+    case "1":
+      return 1;
+    case "3":
+      return 3;
+    case "D3":
+      return rollD3();
+    case "2D3":
+      return rollD3() + rollD3();
+    case "3D3":
+      return rollD3() + rollD3() + rollD3();
+    case "D6":
+      return rollD6();
+    case "2D6":
+      return rollD6() + rollD6();
+    case "3D6":
+      return rollD6() + rollD6() + rollD6();
+    default:
+      return 0;
+  }
+}
+
+// Why do I have this ?
 function statCheck(value: number, passingThreshold: number): boolean {
   if (value < passingThreshold) {
     return false;
@@ -48,34 +74,18 @@ export async function calculateAttack(
   const reRollHits = modifiers.reRollHit;
   const reRollOneToHit = modifiers.reRollOneToHit;
 
-  let attacks =
+  const baseAttacks =
     attackStats.attacks.value +
-    Number(
-      attackStats.attacks.variable === "0"
-        ? 0
-        : attackStats.attacks.variable === "D3"
-          ? rollD3()
-          : attackStats.attacks.variable === "2D3"
-            ? rollD3() + rollD3()
-            : attackStats.attacks.variable === "3D3"
-              ? rollD3() + rollD3() + rollD3()
-              : attackStats.attacks.variable === "D6"
-                ? rollD6()
-                : attackStats.attacks.variable === "2D6"
-                  ? rollD6() + rollD6()
-                  : attackStats.attacks.variable === "3D6"
-                    ? rollD6() + rollD6() + rollD6()
-                    : 0
-    );
+    variableCalculator(attackStats.attacks.variable);
+
+  let attacks = baseAttacks;
+
   for (let i = 0; i < attacks; i++) {
     let toHitRoll = rollD6();
-    // console.log("to hit roll: ", toHitRoll);
     if (!torrent) {
       if (!statCheck(toHitRoll, weaponSkill)) {
         if (reRollOneToHit && toHitRoll === 1) {
           toHitRoll = rollD6();
-          // console.log("reroll 1 : New roll", toHitRoll);
-
           if (!statCheck(toHitRoll, weaponSkill)) {
             continue;
           }
@@ -90,8 +100,9 @@ export async function calculateAttack(
       }
     }
 
-    if (sustainedHits.value && toHitRoll === 6) {
-      attacks = attacks + Number(sustainedHits.variable);
+    if (sustainedHits.value && toHitRoll === 6 && i < baseAttacks) {
+      const test = variableCalculator(sustainedHits.variable);
+      attacks = attacks + test;
     }
 
     const toWound =
@@ -147,23 +158,7 @@ export async function calculateAttack(
 
     const attackDamage =
       attackStats.damage.value +
-      Number(
-        attackStats.damage.variable === "0"
-          ? 0
-          : attackStats.damage.variable === "D3"
-            ? rollD3()
-            : attackStats.damage.variable === "2D3"
-              ? rollD3() + rollD3()
-              : attackStats.damage.variable === "3D3"
-                ? rollD3() + rollD3() + rollD3()
-                : attackStats.damage.variable === "D6"
-                  ? rollD6()
-                  : attackStats.damage.variable === "2D6"
-                    ? rollD6() + rollD6()
-                    : attackStats.damage.variable === "3D6"
-                      ? rollD6() + rollD6() + rollD6()
-                      : 0
-      );
+      variableCalculator(attackStats.damage.variable);
 
     if (feelNoPain) {
       let totalDamage: number = 0;
@@ -177,8 +172,5 @@ export async function calculateAttack(
     }
     finalDamage = finalDamage + attackDamage;
   }
-
-  // console.log("attack damage: ", finalDamage);
-
   return finalDamage;
 }

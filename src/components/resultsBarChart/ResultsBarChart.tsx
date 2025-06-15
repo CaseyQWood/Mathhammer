@@ -84,8 +84,8 @@ export default function ResultsBarChart({ results }: BarChartProps) {
                 yAxis={[{
                     label: "Percent",
                     colorMap: {
-                        type: 'piecewise',            // or 'continuous' / 'ordinal'
-                        thresholds: [10, 30, 50],     // split the scale at these Y values
+                        type: 'piecewise',
+                        thresholds: [5, 10, 20],     // split the scale at these Y values
                         colors: ['#ef5350',
                             '#ffca28',
                             '#66bb6a']

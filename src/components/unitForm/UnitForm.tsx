@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
 import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails, Divider, IconButton } from "@mui/joy";
@@ -23,10 +23,10 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         invulnerable: 0,
         feelNoPain: 0,
     })
-    const handleDefenseChange = (stat: string, value: number) => {
+    const handleDefenseChange = (key: string, value: number) => {
         setdefenseStats(prevStats => ({
             ...prevStats,
-            [stat]: value
+            [key]: value
         }));
     };
     const [attackStats, setAttackStats] = useState<AttackStats>({
@@ -44,10 +44,10 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         }
     })
 
-    const handleAttackChange = useCallback((stat: string, value: number | { variable: string; value: number } | null) => {
+    const handleAttackChange = useCallback((key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => ({
             ...prevStats,
-            [stat]: value
+            [key]: value
         }));
     }, [setAttackStats]);
 
@@ -62,16 +62,12 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         reRollOneToWound: false
     })
 
-    const handleModifiersChange = useCallback((stat: string, value: boolean | { value: boolean; variable: string }) => {
+    const handleModifiersChange = useCallback((key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
         setModifiers(prevStats => ({
             ...prevStats,
-            [stat]: value
+            [key]: value
         }));
     }, [])
-
-    useEffect(() => {
-        console.log("attack stats: ", attackStats)
-    }, [attackStats])
 
     return (
         <div className={style.unitForm__wrapper} >

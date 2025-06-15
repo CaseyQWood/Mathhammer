@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react'
 
 interface VariableInputFieldProps {
     title: string
-    value: { variable: string; value: number }
     stateKey: string
-    handleChange: (key: string, value: { variable: string; value: number }) => void
+    handleChange: (key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 
 export default function VariableInputField({ title, stateKey, handleChange }: VariableInputFieldProps) {
