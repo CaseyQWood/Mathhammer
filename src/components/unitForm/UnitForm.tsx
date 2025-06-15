@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
-import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails } from "@mui/joy";
+import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails, Divider, IconButton } from "@mui/joy";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
@@ -86,6 +87,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                         <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
                     </AccordionDetails>
                 </Accordion>
+                <Divider />
                 <Accordion variant="soft" sx={accordionStyles}>
                     <AccordionSummary>Attack Stats</AccordionSummary>
                     <AccordionDetails>
@@ -93,6 +95,14 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                         <AttackModifiers modifiers={modifiers} handleModifiersChange={handleModifiersChange} />
                     </AccordionDetails>
                 </Accordion>
+                <IconButton size="lg" sx={{
+                    width: "25%",
+                    margin: "0 auto",
+                }} >
+                    <AddCircleOutlineIcon color="primary" />
+
+                </IconButton>
+                <Divider />
                 <Button
                     fullWidth={false}
                     variant="soft"

@@ -10,6 +10,17 @@ interface VariableInputFieldProps {
 }
 
 export default function VariableInputField({ title, stateKey, handleChange }: VariableInputFieldProps) {
+    // const options: string[] = ["0", "D3", "2d3", "3D3", "D6", "2D6", "3d6"]
+    const options = [
+        { key: crypto.randomUUID(), value: "0" },
+        { key: crypto.randomUUID(), value: "D3" },
+        { key: crypto.randomUUID(), value: "2D3" },
+        { key: crypto.randomUUID(), value: "3D3" },
+        { key: crypto.randomUUID(), value: "D6" },
+        { key: crypto.randomUUID(), value: "2D6" },
+        { key: crypto.randomUUID(), value: "3D6" },
+
+    ]
     const [value, setValue] = useState({
         variable: "0",
         value: 1
@@ -55,9 +66,9 @@ export default function VariableInputField({ title, stateKey, handleChange }: Va
                         padding: '0.5rem'
                     }}
                 >
-                    <Option value="0">0</Option>
-                    <Option value="D3">D3</Option>
-                    <Option value="D6">D6</Option>
+                    {options.map((ele) => {
+                        return <Option key={ele.key} value={ele.value} >{ele.value}</Option>
+                    })}
                 </Select>
                 <div className={style.plusSign}>
                     +

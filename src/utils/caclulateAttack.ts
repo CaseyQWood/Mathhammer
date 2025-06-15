@@ -53,9 +53,19 @@ export async function calculateAttack(
     Number(
       attackStats.attacks.variable === "0"
         ? 0
-        : attackStats.attacks.variable === "D6"
-          ? rollD6()
-          : rollD3()
+        : attackStats.attacks.variable === "D3"
+          ? rollD3()
+          : attackStats.attacks.variable === "2D3"
+            ? rollD3() + rollD3()
+            : attackStats.attacks.variable === "3D3"
+              ? rollD3() + rollD3() + rollD3()
+              : attackStats.attacks.variable === "D6"
+                ? rollD6()
+                : attackStats.attacks.variable === "2D6"
+                  ? rollD6() + rollD6()
+                  : attackStats.attacks.variable === "3D6"
+                    ? rollD6() + rollD6() + rollD6()
+                    : 0
     );
   for (let i = 0; i < attacks; i++) {
     let toHitRoll = rollD6();
@@ -140,9 +150,19 @@ export async function calculateAttack(
       Number(
         attackStats.damage.variable === "0"
           ? 0
-          : attackStats.damage.variable === "D6"
-            ? rollD6()
-            : rollD3()
+          : attackStats.damage.variable === "D3"
+            ? rollD3()
+            : attackStats.damage.variable === "2D3"
+              ? rollD3() + rollD3()
+              : attackStats.damage.variable === "3D3"
+                ? rollD3() + rollD3() + rollD3()
+                : attackStats.damage.variable === "D6"
+                  ? rollD6()
+                  : attackStats.damage.variable === "2D6"
+                    ? rollD6() + rollD6()
+                    : attackStats.damage.variable === "3D6"
+                      ? rollD6() + rollD6() + rollD6()
+                      : 0
       );
 
     if (feelNoPain) {
