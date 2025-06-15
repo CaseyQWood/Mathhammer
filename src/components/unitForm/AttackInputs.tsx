@@ -23,7 +23,6 @@ export default function AttackInputs({ attackStats, handleAttackChange }: Attack
             </div>
             <VariableInputField
                 title='Attacks'
-                // value={attackStats.attacks}
                 stateKey="attacks"
                 handleChange={handleAttackChange}
             />

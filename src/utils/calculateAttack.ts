@@ -112,9 +112,9 @@ export async function calculateAttack(
           ? 5
           : strength === toughness + 1
             ? 3
-            : strength >= toughness
+            : strength >= toughness * 2
               ? 2
-              : strength <= toughness
+              : strength <= toughness / 2
                 ? 6
                 : 0;
 
@@ -164,8 +164,9 @@ export async function calculateAttack(
       let totalDamage: number = 0;
       for (let i = 0; i < attackDamage; i++) {
         if (statCheck(rollD6(), feelNoPain)) {
-          totalDamage++;
+          continue;
         }
+        totalDamage++;
       }
       finalDamage = finalDamage + totalDamage;
       continue;

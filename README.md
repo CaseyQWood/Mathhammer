@@ -1,20 +1,9 @@
 TODO:
 
-- add variable attacks
-- - seperate attacks and number of models attacking
-- Update attacking stats to have attackers and attacks seperate
-- - update attacks to accept a d3/6 value
-- Update damage to include d3/6 values
-- add modyfiers
-- - Letal hits
-- - Devistating wounds
-- - Sustained hits (with variable values)
-- - +1/-1 to hit ( maybe not neede )
+- see if I can add testing for the simulations
 - make a more human friendly and readable out put for the results
-- - Display the Mean and the central 80% band
-- Make a design for component layout
+- Complete design
 - Mobile friendly up and down arrows for values ( do I think this is required ? )
-- AP may be buggy ( not applying anything)
 
 # React + TypeScript + Vite
 
