@@ -16,6 +16,32 @@ function rollD3() {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
+function variableCalculator(variable: string) {
+  switch (variable) {
+    case "0":
+      return 0;
+    case "1":
+      return 1;
+    case "3":
+      return 3;
+    case "D3":
+      return rollD3();
+    case "2D3":
+      return rollD3() + rollD3();
+    case "3D3":
+      return rollD3() + rollD3() + rollD3();
+    case "D6":
+      return rollD6();
+    case "2D6":
+      return rollD6() + rollD6();
+    case "3D6":
+      return rollD6() + rollD6() + rollD6();
+    default:
+      return 0;
+  }
+}
+
+// Why do I have this ?
 function statCheck(value: number, passingThreshold: number): boolean {
   if (value < passingThreshold) {
     return false;
@@ -28,6 +54,8 @@ export async function calculateAttack(
   defenseStats: DefenseStats,
   modifiers: Modifiers
 ): Promise<number> {
+  let finalDamage = 0;
+
   const weaponSkill = attackStats.weaponSkill;
   const strength = attackStats.strength;
   const toughness = defenseStats.toughness;
@@ -42,26 +70,26 @@ export async function calculateAttack(
 
   const torrent = modifiers.torrent;
   const reRollWounds = modifiers.reRollWound;
+  const reRollOneToWound = modifiers.reRollOneToWound;
   const reRollHits = modifiers.reRollHit;
+  const reRollOneToHit = modifiers.reRollOneToHit;
 
-  let attacks =
+  const baseAttacks =
     attackStats.attacks.value +
-    Number(
-      attackStats.attacks.variable === "0"
-        ? 0
-        : attackStats.attacks.variable === "D6"
-          ? rollD6()
-          : rollD3()
-    );
-  // console.log("attacks: ", attacks);
-  let finalDamage = 0;
-  // console.log("number of attacks: ", attacks);
+    variableCalculator(attackStats.attacks.variable);
+
+  let attacks = baseAttacks;
+
   for (let i = 0; i < attacks; i++) {
     let toHitRoll = rollD6();
     if (!torrent) {
-      // console.log("torent not working");
       if (!statCheck(toHitRoll, weaponSkill)) {
-        if (reRollHits) {
+        if (reRollOneToHit && toHitRoll === 1) {
+          toHitRoll = rollD6();
+          if (!statCheck(toHitRoll, weaponSkill)) {
+            continue;
+          }
+        } else if (reRollHits) {
           toHitRoll = rollD6();
           if (!statCheck(toHitRoll, weaponSkill)) {
             continue;
@@ -72,8 +100,9 @@ export async function calculateAttack(
       }
     }
 
-    if (sustainedHits.value && toHitRoll === 6) {
-      attacks = attacks + Number(sustainedHits.variable);
+    if (sustainedHits.value && toHitRoll === 6 && i < baseAttacks) {
+      const test = variableCalculator(sustainedHits.variable);
+      attacks = attacks + test;
     }
 
     const toWound =
@@ -90,10 +119,14 @@ export async function calculateAttack(
                 : 0;
 
     let toWoundRoll = rollD6();
-    // console.log("tohit: ", toHitRoll);
     if (!(lethalHits && toHitRoll === 6)) {
-      // console.log("to wound roll");
       if (toWoundRoll < toWound) {
+        if (reRollOneToWound && toWoundRoll === 1) {
+          toWoundRoll = rollD6();
+          if (toWoundRoll < toWound) {
+            continue;
+          }
+        }
         if (reRollWounds) {
           toWoundRoll = rollD6();
           if (toWoundRoll < toWound) {
@@ -104,10 +137,8 @@ export async function calculateAttack(
         }
       }
     }
-    // console.log("wound roll made:  ", toWoundRoll);
 
     if (!(devistatingWounds && toWoundRoll === 6)) {
-      // console.log("Saves Rolls made: ");
       if (
         save > 0 &&
         save + armourPiercing <= 6 &&
@@ -127,13 +158,7 @@ export async function calculateAttack(
 
     const attackDamage =
       attackStats.damage.value +
-      Number(
-        attackStats.damage.variable === "0"
-          ? 0
-          : attackStats.damage.variable === "D6"
-            ? rollD6()
-            : rollD3()
-      );
+      variableCalculator(attackStats.damage.variable);
 
     if (feelNoPain) {
       let totalDamage: number = 0;
@@ -147,8 +172,5 @@ export async function calculateAttack(
     }
     finalDamage = finalDamage + attackDamage;
   }
-
-  // console.log("attack damage: ", finalDamage);
-
   return finalDamage;
 }

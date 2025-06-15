@@ -13,7 +13,9 @@ export interface Modifiers {
   devistatingWounds: boolean;
   torrent: boolean;
   reRollHit: boolean;
+  reRollOneToHit: boolean;
   reRollWound: boolean;
+  reRollOneToWound: boolean;
 }
 
 export interface DefenseStats {

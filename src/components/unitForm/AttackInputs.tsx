@@ -5,7 +5,7 @@ import style from './unitForm.module.css'
 
 interface AttackStatsProps {
     attackStats: AttackStats
-    handleAttackChange: (stat: string, value: number | { variable: string; value: number } | null) => void
+    handleAttackChange: (key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 
 export default function AttackInputs({ attackStats, handleAttackChange }: AttackStatsProps) {
@@ -23,7 +23,7 @@ export default function AttackInputs({ attackStats, handleAttackChange }: Attack
             </div>
             <VariableInputField
                 title='Attacks'
-                value={attackStats.attacks}
+                // value={attackStats.attacks}
                 stateKey="attacks"
                 handleChange={handleAttackChange}
             />
@@ -50,7 +50,7 @@ export default function AttackInputs({ attackStats, handleAttackChange }: Attack
             />
             <VariableInputField
                 title='Damage'
-                value={attackStats.damage}
+                // value={attackStats.damage}
                 stateKey="damage"
                 handleChange={handleAttackChange}
             />

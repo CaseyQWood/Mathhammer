@@ -4,7 +4,7 @@ import style from './unitForm.module.css'
 
 interface DefenseStatsProps {
   defenseStats: DefenseStats
-  handleDefenseChange: (stat: string, value: number) => void
+  handleDefenseChange: (key: string, value: number) => void
 }
 
 export default function DefenseInputs({ defenseStats, handleDefenseChange }: DefenseStatsProps) {
