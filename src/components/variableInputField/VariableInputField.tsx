@@ -3,12 +3,13 @@ import style from './variableInputField.module.css'
 import { useEffect, useState } from 'react'
 
 interface VariableInputFieldProps {
+    index: number;
     title: string
     stateKey: string
-    handleChange: (key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
+    handleChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 
-export default function VariableInputField({ title, stateKey, handleChange }: VariableInputFieldProps) {
+export default function VariableInputField({ index, title, stateKey, handleChange }: VariableInputFieldProps) {
     // const options: string[] = ["0", "D3", "2d3", "3D3", "D6", "2D6", "3d6"]
     const options = [
         { key: crypto.randomUUID(), value: "0" },
@@ -47,8 +48,8 @@ export default function VariableInputField({ title, stateKey, handleChange }: Va
 
 
     useEffect(() => {
-        handleChange(stateKey, value)
-    }, [value, handleChange, stateKey])
+        handleChange(index, stateKey, value)
+    }, [value, handleChange, stateKey, index])
 
     return (
         <div className={style.variableInput__wrapper}>
