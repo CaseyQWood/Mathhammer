@@ -1,10 +1,13 @@
 TODO:
 
-- convert over to units rather than just models
+- unify default value managment between components
+- make sure all components are controlled components
 - Setup saving units
 - see if I can add testing for the simulations
 - Complete design
 - Mobile friendly up and down arrows for values ( do I think this is required ? )
+- improve mobile inputs
+- - configure the go button
 
 # React + TypeScript + Vite
 

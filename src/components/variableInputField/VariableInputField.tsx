@@ -23,7 +23,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
     ]
     const [value, setValue] = useState({
         variable: "0",
-        value: 4
+        value: 1
     })
 
     const handleVariableChange = (

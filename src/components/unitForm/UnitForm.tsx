@@ -31,6 +31,16 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
             value: 1
         }
     }
+    const defaultModifiers = {
+        lethalHits: false,
+        sustainedHits: { value: false, variable: "1" },
+        devistatingWounds: false,
+        torrent: false,
+        reRollHit: false,
+        reRollOneToHit: false,
+        reRollWound: false,
+        reRollOneToWound: false
+    }
     const [defenseStats, setdefenseStats] = useState<DefenseStats>({
         toughness: 4,
         save: 3,
@@ -58,12 +68,6 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         }
     }])
     console.log("attack stats: ", attackStats)
-    // const handleAttackChange = useCallback((key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
-    //     setAttackStats(prevStats => ({
-    //         ...prevStats,
-    //         [key]: value
-    //     }));
-    // }, [setAttackStats]);
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => {
@@ -76,7 +80,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         });
     }, []);
 
-    const [modifiers, setModifiers] = useState<Modifiers>({
+    const [modifiers, setModifiers] = useState<Modifiers[]>([{
         lethalHits: false,
         sustainedHits: { value: false, variable: "1" },
         devistatingWounds: false,
@@ -85,13 +89,22 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         reRollOneToHit: false,
         reRollWound: false,
         reRollOneToWound: false
-    })
+    }])
 
-    const handleModifiersChange = useCallback((key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
-        setModifiers(prevStats => ({
-            ...prevStats,
-            [key]: value
-        }));
+    const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
+        // setModifiers(prevStats => ({
+        //     ...prevStats,
+        //     [key]: value
+        // }));
+
+        setAttackStats(prevStats => {
+            const newStats = [...prevStats];
+            newStats[profileIndex] = {
+                ...newStats[profileIndex],
+                [key]: value
+            };
+            return newStats;
+        });
     }, [])
 
     return (
@@ -112,18 +125,21 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
 
                 {attackStats.map((ele, index) => {
                     return (
-                        <Accordion variant="soft" sx={accordionStyles}>
+                        <Accordion key={index} variant="soft" sx={accordionStyles}>
                             <AccordionSummary>Attack Stats</AccordionSummary>
                             <AccordionDetails>
                                 <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
-                                <AttackModifiers modifiers={modifiers} handleModifiersChange={handleModifiersChange} />
+                                <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
                             </AccordionDetails>
                         </Accordion>
                     )
                 })}
                 <IconButton
                     size="lg"
-                    onClick={() => { setAttackStats([...attackStats, defaultAttackStats]) }}
+                    onClick={() => {
+                        setAttackStats([...attackStats, defaultAttackStats])
+                        setModifiers([...modifiers, defaultModifiers])
+                    }}
                     sx={{
                         width: "25%",
                         margin: "0 auto",
@@ -138,7 +154,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     variant="soft"
                     color="warning"
                     onClick={() => {
-                        runSimulation(10000, attackStats[0], defenseStats, modifiers).then((results) => {
+                        runSimulation(5000, attackStats, defenseStats, modifiers).then((results) => {
                             setSimData(results)
                         })
                     }}

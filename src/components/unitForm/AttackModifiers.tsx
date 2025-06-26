@@ -4,13 +4,14 @@ import { Chip, Checkbox, Select, Option } from "@mui/joy";
 import type { Modifiers } from "../../types/unitStats";
 
 interface AttackModifierProps {
+    index: number
     modifiers: Modifiers
-    handleModifiersChange: (key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => void
+    handleModifiersChange: (index: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => void
 }
 
 // pull down modifiers to manage toggle 
 
-export default function AttackModifiers({ modifiers, handleModifiersChange }: AttackModifierProps) {
+export default function AttackModifiers({ index, modifiers, handleModifiersChange }: AttackModifierProps) {
     const [selected, setSelected] = useState<string[]>([]);
 
     const options = [
@@ -51,34 +52,34 @@ export default function AttackModifiers({ modifiers, handleModifiersChange }: At
             const key = Object.values(modifiersData)[i]
             if (selected.includes(key)) {
                 if (Object.keys(modifiers)[i] === "sustainedHits") {
-                    handleModifiersChange(Object.keys(modifiers)[i], { value: true, variable: sustainedHits })
+                    handleModifiersChange(index, Object.keys(modifiers)[i], { value: true, variable: sustainedHits })
                     continue
                 }
 
-                handleModifiersChange(Object.keys(modifiers)[i], true)
+                handleModifiersChange(index, Object.keys(modifiers)[i], true)
                 continue
             }
 
             if (!selected.includes(key)) {
                 if (Object.keys(modifiers)[i] === "sustainedHits") {
-                    handleModifiersChange(Object.keys(modifiers)[i], { value: false, variable: sustainedHits })
+                    handleModifiersChange(index, Object.keys(modifiers)[i], { value: false, variable: sustainedHits })
                     continue
                 }
 
-                handleModifiersChange(Object.keys(modifiers)[i], false)
+                handleModifiersChange(index, Object.keys(modifiers)[i], false)
                 continue
 
 
             }
         }
-    }, [selected, handleModifiersChange, sustainedHits])
+    }, [selected, handleModifiersChange, sustainedHits, index])
 
     return (
         <div className={style.chip__wrapper}>
-            {Object.values(modifiersData).map((name) => {
+            {Object.values(modifiersData).map((name, index) => {
                 const checked = selected.includes(name);
                 return (
-                    <div className={name === "Sustained Hits" ? style.sustainedHits : ""}>
+                    <div key={index} className={name === "Sustained Hits" ? style.sustainedHits : ""}>
                         <Chip
                             key={name}
                             variant="plain"

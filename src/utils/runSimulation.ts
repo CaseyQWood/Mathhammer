@@ -3,55 +3,47 @@ import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
 
 type WoundTallies = Record<number, number>;
 
+function sumArray(arr: number[]) {
+  const sum = arr.reduce((acc, val) => acc + val, 0);
+  return sum;
+}
 export async function runSimulation(
   iterations: number,
-  attackStats: AttackStats,
+  attackStats: AttackStats[],
   defenseStats: DefenseStats,
-  modifiers: Modifiers
+  modifiers: Modifiers[]
 ): Promise<WoundTallies> {
-  console.log("modifiers", modifiers);
+  // creates an array of promises the length of model count for each unit type
+  // sums all the damage from each modelType and adds to unitDamage
 
-  // a series of runs where each case creates an array of promises the length of model count
-  // filters out all cases of no wounds
-  // captures results into a matrix
-  const results: number[][] = [];
+  const results: number[] = [];
   for (let i = 0; i < iterations; i++) {
-    const newAttacks = Array.from({ length: attackStats.models }, () =>
-      calculateAttack(attackStats, defenseStats, modifiers)
-    );
-    await Promise.all(newAttacks).then((values) => {
-      const filterResults = values.filter((wound) => wound != 0);
-      results.push(filterResults);
-    });
-  }
-
-  // console.log("results: ", results);
-
-  // Sums the wounds from each iteration to form a single array
-  const resultsArray: number[] = [];
-  for (let i = 0; i < results.length; i++) {
-    let totalWounds = 0;
-    for (let a = 0; a < results[i].length; a++) {
-      totalWounds = totalWounds + results[i][a];
+    let unitDamage: number = 0;
+    // runs calculations for each modelType
+    for (let i = 0; i < attackStats.length; i++) {
+      const modelAttacks = Array.from({ length: attackStats[i].models }, () =>
+        calculateAttack(attackStats[i], defenseStats, modifiers[i])
+      );
+      await Promise.all(modelAttacks).then((modelDamage) => {
+        unitDamage = unitDamage + sumArray(modelDamage);
+      });
     }
-    resultsArray.push(totalWounds);
-  }
 
-  // console.log("results array: ", resultsArray);
+    results.push(unitDamage);
+  }
 
   // Creates a object with keys set as the wound amount and the key as the amount of cases it happened
   const aggrigatedObject: WoundTallies = {};
-  for (let i = 0; i < resultsArray.length; i++) {
-    if (!aggrigatedObject[resultsArray[i]]) {
-      aggrigatedObject[resultsArray[i]] = 0;
+  for (let i = 0; i < results.length; i++) {
+    if (!aggrigatedObject[results[i]]) {
+      aggrigatedObject[results[i]] = 0;
     }
 
-    if (aggrigatedObject[resultsArray[i]] >= 0) {
-      aggrigatedObject[resultsArray[i]]++;
+    if (aggrigatedObject[results[i]] >= 0) {
+      aggrigatedObject[results[i]]++;
     }
   }
 
-  // console.log("aggrigrated Object: ", aggrigatedObject);
   // convert the values of object to percentages
   const percentObject: WoundTallies = {};
   for (const [key, value] of Object.entries(aggrigatedObject)) {
