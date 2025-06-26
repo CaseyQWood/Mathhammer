@@ -17,19 +17,7 @@ const accordionStyles = {
 }
 
 export default function UnitForm({ setSimData }: UnitFormProps) {
-    const [defenseStats, setdefenseStats] = useState<DefenseStats>({
-        toughness: 4,
-        save: 3,
-        invulnerable: 0,
-        feelNoPain: 0,
-    })
-    const handleDefenseChange = (key: string, value: number) => {
-        setdefenseStats(prevStats => ({
-            ...prevStats,
-            [key]: value
-        }));
-    };
-    const [attackStats, setAttackStats] = useState<AttackStats>({
+    const defaultAttackStats = {
         models: 1,
         attacks: {
             variable: "0",
@@ -42,16 +30,8 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
             variable: "0",
             value: 1
         }
-    })
-
-    const handleAttackChange = useCallback((key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
-        setAttackStats(prevStats => ({
-            ...prevStats,
-            [key]: value
-        }));
-    }, [setAttackStats]);
-
-    const [modifiers, setModifiers] = useState<Modifiers>({
+    }
+    const defaultModifiers = {
         lethalHits: false,
         sustainedHits: { value: false, variable: "1" },
         devistatingWounds: false,
@@ -60,13 +40,71 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
         reRollOneToHit: false,
         reRollWound: false,
         reRollOneToWound: false
+    }
+    const [defenseStats, setdefenseStats] = useState<DefenseStats>({
+        toughness: 4,
+        save: 3,
+        invulnerable: 0,
+        feelNoPain: 0,
     })
-
-    const handleModifiersChange = useCallback((key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
-        setModifiers(prevStats => ({
+    const handleDefenseChange = (key: string, value: number) => {
+        setdefenseStats(prevStats => ({
             ...prevStats,
             [key]: value
         }));
+    };
+    const [attackStats, setAttackStats] = useState<AttackStats[]>([{
+        models: 1,
+        attacks: {
+            variable: "0",
+            value: 4
+        },
+        weaponSkill: 3,
+        strength: 4,
+        armourPiercing: 1,
+        damage: {
+            variable: "0",
+            value: 1
+        }
+    }])
+    console.log("attack stats: ", attackStats)
+
+    const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
+        setAttackStats(prevStats => {
+            const newStats = [...prevStats];
+            newStats[profileIndex] = {
+                ...newStats[profileIndex],
+                [key]: value
+            };
+            return newStats;
+        });
+    }, []);
+
+    const [modifiers, setModifiers] = useState<Modifiers[]>([{
+        lethalHits: false,
+        sustainedHits: { value: false, variable: "1" },
+        devistatingWounds: false,
+        torrent: false,
+        reRollHit: false,
+        reRollOneToHit: false,
+        reRollWound: false,
+        reRollOneToWound: false
+    }])
+
+    const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
+        // setModifiers(prevStats => ({
+        //     ...prevStats,
+        //     [key]: value
+        // }));
+
+        setAttackStats(prevStats => {
+            const newStats = [...prevStats];
+            newStats[profileIndex] = {
+                ...newStats[profileIndex],
+                [key]: value
+            };
+            return newStats;
+        });
     }, [])
 
     return (
@@ -84,17 +122,29 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     </AccordionDetails>
                 </Accordion>
                 <Divider />
-                <Accordion variant="soft" sx={accordionStyles}>
-                    <AccordionSummary>Attack Stats</AccordionSummary>
-                    <AccordionDetails>
-                        <AttackInputs attackStats={attackStats} handleAttackChange={handleAttackChange} />
-                        <AttackModifiers modifiers={modifiers} handleModifiersChange={handleModifiersChange} />
-                    </AccordionDetails>
-                </Accordion>
-                <IconButton size="lg" sx={{
-                    width: "25%",
-                    margin: "0 auto",
-                }} >
+
+                {attackStats.map((ele, index) => {
+                    return (
+                        <Accordion key={index} variant="soft" sx={accordionStyles}>
+                            <AccordionSummary>Attack Stats</AccordionSummary>
+                            <AccordionDetails>
+                                <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
+                                <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
+                            </AccordionDetails>
+                        </Accordion>
+                    )
+                })}
+                <IconButton
+                    size="lg"
+                    onClick={() => {
+                        setAttackStats([...attackStats, defaultAttackStats])
+                        setModifiers([...modifiers, defaultModifiers])
+                    }}
+                    sx={{
+                        width: "25%",
+                        margin: "0 auto",
+                    }}
+                >
                     <AddCircleOutlineIcon color="primary" />
 
                 </IconButton>
@@ -104,7 +154,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     variant="soft"
                     color="warning"
                     onClick={() => {
-                        runSimulation(10000, attackStats, defenseStats, modifiers).then((results) => {
+                        runSimulation(5000, attackStats, defenseStats, modifiers).then((results) => {
                             setSimData(results)
                         })
                     }}

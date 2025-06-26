@@ -49,6 +49,7 @@ function statCheck(value: number, passingThreshold: number): boolean {
   return true;
 }
 
+// Calculates attacks for 1 model
 export async function calculateAttack(
   attackStats: AttackStats,
   defenseStats: DefenseStats,
