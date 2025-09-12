@@ -34,7 +34,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
     const defaultModifiers = {
         lethalHits: false,
         sustainedHits: { value: false, variable: "1" },
-        devistatingWounds: false,
+        devastatingWounds: false,
         torrent: false,
         reRollHit: false,
         reRollOneToHit: false,
@@ -67,7 +67,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
             value: 1
         }
     }])
-    console.log("attack stats: ", attackStats)
+    // console.log("attack stats: ", attackStats)
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => {
@@ -83,7 +83,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
     const [modifiers, setModifiers] = useState<Modifiers[]>([{
         lethalHits: false,
         sustainedHits: { value: false, variable: "1" },
-        devistatingWounds: false,
+        devastatingWounds: false,
         torrent: false,
         reRollHit: false,
         reRollOneToHit: false,
@@ -154,7 +154,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     variant="soft"
                     color="warning"
                     onClick={() => {
-                        runSimulation(5000, attackStats, defenseStats, modifiers).then((results) => {
+                        runSimulation(1, attackStats, defenseStats, modifiers).then((results) => {
                             setSimData(results)
                         })
                     }}

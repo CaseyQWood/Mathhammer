@@ -1,5 +1,7 @@
 TODO:
 
+- add remove attack stats button
+- add instance carousel
 - unify default value managment between components
 - make sure all components are controlled components
 - Setup saving units

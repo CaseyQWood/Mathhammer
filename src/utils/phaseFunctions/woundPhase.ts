@@ -1,0 +1,62 @@
+import { rollD6 } from '../diceUtils';
+import { calculateToWoundThreshold } from '../statUtils';
+
+// Phase 2: Wound Phase - Returns counts of successful wounds and devastating wounds
+export function processWoundPhase(
+  successfulHits: number,
+  lethalHits: number,
+  strength: number,
+  toughness: number,
+  modifiers: {
+    lethalHits: boolean;
+    reRollWound: boolean;
+    reRollOneToWound: boolean;
+    devastatingWounds: boolean;
+  }
+): {
+  successfulWounds: number;
+  devastatingWounds: number;
+} {
+  let successfulWounds = 0;
+  let devastatingWounds = 0;
+
+  // Process regular hits (non-lethal)
+  const regularHits = successfulHits - lethalHits;
+  for (let i = 0; i < regularHits; i++) {
+    const toWound = calculateToWoundThreshold(strength, toughness);
+    let toWoundRoll = rollD6();
+
+    // Handle wound phase with rerolls
+    if (toWoundRoll < toWound) {
+      if (modifiers.reRollOneToWound && toWoundRoll === 1) {
+        toWoundRoll = rollD6();
+        if (toWoundRoll < toWound) {
+          continue;
+        }
+      } else if (modifiers.reRollWound) {
+        toWoundRoll = rollD6();
+        if (toWoundRoll < toWound) {
+          continue;
+        }
+      } else {
+        continue;
+      }
+    }
+
+    // Count successful wound
+    successfulWounds++;
+
+    // Check for devastating wounds
+    if (modifiers.devastatingWounds && toWoundRoll === 6) {
+      devastatingWounds++;
+    }
+  }
+
+  // Lethal hits auto-wound
+  successfulWounds += lethalHits;
+  if (modifiers.devastatingWounds) {
+    devastatingWounds += lethalHits;
+  }
+
+  return { successfulWounds, devastatingWounds };
+} 

@@ -51,6 +51,5 @@ export async function runSimulation(
       ((value / iterations) * 100).toFixed(1)
     );
   }
-  // console.log("percent Object: ", percentObject);
   return percentObject;
 }
