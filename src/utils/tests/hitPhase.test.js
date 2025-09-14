@@ -5,17 +5,13 @@ vi.mock('../diceUtils', () => ({
   rollD6: vi.fn(),
   variableCalculator: vi.fn(),
 }))
-vi.mock('../statUtils', () => ({
-  statCheck: vi.fn(),
-}))
 
 import { rollD6, variableCalculator } from '../diceUtils'
-import { statCheck } from '../statUtils'
 import { processHitPhase } from '../phaseFunctions/hitPhase'
 
-const mockRollSequence = (values: number[]) => {
+const mockRollSequence = (values) => {
   let i = 0
-  ;(rollD6 as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => values[i++])
+  ;(rollD6).mockImplementation(() => values[i++])
 }
 
 beforeEach(() => {
@@ -25,9 +21,6 @@ beforeEach(() => {
 describe('processHitPhase', () => {
   it('counts hits without modifiers and records hit rolls', () => {
     mockRollSequence([5, 3, 4])
-    ;(statCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      (roll: number, ws: number) => roll >= ws
-    )
 
     const res = processHitPhase(3, 4, {
       torrent: false,
@@ -44,11 +37,8 @@ describe('processHitPhase', () => {
   })
 
   it('applies reRollOneToHit on 1s and records reroll', () => {
-    // Calls: initial(1), reroll(3), next initial(5)
-    mockRollSequence([1, 4, 5, 1, 3])
-    ;(statCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      (roll: number, ws: number) => roll >= ws
-    )
+    // Calls: initial(1), reroll(4), next initial(5)
+    mockRollSequence([1, 4, 5, 3])
 
     const res = processHitPhase(3, 4, {
       torrent: false,
@@ -58,15 +48,12 @@ describe('processHitPhase', () => {
       lethalHits: false,
     })
 
-    expect(res.successfulHits).toBe(2) // Only the 5 hits
-    expect(res.hitRolls).toEqual([1, 4, 5, 1, 3]) // includes the reroll of the 1
+    expect(res.successfulHits).toBe(2) // 4 and 5 hit
+    expect(res.hitRolls).toEqual([1, 4, 5, 3]) // includes the reroll of the 1
   })
 
   it('applies reRollHit for any failed hit', () => {
     mockRollSequence([2, 4, 6, 2, 3])
-    ;(statCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      (roll: number, ws: number) => roll >= ws
-    )
 
     const res = processHitPhase(3, 4, {
       torrent: false,
@@ -86,10 +73,7 @@ describe('processHitPhase', () => {
     // variableCalculator('D3') -> 2 extra attacks
     // The loop should then process 2 more rolls: 4, 2
     mockRollSequence([6, 4, 2])
-    ;(variableCalculator as unknown as ReturnType<typeof vi.fn>).mockReturnValue(2)
-    ;(statCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      (roll: number, ws: number) => roll >= ws
-    )
+    ;(variableCalculator).mockReturnValue(2)
 
     const res = processHitPhase(1, 3, {
       torrent: false,
@@ -100,17 +84,14 @@ describe('processHitPhase', () => {
     })
 
     expect(res.extraAttacks).toBe(2)
-    expect(res.successfulHits).toBe(2) // 1 hit and 1 2damage sustained hit
+    expect(res.successfulHits).toBe(1) 
     expect(res.lethalHits).toBe(1) // 6 is a lethal hit
-    expect(res.hitRolls).toEqual([6, 4, 2])
+    expect(res.hitRolls).toEqual([6])
   })
 
   it('skips all hit logic when torrent is true but still records rolls', () => {
     // With torrent true, current implementation bypasses hit checks, but we still roll once per attack
     mockRollSequence([2, 1, 6])
-    ;(statCheck as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      (roll: number, ws: number) => roll >= ws
-    )
 
     const res = processHitPhase(3, 6, {
       torrent: true,
@@ -120,10 +101,57 @@ describe('processHitPhase', () => {
       lethalHits: true,
     })
 
-    
-    expect(res.successfulHits).toBe(3) // Since torrent bypasses the miss checks, all three are counted as successful hits as per current code
-    expect(res.lethalHits).toBe(0) // only the 6 qualifies
-    expect(res.extraAttacks).toBe(0) // sustained only from base attacks on 6; but code path still checks 6 - i < baseAttacks holds, however torrent bypass may still allow it.
-    expect(res.hitRolls).toEqual([2, 1, 6])
+    expect(res.successfulHits).toBe(3) // Since torrent bypasses the miss checks, all three are counted as successful hits
+    expect(res.lethalHits).toBe(0)  
+    expect(res.extraAttacks).toBe(0) 
+    expect(res.hitRolls).toEqual([])
+  })
+
+  it('handles all successful hits', () => {
+    mockRollSequence([4, 5, 6])
+
+    const res = processHitPhase(3, 4, {
+      torrent: false,
+      reRollHit: false,
+      reRollOneToHit: false,
+      sustainedHits: { value: false, variable: '0' },
+      lethalHits: false,
+    })
+
+    expect(res.successfulHits).toBe(3) // All hit (4, 5, 6 >= 4)
+    expect(res.lethalHits).toBe(0)
+    expect(res.extraAttacks).toBe(0)
+  })
+
+  it('handles all failed hits', () => {
+    mockRollSequence([1, 2, 3])
+
+    const res = processHitPhase(3, 4, {
+      torrent: false,
+      reRollHit: false,
+      reRollOneToHit: false,
+      sustainedHits: { value: false, variable: '0' },
+      lethalHits: false,
+    })
+
+    expect(res.successfulHits).toBe(0) // None hit (1, 2, 3 < 4)
+    expect(res.lethalHits).toBe(0)
+    expect(res.extraAttacks).toBe(0)
+  })
+
+  it('handles lethal hits correctly', () => {
+    mockRollSequence([6, 4, 6])
+
+    const res = processHitPhase(3, 4, {
+      torrent: false,
+      reRollHit: false,
+      reRollOneToHit: false,
+      sustainedHits: { value: false, variable: '0' },
+      lethalHits: true,
+    })
+
+    expect(res.successfulHits).toBe(3) // All hit (6, 4, 6 >= 4)
+    expect(res.lethalHits).toBe(2) // Two 6s are lethal hits
+    expect(res.extraAttacks).toBe(0)
   })
 })

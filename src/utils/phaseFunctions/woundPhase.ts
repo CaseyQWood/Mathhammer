@@ -43,20 +43,20 @@ export function processWoundPhase(
       }
     }
 
-    // Count successful wound
-    successfulWounds++;
-
     // Check for devastating wounds
     if (modifiers.devastatingWounds && toWoundRoll === 6) {
       devastatingWounds++;
+      continue;
     }
+
+    // Count successful wound
+    successfulWounds++;
+
+ 
   }
 
   // Lethal hits auto-wound
   successfulWounds += lethalHits;
-  if (modifiers.devastatingWounds) {
-    devastatingWounds += lethalHits;
-  }
 
   return { successfulWounds, devastatingWounds };
 } 

@@ -1,7 +1,6 @@
 import type { AttackStats, DefenseStats } from "../../types/unitStats";
-import { rollD6 } from '../diceUtils';
-import { statCheck } from '../statUtils';
-import { shouldAttemptSave, getSaveThreshold } from '../damageUtils';
+import { rollD6, variableCalculator } from '../diceUtils';
+import { getSaveThreshold } from '../damageUtils';
 
 // Phase 3: Save Phase - Returns counts of wounds that need saves vs bypass saves
 export function processSavePhase(
@@ -9,42 +8,41 @@ export function processSavePhase(
   devastatingWounds: number,
   defenseStats: DefenseStats,
   attackStats: AttackStats,
-  modifiers: {
-    devastatingWounds: boolean;
-  }
-): {
-  woundsNeedingSaves: number;
-  woundsBypassingSaves: number;
-} {
-  let woundsNeedingSaves = 0;
-  let woundsBypassingSaves = 0;
+): number {
+  let totalWounds = 0;
 
-  // Devastating wounds bypass saves
-  woundsBypassingSaves += devastatingWounds;
 
   // Regular wounds need saves
-  const regularWounds = successfulWounds - devastatingWounds;
-  for (let i = 0; i < regularWounds; i++) {
-    if (shouldAttemptSave(
+  for (let i = 0; i < successfulWounds; i++) {
+    const saveThreshold = getSaveThreshold(
       defenseStats.save,
       attackStats.armourPiercing,
-      defenseStats.invulnerable,
-      modifiers.devastatingWounds,
-      0 // Not used in shouldAttemptSave for regular wounds
-    )) {
-      const saveThreshold = getSaveThreshold(
-        defenseStats.save,
-        attackStats.armourPiercing,
-        defenseStats.invulnerable
-      );
+      defenseStats.invulnerable
+    )
+
+    if (saveThreshold != 0) {
       const toSaveRoll = rollD6();
-      if (!statCheck(toSaveRoll, saveThreshold)) {
-        woundsNeedingSaves++;
+      if (toSaveRoll >= saveThreshold) {
+        totalWounds++;
       }
     } else {
-      woundsNeedingSaves++;
+      continue;
     }
   }
 
-  return { woundsNeedingSaves, woundsBypassingSaves };
+
+  totalWounds += (devastatingWounds * variableCalculator(attackStats.damage.variable))
+  let wounds = 0
+
+  for (let i = 0; i < totalWounds; i++) {
+    const saveRoll = rollD6()
+    if (saveRoll < defenseStats.feelNoPain) {
+      wounds++
+    }
+    continue
+    
+  }
+
+
+  return wounds ;
 } 

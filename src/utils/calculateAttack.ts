@@ -4,7 +4,6 @@ import { calculateBaseAttacks } from './statUtils';
 import { processHitPhase } from './phaseFunctions/hitPhase';
 import { processWoundPhase } from './phaseFunctions/woundPhase';
 import { processSavePhase } from './phaseFunctions/savePhase';
-import { processDamagePhase } from './phaseFunctions/damagePhase';
 
 // Main orchestration function using count-based phases
 export async function calculateAttack(
@@ -49,24 +48,12 @@ export async function calculateAttack(
     woundResult.devastatingWounds,
     defenseStats,
     attackStats,
-    {
-      devastatingWounds: modifiers.devastatingWounds,
-    }
+    
   );
 
   console.log('saveResult', saveResult);
 
-  // Phase 4: Damage Phase
-  const damageResult = processDamagePhase(
-    saveResult.woundsNeedingSaves,
-    saveResult.woundsBypassingSaves,
-    attackStats,
-    defenseStats
-  );
-
-  console.log('damageResult', damageResult);
-
-  return damageResult;
+  return saveResult;
 }
 
 // Re-export commonly used functions for backward compatibility

@@ -1,26 +1,20 @@
-import { statCheck } from './statUtils';
 import { rollD6 } from './diceUtils';
 
-// Pure function: Determine if a save should be attempted
-export function shouldAttemptSave(
-  save: number,
-  armourPiercing: number,
-  invulnerable: number,
-  devastatingWounds: boolean,
-  toWoundRoll: number
-): boolean {
-  if (devastatingWounds && toWoundRoll === 6) {
-    return false; // Devastating wounds bypass saves
-  }
+// // Pure function: Determine if a save should be attempted
+// export function shouldAttemptSave(
+//   save: number,
+//   armourPiercing: number,
+//   invulnerable: number,
+// ): boolean {
+
+//   if (save > 0 && save + armourPiercing <= 6) {
+//     return !(invulnerable && save + armourPiercing <= invulnerable);
+//   } else if (invulnerable > 0) {
+//     return true;
+//   }
   
-  if (save > 0 && save + armourPiercing <= 6) {
-    return !(invulnerable && save + armourPiercing <= invulnerable);
-  } else if (invulnerable > 0) {
-    return true;
-  }
-  
-  return false;
-}
+//   return false;
+// }
 
 // Pure function: Determine which save to use (normal or invulnerable)
 export function getSaveThreshold(
@@ -50,7 +44,7 @@ export function calculateDamageAfterFeelNoPain(
   
   let totalDamage = 0;
   for (let i = 0; i < attackDamage; i++) {
-    if (!statCheck(rollD6(), feelNoPain)) {
+    if (rollD6() < feelNoPain) {
       totalDamage++;
     }
   }
