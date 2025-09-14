@@ -1,35 +1,17 @@
 import { rollD6 } from './diceUtils';
 
-// // Pure function: Determine if a save should be attempted
-// export function shouldAttemptSave(
-//   save: number,
-//   armourPiercing: number,
-//   invulnerable: number,
-// ): boolean {
-
-//   if (save > 0 && save + armourPiercing <= 6) {
-//     return !(invulnerable && save + armourPiercing <= invulnerable);
-//   } else if (invulnerable > 0) {
-//     return true;
-//   }
-  
-//   return false;
-// }
-
 // Pure function: Determine which save to use (normal or invulnerable)
 export function getSaveThreshold(
   save: number,
   armourPiercing: number,
   invulnerable: number
 ): number {
-  if (save > 0 && save + armourPiercing <= 6) {
-    if (invulnerable && save + armourPiercing <= invulnerable) {
+  if (save > 0 && (save + armourPiercing) <= 6) {
+    if (invulnerable && save + armourPiercing >= invulnerable) {
       return invulnerable;
     }
     return save + armourPiercing;
-  } else if (invulnerable > 0) {
-    return invulnerable;
-  }
+   } 
   return 0;
 }
 

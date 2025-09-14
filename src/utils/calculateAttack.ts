@@ -43,7 +43,7 @@ export async function calculateAttack(
   console.log('woundResult', woundResult);
 
   // Phase 3: Save Phase
-  const saveResult = processSavePhase(
+  const saveResult = processSavePhase(  
     woundResult.successfulWounds,
     woundResult.devastatingWounds,
     defenseStats,
@@ -53,7 +53,7 @@ export async function calculateAttack(
 
   console.log('saveResult', saveResult);
 
-  return saveResult;
+  return saveResult.wounds;
 }
 
 // Re-export commonly used functions for backward compatibility

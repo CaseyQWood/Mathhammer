@@ -16,25 +16,30 @@ export function processWoundPhase(
 ): {
   successfulWounds: number;
   devastatingWounds: number;
+  diceRolls: number[];
 } {
   let successfulWounds = 0;
   let devastatingWounds = 0;
+  const diceRolls = []
 
   // Process regular hits (non-lethal)
   const regularHits = successfulHits - lethalHits;
   for (let i = 0; i < regularHits; i++) {
     const toWound = calculateToWoundThreshold(strength, toughness);
     let toWoundRoll = rollD6();
+    diceRolls.push(toWoundRoll)
 
     // Handle wound phase with rerolls
     if (toWoundRoll < toWound) {
       if (modifiers.reRollOneToWound && toWoundRoll === 1) {
         toWoundRoll = rollD6();
+        diceRolls.push(toWoundRoll)
         if (toWoundRoll < toWound) {
           continue;
         }
       } else if (modifiers.reRollWound) {
         toWoundRoll = rollD6();
+        diceRolls.push(toWoundRoll)
         if (toWoundRoll < toWound) {
           continue;
         }
@@ -58,5 +63,5 @@ export function processWoundPhase(
   // Lethal hits auto-wound
   successfulWounds += lethalHits;
 
-  return { successfulWounds, devastatingWounds };
+  return { successfulWounds, devastatingWounds, diceRolls };
 } 
