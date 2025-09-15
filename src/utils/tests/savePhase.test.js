@@ -54,27 +54,17 @@ describe('processSavePhase', () => {
   })
 
   it('handles wounds that cannot attempt saves (saveThreshold = 0)', () => {
-    const mockDefenseStats = {
-      toughness: 4,
-      save: 3,
-      invulnerable: 0,
-      feelNoPain: 0,
-    }
-  
-    const mockAttackStats = {
-      models: 1,
-      attacks: { variable: '0', value: 1 },
-      weaponSkill: 3,
-      strength: 4,
-      armourPiercing: 4,
-      damage: { variable: '0', value: 1 },
+
+    const armourPiercingMockAttackData ={
+      ...mockAttackStats,
+      armourPiercing: 4
     }
  
     mockRollSequence([1, 2]) 
-    ;(getSaveThreshold).mockReturnValue(7) // Save threshold of 3+
+    ;(getSaveThreshold).mockReturnValue(7) // 3+ save + ap 4 = 7 (out of threshold)
     ;(variableCalculator).mockReturnValue(0) // Damage calculation
 
-    const result = processSavePhase(2, 0, mockDefenseStats, mockAttackStats)
+    const result = processSavePhase(2, 0, mockDefenseStats, armourPiercingMockAttackData)
     
     expect(result.wounds).toBe(2) 
   })
@@ -97,13 +87,13 @@ describe('processSavePhase', () => {
       damage: { variable: '0', value: 1 },
     }
     // Mock: 2 devastating wounds, both fail Feel No Pain
-    mockRollSequence([1, 2, 4]) // fail (1, 2 < 0) pass (4 = 4)
+    mockRollSequence([1, 2, 4]) 
     ;(getSaveThreshold).mockReturnValue(7) 
     ;(variableCalculator).mockReturnValue(0) // Damage calculation
 
     const result = processSavePhase(0, 3, mockDefenseStats, mockAttackStats)
     
-    expect(result.wounds).toBe(2) // two FNP saves and one fail
+    expect(result.wounds).toBe(2) // fail (1, 2 < 0) pass (4 = 4)
     expect(rollD6).toHaveBeenCalledTimes(3) // Only FNP rolls
   })
 

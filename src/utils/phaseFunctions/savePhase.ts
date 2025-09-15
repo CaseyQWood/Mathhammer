@@ -39,8 +39,6 @@ export function processSavePhase(
   }
 
   const woundTotal = (totalFailedSaves + devastatingHits) * (variableCalculator(attackStats.damage.variable) + attackStats.damage.value)
-  console.log("woundTotal", woundTotal)
-  console.log("Feel no pain: ", defenseStats.feelNoPain)
 
   if (defenseStats.feelNoPain === 0) {
     return { 
@@ -50,15 +48,12 @@ export function processSavePhase(
   }
 
   
-  console.log("woundTotal: ", woundTotal)
   for (let i = 0; i < woundTotal; i++) {
     const saveRoll = rollD6()
     diceRolls.push(saveRoll)
-    console.log("dice", saveRoll)
     if (saveRoll < defenseStats.feelNoPain) {
       wounds++
     }
   } 
-  console.log("dicerolls", diceRolls)
   return { wounds, diceRolls } ;
 } 

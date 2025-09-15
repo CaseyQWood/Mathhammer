@@ -58,12 +58,14 @@ export function processHitPhase(
       }
 
       if ( toHitRoll === 6 ) {
-        if (modifiers.lethalHits) {
-          lethalHits++;
-        }
         if (modifiers.sustainedHits.value) {
           const sustainedExtra = variableCalculator(modifiers.sustainedHits.variable);
           extraAttacks += sustainedExtra;
+          successfulHits++;
+        }
+        if (modifiers.lethalHits) {
+          lethalHits++;
+          continue
         }
       }
 

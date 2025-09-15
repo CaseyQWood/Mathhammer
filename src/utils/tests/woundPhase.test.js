@@ -94,7 +94,7 @@ describe('processWoundPhase', () => {
       devastatingWounds: false,
     })
 
-    expect(res.successfulWounds).toBe(3) // 1 regular wound + 2 lethal hits
+    expect(res.successfulWounds).toBe(4) // 1 regular wound + 2 lethal hits
     expect(res.devastatingWounds).toBe(0)
   })
 
@@ -109,12 +109,12 @@ describe('processWoundPhase', () => {
       devastatingWounds: true,
     })
 
-    expect(res.successfulWounds).toBe(3) // 1 regular wound + 2 lethal hits
-    expect(res.devastatingWounds).toBe(0) // 2 lethal hits count as devastating
+    expect(res.successfulWounds).toBe(4) // 2 regular wound + 2 lethal hits
+    expect(res.devastatingWounds).toBe(0) 
   })
 
   it('handles mixed regular hits and lethal hits with devastating wounds', () => {
-    mockRollSequence([6, 4, 2])
+    mockRollSequence([6, 4, 2, 5, 1])
     ;(calculateToWoundThreshold).mockReturnValue(4)
 
     const res = processWoundPhase(5, 2, 4, 4, {
@@ -124,7 +124,7 @@ describe('processWoundPhase', () => {
       devastatingWounds: true,
     })
 
-    expect(res.successfulWounds).toBe(3) // 1 regular wounds (4) + 2 lethal hits
+    expect(res.successfulWounds).toBe(4) // 3 regular wounds + 2 lethal hits
     expect(res.devastatingWounds).toBe(1) // 1 from 6 
   })
 

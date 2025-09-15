@@ -1,6 +1,5 @@
 import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
 import { calculateBaseAttacks } from './statUtils';
-// import { processHitPhase, processWoundPhase, processSavePhase, processDamagePhase } from './phaseUtils';
 import { processHitPhase } from './phaseFunctions/hitPhase';
 import { processWoundPhase } from './phaseFunctions/woundPhase';
 import { processSavePhase } from './phaseFunctions/savePhase';
@@ -24,7 +23,6 @@ export async function calculateAttack(
     }
   );
 
-  console.log('hitResult', hitResult);
 
   // Phase 2: Wound Phase
   const woundResult = processWoundPhase(
@@ -40,7 +38,6 @@ export async function calculateAttack(
     }
   );
 
-  console.log('woundResult', woundResult);
 
   // Phase 3: Save Phase
   const saveResult = processSavePhase(  
@@ -51,7 +48,6 @@ export async function calculateAttack(
     
   );
 
-  console.log('saveResult', saveResult);
 
   return saveResult.wounds;
 }

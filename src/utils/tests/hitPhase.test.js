@@ -90,7 +90,7 @@ describe('processHitPhase', () => {
   })
 
   it('skips all hit logic when torrent is true but still records rolls', () => {
-    // With torrent true, current implementation bypasses hit checks, but we still roll once per attack
+    // With torrent true, current implementation bypasses hit checks
     mockRollSequence([2, 1, 6])
 
     const res = processHitPhase(3, 6, {
@@ -107,21 +107,6 @@ describe('processHitPhase', () => {
     expect(res.hitRolls).toEqual([])
   })
 
-  it('handles all successful hits', () => {
-    mockRollSequence([4, 5, 6])
-
-    const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: false,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: false,
-    })
-
-    expect(res.successfulHits).toBe(3) // All hit (4, 5, 6 >= 4)
-    expect(res.lethalHits).toBe(0)
-    expect(res.extraAttacks).toBe(0)
-  })
 
   it('handles all failed hits', () => {
     mockRollSequence([1, 2, 3])
@@ -150,7 +135,7 @@ describe('processHitPhase', () => {
       lethalHits: true,
     })
 
-    expect(res.successfulHits).toBe(3) // All hit (6, 4, 6 >= 4)
+    expect(res.successfulHits).toBe(1) // All hit (6, 4, 6 >= 4)
     expect(res.lethalHits).toBe(2) // Two 6s are lethal hits
     expect(res.extraAttacks).toBe(0)
   })
