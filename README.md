@@ -1,11 +1,12 @@
 TODO:
 
 - add remove attack stats button
+- Update variableCalculator to cover more cases as it also manages damage
 - add instance carousel
 - unify default value managment between components
 - make sure all components are controlled components
 - Setup saving units
-- see if I can add testing for the simulations
+- determine if I should move to models killed VS wounds done. because some defenders have multiple wounds because of the non overflow when feel no pain is involved
 - Complete design
 - Mobile friendly up and down arrows for values ( do I think this is required ? )
 - improve mobile inputs

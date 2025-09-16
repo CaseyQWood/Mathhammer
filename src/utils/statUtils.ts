@@ -1,10 +1,5 @@
 import { variableCalculator } from './calculateAttack';
 
-// Pure function: Simplified stat check
-export function statCheck(value: number, passingThreshold: number): boolean {
-  return value >= passingThreshold;
-}
-
 // Pure function: Calculate wound threshold based on strength vs toughness
 export function calculateToWoundThreshold(strength: number, toughness: number): number {
   if (strength === toughness) {

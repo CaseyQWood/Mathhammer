@@ -1,5 +1,4 @@
 import { rollD6, variableCalculator } from '../diceUtils';
-import { statCheck } from '../statUtils';
 
 // Phase 1: Hit Phase - Returns counts of successful hits and lethal hits
 export function processHitPhase(
@@ -18,51 +17,57 @@ export function processHitPhase(
   extraAttacks: number;
   hitRolls: number[];
 } {
+
+
+
   let successfulHits = 0;
   let lethalHits = 0;
   let extraAttacks = 0;
-  let totalAttacks = baseAttacks;
   
   const hitRolls: number[] = [];
 
+  if (modifiers.torrent) {
+    successfulHits = baseAttacks
+    return { successfulHits, lethalHits, extraAttacks, hitRolls }
+  }
+
   // Process all attacks (base + sustained hits)
-  for (let i = 0; i < totalAttacks; i++) {
+  for (let i = 0; i < baseAttacks; i++) {
     let toHitRoll = rollD6();
     hitRolls.push(toHitRoll);
 
     // Handle hit phase with rerolls - checks for failure and if failed ends the loop for that attack
-    if (!modifiers.torrent) {
-      if (!statCheck(toHitRoll, weaponSkill)) {
+      if (toHitRoll < weaponSkill) {
         if (modifiers.reRollOneToHit && toHitRoll === 1) {
           toHitRoll = rollD6();
           hitRolls.push(toHitRoll);
-          if (!statCheck(toHitRoll, weaponSkill)) {
+          if (toHitRoll < weaponSkill) {
             continue;
           }
         } else if (modifiers.reRollHit) {
           toHitRoll = rollD6();
           hitRolls.push(toHitRoll);
-          if (!statCheck(toHitRoll, weaponSkill)) {
+          if (toHitRoll < weaponSkill) {
             continue;
           }
         } else {
           continue;
         }
+
+        
       }
 
-      // Check for lethal hits
-      if (modifiers.lethalHits && toHitRoll === 6) {
-        lethalHits++;
+      if ( toHitRoll === 6 ) {
+        if (modifiers.sustainedHits.value) {
+          const sustainedExtra = variableCalculator(modifiers.sustainedHits.variable);
+          extraAttacks += sustainedExtra;
+          successfulHits++;
+        }
+        if (modifiers.lethalHits) {
+          lethalHits++;
+          continue
+        }
       }
-
-      // Handle sustained hits (only for base attacks)
-
-      if (modifiers.sustainedHits.value && toHitRoll === 6 && i < baseAttacks) {
-        const sustainedExtra = variableCalculator(modifiers.sustainedHits.variable);
-        extraAttacks += sustainedExtra;
-        totalAttacks += sustainedExtra;
-      }
-    }
 
     // Count successful hit
     successfulHits++;

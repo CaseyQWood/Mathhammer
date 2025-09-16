@@ -32,7 +32,6 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
         _event: unknown,
         newVal: string | null,
     ) => {
-        console.log(newVal)
         setSustainedHits(newVal);
     };
 

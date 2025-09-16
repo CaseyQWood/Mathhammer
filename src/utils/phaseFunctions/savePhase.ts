@@ -1,50 +1,59 @@
 import type { AttackStats, DefenseStats } from "../../types/unitStats";
-import { rollD6 } from '../diceUtils';
-import { statCheck } from '../statUtils';
-import { shouldAttemptSave, getSaveThreshold } from '../damageUtils';
+import { rollD6, variableCalculator } from '../diceUtils';
+import { getSaveThreshold } from '../damageUtils';
 
 // Phase 3: Save Phase - Returns counts of wounds that need saves vs bypass saves
 export function processSavePhase(
-  successfulWounds: number,
-  devastatingWounds: number,
+  successfulHits: number,
+  devastatingHits: number,
   defenseStats: DefenseStats,
   attackStats: AttackStats,
-  modifiers: {
-    devastatingWounds: boolean;
-  }
 ): {
-  woundsNeedingSaves: number;
-  woundsBypassingSaves: number;
+  wounds: number,
+  diceRolls: number[]
 } {
-  let woundsNeedingSaves = 0;
-  let woundsBypassingSaves = 0;
+  let totalFailedSaves = 0;
+  let wounds = 0
+  const diceRolls: number[] = []
 
-  // Devastating wounds bypass saves
-  woundsBypassingSaves += devastatingWounds;
+  if (successfulHits <= 0 && devastatingHits <= 0) return  { wounds, diceRolls }
+
 
   // Regular wounds need saves
-  const regularWounds = successfulWounds - devastatingWounds;
-  for (let i = 0; i < regularWounds; i++) {
-    if (shouldAttemptSave(
+  for (let i = 0; i < successfulHits; i++) {
+    const saveThreshold = getSaveThreshold(
       defenseStats.save,
       attackStats.armourPiercing,
-      defenseStats.invulnerable,
-      modifiers.devastatingWounds,
-      0 // Not used in shouldAttemptSave for regular wounds
-    )) {
-      const saveThreshold = getSaveThreshold(
-        defenseStats.save,
-        attackStats.armourPiercing,
-        defenseStats.invulnerable
-      );
+      defenseStats.invulnerable
+    )
+
+    if (saveThreshold != 0 || saveThreshold > 6) {
       const toSaveRoll = rollD6();
-      if (!statCheck(toSaveRoll, saveThreshold)) {
-        woundsNeedingSaves++;
+      diceRolls.push(toSaveRoll)
+      if (toSaveRoll < saveThreshold) {
+        totalFailedSaves++;
       }
     } else {
-      woundsNeedingSaves++;
+      continue;
     }
   }
 
-  return { woundsNeedingSaves, woundsBypassingSaves };
+  const woundTotal = (totalFailedSaves + devastatingHits) * (variableCalculator(attackStats.damage.variable) + attackStats.damage.value)
+
+  if (defenseStats.feelNoPain === 0) {
+    return { 
+      wounds: woundTotal * (variableCalculator(attackStats.damage.variable) + attackStats.damage.value) , 
+      diceRolls 
+    }
+  }
+
+  
+  for (let i = 0; i < woundTotal; i++) {
+    const saveRoll = rollD6()
+    diceRolls.push(saveRoll)
+    if (saveRoll < defenseStats.feelNoPain) {
+      wounds++
+    }
+  } 
+  return { wounds, diceRolls } ;
 } 
