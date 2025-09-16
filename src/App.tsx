@@ -1,19 +1,38 @@
-import { useState } from 'react';
-import { Sheet } from '@mui/joy';
+// import { useState } from 'react';
 import './App.css'
-import ResultsBarChart from './components/resultsBarChart';
-import UnitForm from './components/unitForm/UnitForm';
-import Header from './components/header';
-type WoundTallies = Record<number, number>;
+// import ResultsBarChart from './components/resultsBarChart';
+// import UnitForm from './components/unitForm/UnitForm';
+// import Header from './components/header';
+// type WoundTallies = Record<number, number>;
 
 
 function App() {
-  const [simData, setSimData] = useState<WoundTallies>()
-  const [openAside, setOpenAside] = useState<boolean>(false)
+  // const [simData, setSimData] = useState<WoundTallies>()
+  // const [openAside, setOpenAside] = useState<boolean>(false)
 
   return (
-    <Sheet >
-      <Header openAside={openAside} setOpenAside={setOpenAside} />
+    <div id='main'>
+
+      <section className="login-section">
+        <div className='logo-wrapper'>
+          <img src="src/assets/react.svg" alt="Mathhammer Logo" />
+        </div>
+        <form>
+          <button>Login</button>
+          <button>Sign Up</button>
+          <button>Guest</button>
+        </form>
+
+
+        {/* <form>
+          <label htmlFor="username">Username:</label>
+          <input type="text" id="username" name="username" />
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" />
+          <button type="submit">Login</button>
+        </form> */}
+      </section>
+      {/* <Header openAside={openAside} setOpenAside={setOpenAside} />
       <div id="main">
         {openAside ? <aside>aside</aside> : null}
         <article>
@@ -25,8 +44,8 @@ function App() {
         </article>
 
       </div>
-      <footer>Footer</footer>
-    </Sheet>
+      <footer>Footer</footer> */}
+    </div>
   )
 }
 
