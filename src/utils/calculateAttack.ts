@@ -1,8 +1,8 @@
 import type { AttackStats, DefenseStats, Modifiers } from "../types/unitStats";
-import { calculateBaseAttacks } from './statUtils';
-import { processHitPhase } from './phaseFunctions/hitPhase';
-import { processWoundPhase } from './phaseFunctions/woundPhase';
-import { processSavePhase } from './phaseFunctions/savePhase';
+import { calculateBaseAttacks } from "./statUtils";
+import { processHitPhase } from "./phaseFunctions/hitPhase";
+import { processWoundPhase } from "./phaseFunctions/woundPhase";
+import { processSavePhase } from "./phaseFunctions/savePhase";
 
 // Main orchestration function using count-based phases
 export async function calculateAttack(
@@ -23,7 +23,6 @@ export async function calculateAttack(
     }
   );
 
-
   // Phase 2: Wound Phase
   const woundResult = processWoundPhase(
     hitResult.successfulHits,
@@ -38,20 +37,17 @@ export async function calculateAttack(
     }
   );
 
-
   // Phase 3: Save Phase
-  const saveResult = processSavePhase(  
+  const saveResult = processSavePhase(
     woundResult.successfulWounds,
     woundResult.devastatingWounds,
     defenseStats,
-    attackStats,
-    
+    attackStats
   );
-
 
   return saveResult.wounds;
 }
 
 // Re-export commonly used functions for backward compatibility
-export { calculateToWoundThreshold } from './statUtils';
-export { variableCalculator } from './diceUtils';
+export { calculateToWoundThreshold } from "./statUtils";
+export { variableCalculator } from "./diceUtils";
