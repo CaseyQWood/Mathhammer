@@ -32,14 +32,13 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
         _event: unknown,
         newVal: string | null,
     ) => {
-        console.log(newVal)
         setSustainedHits(newVal);
     };
 
     const modifiersData = {
         lethalHits: 'Lethal Hits',
         sustainedHits: 'Sustained Hits',
-        devistatingWounds: 'Devistating Wounds',
+        devastatingWounds: 'devastating Wounds',
         torrent: 'Torrent',
         reRollHit: 'Re-roll to Hit',
         reRollOneToHit: "Re-roll 1 to Hit",

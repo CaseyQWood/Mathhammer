@@ -10,7 +10,7 @@ export interface AttackStats {
 export interface Modifiers {
   lethalHits: boolean;
   sustainedHits: { value: boolean; variable: string };
-  devistatingWounds: boolean;
+  devastatingWounds: boolean;
   torrent: boolean;
   reRollHit: boolean;
   reRollOneToHit: boolean;

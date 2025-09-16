@@ -15,7 +15,6 @@ export async function runSimulation(
 ): Promise<WoundTallies> {
   // creates an array of promises the length of model count for each unit type
   // sums all the damage from each modelType and adds to unitDamage
-
   const results: number[] = [];
   for (let i = 0; i < iterations; i++) {
     let unitDamage: number = 0;
@@ -51,6 +50,5 @@ export async function runSimulation(
       ((value / iterations) * 100).toFixed(1)
     );
   }
-  // console.log("percent Object: ", percentObject);
   return percentObject;
 }
