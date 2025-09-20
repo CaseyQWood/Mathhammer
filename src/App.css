@@ -140,6 +140,7 @@ article {
 
   to {
     bottom: -45%;
+    display: none;
   }
 }
 
@@ -160,5 +161,6 @@ article {
 
   to {
     opacity: 0;
+    display: none;
   }
 }
