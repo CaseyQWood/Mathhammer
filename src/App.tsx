@@ -3,48 +3,36 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router';
 import { AnimatePresence } from 'motion/react';
 import './App.css'
 import LoginScreen from './components/Login'
-import ResultsBarChart from './components/resultsBarChart';
-import UnitForm from './components/unitForm/UnitForm';
-import Header from './components/header';
+import HomePage from './components/routes/HomePage'
+
+// import Header from './components/header';
 import { motion } from "motion/react"
 
 
-type WoundTallies = Record<number, number>;
 
 
 function App() {
-  const [simData, setSimData] = useState<WoundTallies>()
   // const [openAside, setOpenAside] = useState<boolean>(false)
   const navigate = useNavigate();
   const location = useLocation()
 
 
-  const page = {
-    initial: { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.35 } },
-  };
+  // const page = {
+  //   initial: { opacity: 0, y: 16 },
+  //   animate: { opacity: 1, y: 0, transition: { duration: 0.35 } },
+  // };
 
   return (
     <div key="test" id='main'>
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
-          key={location.pathname}            // or: location.key
-          variants={page}
-          initial="initial"
-          animate="animate"
+          key={location.pathname}
+        // variants={page}
+        // initial="initial"
+        // animate="animate"
         >
           <Routes location={location}>
-            <Route path="/home" element={
-              <motion.article
-                key="home"
-              >
-                <UnitForm setSimData={setSimData} />
-                {simData ?
-                  <ResultsBarChart results={simData} />
-                  : null
-                }
-              </motion.article>
-            } />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} />
           </Routes>
 
