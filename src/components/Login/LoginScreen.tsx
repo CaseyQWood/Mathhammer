@@ -1,22 +1,13 @@
-import { useEffect } from "react"
 import { motion } from "motion/react"
 
 interface LoginScreenProps {
-    loggedIn: boolean
-    setLoggedIn: any;
+    login: () => void;
 }
 
-const transition = {
-    duration: 0.8,
-    delay: 0.5,
-    ease: [0, 0.71, 0.2, 1.01],
-}
 
-export default function LoginScreen({ loggedIn, setLoggedIn }: LoginScreenProps) {
+export default function LoginScreen({ login }: LoginScreenProps) {
 
-    useEffect(() => {
-        console.log(`Test: ${loggedIn}`)
-    }, [loggedIn])
+
     return (
         <motion.section className="login-section">
             <motion.div transition={{ duration: 0.5 }} key="login-logo" initial={{ opacity: 0 }} exit={{ opacity: 0 }} animate={{ opacity: 1 }} className={`logo-wrapper `}>
@@ -28,7 +19,7 @@ export default function LoginScreen({ loggedIn, setLoggedIn }: LoginScreenProps)
             <motion.form transition={{ duration: 0.5, ease: "easeInOut" }} key="login-modal" initial={{ y: "100%" }} exit={{ y: "100%" }} animate={{ y: 0 }}>
                 <button type="button">Login</button>
                 <button type="button">Sign Up</button>
-                <button type="button" onClick={() => setLoggedIn()}>Guest</button>
+                <button type="button" onClick={() => login()}>Guest</button>
             </motion.form>
         </motion.section>
     )

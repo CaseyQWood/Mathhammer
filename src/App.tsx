@@ -15,7 +15,6 @@ type WoundTallies = Record<number, number>;
 function App() {
   const [simData, setSimData] = useState<WoundTallies>()
   // const [openAside, setOpenAside] = useState<boolean>(false)
-  const [loggedIn, setLoggedIn] = useState(false)
   const navigate = useNavigate();
   const location = useLocation()
 
@@ -23,7 +22,6 @@ function App() {
   const page = {
     initial: { opacity: 0, y: 16 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.35 } },
-    // exit: { opacity: 0, y: -16, transition: { duration: 0.25 } },
   };
 
   return (
@@ -34,15 +32,10 @@ function App() {
           variants={page}
           initial="initial"
           animate="animate"
-        // exit="exit"
         >
           <Routes location={location}>
             <Route path="/home" element={
               <motion.article
-                // initial={{ opacity: 0, x: 100 }}
-                // animate={{ opacity: 1, x: 0 }}
-                // exit={{ opacity: 0, x: -100 }}
-                // transition={{ duration: 0.5 }}
                 key="home"
               >
                 <UnitForm setSimData={setSimData} />
@@ -52,20 +45,9 @@ function App() {
                 }
               </motion.article>
             } />
-            <Route path="/" element={<LoginScreen key="login-screen" loggedIn={loggedIn} setLoggedIn={() => navigate("/home")} />} />
+            <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} />
           </Routes>
 
-          {/* {loggedIn ?
-          // <article>
-          //   <UnitForm setSimData={setSimData} />
-          //   {simData ?
-          //     <ResultsBarChart results={simData} />
-          //     : null
-          //   }
-          // </article>
-          null :
-          
-        } */}
           {/* <Header openAside={openAside} setOpenAside={setOpenAside} />
       <div id="main">
          {openAside ? <aside>aside</aside> : null}
