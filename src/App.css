@@ -43,13 +43,14 @@ article {
 .login-section {
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   position: relative;
 }
 
 .login-section form {
-  position: absolute;
-  bottom: 0;
+  /* position: absolute; */
+  /* bottom: 0; */
   display: flex;
   height: 45%;
   width: 100%;
@@ -58,17 +59,17 @@ article {
   flex-direction: column;
   gap: 1rem;
   justify-content: center;
-  animation-fill-mode: both;
+  overflow: "auto";
 }
 
-.login-section form.logged-in {
+/* .login-section form.logged-in {
   animation-duration: 1s;
   animation-name: slide-out;
 }
 .login-section form.logged-out {
   animation-duration: 1s;
   animation-name: slide-in;
-}
+} */
 
 .login-section form button:nth-child(3) {
   margin-top: 3rem;
