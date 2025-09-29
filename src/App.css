@@ -29,14 +29,8 @@ aside {
   padding: 1em;
 }
 header,
-footer {
+nav {
   background: #196774;
   height: 10vh;
-}
-
-article {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 1rem;
+  border-radius: 15px 15px 0 0;
 }

@@ -1,5 +1,6 @@
 import { motion } from "motion/react"
 import { useState } from "react"
+import styles from './homePage.module.css'
 import UnitForm from "../../unitForm"
 import ResultsBarChart from "../../resultsBarChart"
 
@@ -11,12 +12,14 @@ export default function HomePage() {
 
 
     return (
-        <motion.article initial={{ backgroundColor: "#001524" }} key="home">
+        <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
+            <motion.h2>Calculate</motion.h2>
             <UnitForm setSimData={setSimData} />
             {simData ?
                 <ResultsBarChart results={simData} />
                 : null
             }
-        </motion.article>
+            <motion.nav>Nav</motion.nav>
+        </motion.div>
     )
 }

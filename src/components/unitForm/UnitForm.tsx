@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
+import DropDown from "../dropDown/DropDown";
 import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails, Divider, IconButton } from "@mui/joy";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DefenseInputs from './DefenseInputs'
@@ -12,8 +13,9 @@ interface UnitFormProps {
     setSimData: (result: WoundTallies) => void
 }
 
-const accordionStyles = {
-    borderRadius: "1rem"
+const AttackAccordionStyles = {
+    borderRadius: "1rem",
+    backgroundColor: "#ff7d00",
 }
 
 export default function UnitForm({ setSimData }: UnitFormProps) {
@@ -104,13 +106,30 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
-            <AccordionGroup
+            <DropDown title="Defence Stats">
+
+            </DropDown>
+
+
+        </div >
+    )
+}
+
+
+
+
+
+/*
+
+<AccordionGroup
                 color="neutral"
                 size="lg"
                 variant="plain"
                 sx={{ gap: "1rem" }}
             >
-                <Accordion variant="soft" sx={accordionStyles}>
+                <Accordion variant="soft" sx={{
+                    backgroundColor: "#15616d", borderRadius: "1rem"
+                }}>
                     <AccordionSummary>Defence Stats</AccordionSummary>
                     <AccordionDetails>
                         <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
@@ -120,8 +139,8 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
 
                 {attackStats.map((ele, index) => {
                     return (
-                        <Accordion key={index} variant="soft" sx={accordionStyles}>
-                            <AccordionSummary>Attack Stats</AccordionSummary>
+                        <Accordion key={index} variant="soft" sx={AttackAccordionStyles}>
+                            <AccordionSummary sx={{ color: "#001524" }}>Attack Stats</AccordionSummary>
                             <AccordionDetails>
                                 <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
                                 <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
@@ -158,6 +177,6 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                     Submit
                 </Button >
             </AccordionGroup>
-        </div >
-    )
-}
+
+
+*/

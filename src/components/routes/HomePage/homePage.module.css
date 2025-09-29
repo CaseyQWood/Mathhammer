@@ -1,0 +1,9 @@
+.homePageWrapper {
+  display: flex;
+  justify-content: space-between;
+  background-color: #001524;
+  flex-direction: column;
+  height: 100%;
+  width: 100vw;
+  gap: 1rem;
+}

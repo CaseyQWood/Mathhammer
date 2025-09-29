@@ -1,3 +1,8 @@
+.unitForm__wrapper {
+  height: 100%;
+  padding: 1rem;
+}
+
 .defensiveStats__wrapper {
   display: flex;
   flex-direction: column;
