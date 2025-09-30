@@ -2,8 +2,7 @@ import { useCallback, useState } from "react";
 import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
 import DropDown from "../dropDown/DropDown";
-import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails, Divider, IconButton } from "@mui/joy";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
@@ -13,10 +12,6 @@ interface UnitFormProps {
     setSimData: (result: WoundTallies) => void
 }
 
-const AttackAccordionStyles = {
-    borderRadius: "1rem",
-    backgroundColor: "#ff7d00",
-}
 
 export default function UnitForm({ setSimData }: UnitFormProps) {
     const simCount = 1
@@ -106,10 +101,21 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
-            <DropDown title="Defence Stats">
-
+            <DropDown color="primary" title="Defence Stats">
+                <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
             </DropDown>
 
+            {attackStats.map((ele, index) => {
+                return (
+                    <DropDown color="secondary" title="Attack Stats">
+                        <div>
+                            <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
+                            <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
+                        </div>
+                    </DropDown>
+
+                )
+            })}
 
         </div >
     )

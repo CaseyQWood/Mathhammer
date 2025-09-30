@@ -13,6 +13,7 @@ export default function HomePage() {
 
     return (
         <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
+            <aside>aside</aside>
             <motion.h2>Calculate</motion.h2>
             <UnitForm setSimData={setSimData} />
             {simData ?

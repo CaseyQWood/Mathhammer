@@ -31,6 +31,7 @@ aside {
 header,
 nav {
   background: #196774;
-  height: 10vh;
+  height: 15vh;
   border-radius: 15px 15px 0 0;
+  position: static;
 }
