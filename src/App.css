@@ -30,6 +30,7 @@ aside {
 }
 header,
 nav {
+  z-index: 10;
   background: #196774;
   height: 15vh;
   border-radius: 15px 15px 0 0;

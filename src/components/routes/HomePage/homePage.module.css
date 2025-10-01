@@ -12,16 +12,15 @@
 
 .homePageWrapper aside {
   position: absolute;
-  width: 8rem;
-  height: 8rem;
+  width: 10rem;
+  height: 100%;
   background-color: #ff7d00;
-  border-radius: 50%;
-  top: -2rem;
-  left: -2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+}
+
+aside ul {
+  margin: 0;
+  height: auto;
+  margin-top: 2rem;
 }
 
 .homePageWrapper h2 {
