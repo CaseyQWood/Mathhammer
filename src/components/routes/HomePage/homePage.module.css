@@ -10,19 +10,6 @@
   overflow: auto;
 }
 
-.homePageWrapper aside {
-  position: absolute;
-  width: 10rem;
-  height: 100%;
-  background-color: #ff7d00;
-}
-
-aside ul {
-  margin: 0;
-  height: auto;
-  margin-top: 2rem;
-}
-
 .homePageWrapper h2 {
   margin: 2rem 0;
   padding-left: 10rem;
