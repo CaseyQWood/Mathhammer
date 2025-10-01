@@ -2,7 +2,11 @@
   background-color: rgb(21, 97, 109);
   border-radius: 1rem;
   padding: 1rem;
+}
+
+.preview {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }
 

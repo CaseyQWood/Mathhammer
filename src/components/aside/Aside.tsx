@@ -14,8 +14,6 @@ const sidebarVariants = {
     hidden: { clipPath: "circle(0 at 40px 40px)" }
 }
 
-
-
 const itemVariants = {
     open: {
         y: 0,

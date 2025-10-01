@@ -14,7 +14,7 @@ interface UnitFormProps {
 
 
 export default function UnitForm({ setSimData }: UnitFormProps) {
-    const simCount = 1
+    const simCount = 1000
     const defaultAttackStats = {
         models: 1,
         attacks: {
@@ -101,22 +101,33 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
-            <DropDown color="primary" title="Defence Stats">
-                <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
-            </DropDown>
+            <div className={style.dropDown__wrapper}>
+                <DropDown color="primary" title="Defence Stats">
+                    <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
+                </DropDown>
 
-            {attackStats.map((ele, index) => {
-                return (
-                    <DropDown color="secondary" title="Attack Stats">
-                        <div>
-                            <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
-                            <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
-                        </div>
-                    </DropDown>
+                {attackStats.map((ele, index) => {
+                    return (
+                        <DropDown color="secondary" title="Attack Stats">
+                            <div>
+                                <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
+                                <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
+                            </div>
+                        </DropDown>
+                    )
+                })}
+            </div>
 
-                )
-            })}
+            <button
+                onClick={() => {
+                    runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
+                        setSimData(results)
+                    })
+                }}
 
+            >
+                Submit
+            </button >
         </div >
     )
 }
