@@ -20,7 +20,6 @@ interface DropDownProps {
 export default function DropDown({ title, color = "primary", children }: DropDownProps) {
     const [open, setOpen] = useState(false)
 
-
     useEffect(() => { console.log(open) }, [open])
 
     return (

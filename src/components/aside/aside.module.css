@@ -32,9 +32,8 @@ Hamburger
 */
 
 .buttonNav {
-  /*   border: 3px solid white; */
   height: 6rem;
-  left: 3rem;
+  left: 2.8rem;
   position: absolute;
   top: 3rem;
   -webkit-transform: translate(-50%, -50%);

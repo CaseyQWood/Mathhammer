@@ -1,103 +1,15 @@
-import { useCallback, useState } from "react";
-import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
 import DropDown from "../dropDown/DropDown";
 
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
-import { runSimulation } from "../../utils/runSimulation";
-
-interface UnitFormProps {
-    setSimData: (result: WoundTallies) => void
-}
 
 
-export default function UnitForm({ setSimData }: UnitFormProps) {
-    const simCount = 1000
-    const defaultAttackStats = {
-        models: 1,
-        attacks: {
-            variable: "0",
-            value: 4
-        },
-        weaponSkill: 3,
-        strength: 4,
-        armourPiercing: 1,
-        damage: {
-            variable: "0",
-            value: 1
-        }
-    }
-    const defaultModifiers = {
-        lethalHits: false,
-        sustainedHits: { value: false, variable: "1" },
-        devastatingWounds: false,
-        torrent: false,
-        reRollHit: false,
-        reRollOneToHit: false,
-        reRollWound: false,
-        reRollOneToWound: false
-    }
-    const [defenseStats, setdefenseStats] = useState<DefenseStats>({
-        toughness: 4,
-        save: 3,
-        invulnerable: 0,
-        feelNoPain: 0,
-    })
-    const handleDefenseChange = (key: string, value: number) => {
-        setdefenseStats(prevStats => ({
-            ...prevStats,
-            [key]: value
-        }));
-    };
-    const [attackStats, setAttackStats] = useState<AttackStats[]>([{
-        models: 1,
-        attacks: {
-            variable: "0",
-            value: 4
-        },
-        weaponSkill: 3,
-        strength: 4,
-        armourPiercing: 1,
-        damage: {
-            variable: "0",
-            value: 1
-        }
-    }])
 
-    const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
-        setAttackStats(prevStats => {
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
-            };
-            return newStats;
-        });
-    }, []);
+export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange }) {
 
-    const [modifiers, setModifiers] = useState<Modifiers[]>([{
-        lethalHits: false,
-        sustainedHits: { value: false, variable: "1" },
-        devastatingWounds: false,
-        torrent: false,
-        reRollHit: false,
-        reRollOneToHit: false,
-        reRollWound: false,
-        reRollOneToWound: false
-    }])
 
-    const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
-        setModifiers(prevStats => {
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
-            };
-            return newStats;
-        });
-    }, [])
 
     return (
         <div className={style.unitForm__wrapper} >
@@ -118,16 +30,7 @@ export default function UnitForm({ setSimData }: UnitFormProps) {
                 })}
             </div>
 
-            <button
-                onClick={() => {
-                    runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
-                        setSimData(results)
-                    })
-                }}
 
-            >
-                Submit
-            </button >
         </div >
     )
 }

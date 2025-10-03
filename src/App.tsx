@@ -25,14 +25,6 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} />
           </Routes>
-
-          {/* <Header openAside={openAside} setOpenAside={setOpenAside} />
-      <div id="main">
-         {openAside ? <aside>aside</aside> : null}
-
-
-      </div>
-       */}
         </motion.main>
       </AnimatePresence>
     </div >
