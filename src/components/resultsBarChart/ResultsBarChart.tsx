@@ -67,13 +67,13 @@ export default function ResultsBarChart({ results }: BarChartProps) {
 
 
     return (
-        <div>
+        <div className={styles.resultsModal}>
             <span className={styles.results__span}>
                 <div>
-                    Mean: {mean}
+                    Mean:<span>{mean}</span>
                 </div>
                 <div>
-                    80% of the time at least: {band.lower} at most: {band.upper}
+                    80% Band: <span>{band.lower} at most: {band.upper}</span>
                 </div>
             </span>
             <BarChart
@@ -106,7 +106,8 @@ export default function ResultsBarChart({ results }: BarChartProps) {
                         },
                         [`.${axisClasses.label}`]: {
                             stroke: "#ffffff"
-                        }
+                        },
+
                     },
 
                 })}

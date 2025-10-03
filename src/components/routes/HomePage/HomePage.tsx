@@ -44,7 +44,7 @@ const defaultModifiers = {
 
 
 export default function HomePage() {
-    const simCount = 250000
+    const simCount = 10000
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)
     const [attackStats, setAttackStats] = useState<AttackStats[]>([defaultAttackStats])
@@ -91,12 +91,7 @@ export default function HomePage() {
                 : null
             }
             <button
-                onClick={() => {
-                    runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
-                        setSimData(results)
-                    })
-                }}
-
+                onClick={() => { runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => { setSimData(results) }) }}
             >
                 Submit
             </button >

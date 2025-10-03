@@ -1,15 +1,27 @@
 import style from './unitForm.module.css'
 import DropDown from "../dropDown/DropDown";
-
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
+import type { DefenseStats, AttackStats, Modifiers } from "../../types/unitStats"
 
 
+interface UnitFormProps {
+    defenseStats: DefenseStats
+    attackStats: AttackStats[]
+    modifiers: Modifiers[]
+    handleDefenseChange: (key: string, value: number) => void
+    handleAttackChange: (profileIndex: number, key: string, value: boolean | number | null | {
+        variable: string;
+        value: boolean | number;
+    }) => void
+    handleModifiersChange: (profileIndex: number, key: string, value: boolean | number | null | {
+        variable: string | null;
+        value: boolean | number;
+    }) => void
+}
 
-export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange }) {
-
-
+export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
@@ -29,74 +41,6 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleD
                     )
                 })}
             </div>
-
-
         </div >
     )
 }
-
-
-
-
-
-/*
-
-<AccordionGroup
-                color="neutral"
-                size="lg"
-                variant="plain"
-                sx={{ gap: "1rem" }}
-            >
-                <Accordion variant="soft" sx={{
-                    backgroundColor: "#15616d", borderRadius: "1rem"
-                }}>
-                    <AccordionSummary>Defence Stats</AccordionSummary>
-                    <AccordionDetails>
-                        <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
-                    </AccordionDetails>
-                </Accordion>
-                <Divider />
-
-                {attackStats.map((ele, index) => {
-                    return (
-                        <Accordion key={index} variant="soft" sx={AttackAccordionStyles}>
-                            <AccordionSummary sx={{ color: "#001524" }}>Attack Stats</AccordionSummary>
-                            <AccordionDetails>
-                                <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
-                                <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
-                            </AccordionDetails>
-                        </Accordion>
-                    )
-                })}
-                <IconButton
-                    size="lg"
-                    onClick={() => {
-                        setAttackStats([...attackStats, defaultAttackStats])
-                        setModifiers([...modifiers, defaultModifiers])
-                    }}
-                    sx={{
-                        width: "25%",
-                        margin: "0 auto",
-                    }}
-                >
-                    <AddCircleOutlineIcon color="primary" />
-
-                </IconButton>
-                <Divider />
-                <Button
-                    fullWidth={false}
-                    variant="soft"
-                    color="warning"
-                    onClick={() => {
-                        runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
-                            setSimData(results)
-                        })
-                    }}
-
-                >
-                    Submit
-                </Button >
-            </AccordionGroup>
-
-
-*/
