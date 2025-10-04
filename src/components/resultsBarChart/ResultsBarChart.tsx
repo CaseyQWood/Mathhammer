@@ -8,6 +8,7 @@ type WoundTallies = Record<number, number>;
 
 interface BarChartProps {
     results: WoundTallies
+    setOpenModal: (value: boolean) => void
 }
 
 function findMean(table: WoundTallies, precision = 2): number {
@@ -57,7 +58,7 @@ function findCentralBand(table: WoundTallies, mass = 0.8) {
     return { lower, upper };
 }
 
-export default function ResultsBarChart({ results }: BarChartProps) {
+export default function ResultsBarChart({ results, setOpenModal }: BarChartProps) {
 
     const resultsTitles: string[] = Object.keys(results)
     const resultsValue: number[] = Object.values(results)
@@ -73,7 +74,7 @@ export default function ResultsBarChart({ results }: BarChartProps) {
                     Mean:<span>{mean}</span>
                 </div>
                 <div>
-                    80% Band: <span>{band.lower} at most: {band.upper}</span>
+                    80% Band: <span>{band.lower} - {band.upper}</span>
                 </div>
             </span>
             <BarChart
@@ -112,6 +113,9 @@ export default function ResultsBarChart({ results }: BarChartProps) {
 
                 })}
             />
+            <button onClick={() => setOpenModal(false)}>
+                Close
+            </button>
         </div>
     )
 }

@@ -45,6 +45,7 @@ const defaultModifiers = {
 
 export default function HomePage() {
     const simCount = 10000
+    const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)
     const [attackStats, setAttackStats] = useState<AttackStats[]>([defaultAttackStats])
@@ -86,12 +87,17 @@ export default function HomePage() {
             <Aside />
             <motion.h2>Calculate</motion.h2>
             <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} />
-            {simData ?
-                <ResultsBarChart results={simData} />
+            {openModal && simData ?
+                <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                 : null
             }
             <button
-                onClick={() => { runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => { setSimData(results) }) }}
+                onClick={() => {
+                    runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
+                        setSimData(results)
+                        setOpenModal(true)
+                    })
+                }}
             >
                 Submit
             </button >

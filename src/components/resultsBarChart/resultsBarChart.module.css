@@ -1,11 +1,16 @@
 .resultsModal {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: #78290f;
   padding: 1rem;
   width: 90%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  border-radius: 1rem;
+  z-index: 20;
 }
 
 .results__span {
@@ -18,9 +23,10 @@
 .results__span div {
   display: flex;
   flex-direction: column;
-  width: 35%;
+  width: 40%;
   padding: 1rem;
   background-color: rgb(21, 97, 109);
   overflow: auto;
   border-radius: 1rem;
+  text-align: center;
 }
