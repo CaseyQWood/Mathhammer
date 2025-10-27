@@ -7,7 +7,11 @@
 - Users can run a simulation between attacker(s) and defender
   - Returns the mean, 80% band and the chart of the results
 - Users can add/remove/edit models to the attacking "unit" and edit the defending stat brick
+- Has all included modifiers + fishing
+  - Include critical roll value for anti-\* abilities or 5+ to crit abilities
+  - +1/-1 to hit/wound
 - Has custom Domain
+- Mobile/Desktop compatible
 - release to testing group
 
 **_MMP_**
@@ -32,6 +36,8 @@
 - Allow User Settings
 
 ## TODO:
+
+- Styling for desktop + mobile
 
 - add remove attack stats button
 - Update variableCalculator to cover more cases as it also manages damage

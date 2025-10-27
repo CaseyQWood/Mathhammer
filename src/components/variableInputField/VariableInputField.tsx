@@ -27,7 +27,6 @@ export default function VariableInputField({ index, title, stateKey, handleChang
     })
 
     const handleVariableChange = (
-        _event: unknown,
         newVal: string | null,
     ) => {
         setValue(prev => ({
@@ -39,6 +38,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
     const handleValueChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
+        e.preventDefault()
         const num = Number(e.target.value);
         setValue(prev => ({
             ...prev,
@@ -57,7 +57,9 @@ export default function VariableInputField({ index, title, stateKey, handleChang
             <div className={style.input__wrapper} >
                 <Select
                     value={value.variable}
-                    onChange={handleVariableChange}
+                    onChange={(e, newVal) => {
+                        handleVariableChange(newVal)
+                    }}
                     size="md"
                     variant="outlined"
                     sx={{
@@ -79,7 +81,9 @@ export default function VariableInputField({ index, title, stateKey, handleChang
                     type="number"
                     onFocus={e => e.target.select()}
                     value={value.value}
-                    onChange={handleValueChange}
+                    onChange={(e) => {
+                        handleValueChange(e)
+                    }}
                     slotProps={{
                         input: {
                             min: 1,

@@ -31,7 +31,7 @@ export default function InputField({ title, value, setValue, min, max }: InputPr
     }
 
     return (
-        <div onClick={(e) => e.stopPropagation()} className={styles.inputField__wrapper}>
+        <div className={styles.inputField__wrapper}>
             <FormLabel sx={{ marginBottom: '0.5rem' }}>{title}</FormLabel>
             <Input
                 size="md"
