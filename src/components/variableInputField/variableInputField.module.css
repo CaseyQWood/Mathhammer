@@ -1,17 +1,17 @@
 .variableInput__wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
 .input__wrapper {
-  display: flex;
   align-items: center;
-  width: 100%;
+  display: flex;
+  width: 65%;
 }
 
 .plusSign {
   width: auto;
-  padding: 0.5rem;
 }

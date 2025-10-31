@@ -2,7 +2,8 @@ import { Input, FormLabel } from '@mui/joy';
 import styles from "./inputField.module.css"
 
 interface InputProps {
-    title: string;
+    title?: string | undefined;
+    placeholder?: string | undefined;
     value: number;
     min: number;
     max: number;
@@ -13,7 +14,7 @@ function stripNonNumbers(input: string): string {
     return input.replace(/\D+/g, '');
 }
 
-export default function InputField({ title, value, setValue, min, max }: InputProps) {
+export default function InputField({ title, placeholder, value, setValue, min, max }: InputProps) {
 
     function handleChange(input: string, min: number, max: number) {
         const strippedInput = stripNonNumbers(input)
@@ -32,11 +33,12 @@ export default function InputField({ title, value, setValue, min, max }: InputPr
 
     return (
         <div className={styles.inputField__wrapper}>
-            <FormLabel sx={{ marginBottom: '0.5rem' }}>{title}</FormLabel>
+            {title ? <FormLabel sx={{ marginBottom: '0.5rem', width: "auto" }}>{title}</FormLabel> : null}
             <Input
                 size="md"
                 variant="outlined"
                 type="number"
+                placeholder={placeholder}
                 onFocus={e => e.target.select()}
                 value={value}
                 onChange={(e) => handleChange(e.target.value, min, max)}
@@ -48,7 +50,7 @@ export default function InputField({ title, value, setValue, min, max }: InputPr
                     },
                 }}
                 sx={{
-                    width: '100%'
+                    width: '65%'
                 }}
             />
         </div>

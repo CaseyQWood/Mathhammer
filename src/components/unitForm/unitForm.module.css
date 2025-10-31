@@ -20,10 +20,14 @@
   width: 100%;
 }
 
-.attackingStats__wrapper div {
+.attackingStats__wrapper > * {
   width: 100%;
   display: flex;
   gap: 1rem;
+}
+
+.weaponStats > * {
+  width: 100%;
 }
 
 .dropDown__wrapper {

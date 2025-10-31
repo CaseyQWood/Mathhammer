@@ -79,6 +79,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
                     size="md"
                     variant="outlined"
                     type="number"
+
                     onFocus={e => e.target.select()}
                     value={value.value}
                     onChange={(e) => {
