@@ -8,13 +8,14 @@ interface InputProps {
     min: number;
     max: number;
     setValue: (value: number) => void;
+    width?: string;
 }
 
 function stripNonNumbers(input: string): string {
     return input.replace(/\D+/g, '');
 }
 
-export default function InputField({ title, placeholder, value, setValue, min, max }: InputProps) {
+export default function InputField({ title, placeholder, value, setValue, min, max, width = "65%" }: InputProps) {
 
     function handleChange(input: string, min: number, max: number) {
         const strippedInput = stripNonNumbers(input)
@@ -50,7 +51,7 @@ export default function InputField({ title, placeholder, value, setValue, min, m
                     },
                 }}
                 sx={{
-                    width: '65%'
+                    width: { width }
                 }}
             />
         </div>

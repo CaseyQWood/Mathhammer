@@ -1,7 +1,9 @@
 import style from "./unitForm.module.css"
 import { useEffect, useState } from "react";
-import { Chip, Checkbox, Select, Option } from "@mui/joy";
+import { Chip, Checkbox, Select, Option, List, ListItem, ListSubheader, ListItemButton } from "@mui/joy";
 import type { Modifiers } from "../../types/unitStats";
+import CheckIcon from '@mui/icons-material/Check';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 interface AttackModifierProps {
     index: number
@@ -74,51 +76,114 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
     }, [selected, handleModifiersChange, sustainedHits, index])
 
     return (
-        <div className={style.chip__wrapper}>
+        <ul className={style.list__wrapper}>
             {Object.values(modifiersData).map((name, index) => {
                 const checked = selected.includes(name);
                 return (
-                    <div key={index} className={name === "Sustained Hits" ? style.sustainedHits : ""}>
-                        <Chip
-                            key={name}
-                            variant="plain"
-                            color={checked ? 'primary' : 'neutral'}
-                        >
-                            <Checkbox
-                                variant="outlined"
-                                color={checked ? 'primary' : 'neutral'}
-                                disableIcon
-                                overlay
-                                label={name}
-                                checked={checked}
-                                onChange={(event) => {
-                                    setSelected((names) =>
-                                        !event.target.checked
-                                            ? names.filter((n) => n !== name)
-                                            : [...names, name],
-                                    );
-                                }}
-                            />
+                    <li key={`${name}--${index}`} onClick={() => {
+                        setSelected((names) => {
+                            return checked
+                                ? names.filter((n) => n !== name)
+                                : [...names, name];
+                        });
+                    }}>
+                        <label>{name}</label>
+                        <div className={checked && name === "Sustained Hits" ? style.sustainedHits : ""}>
+                            {checked && name === "Sustained Hits" ? (
+                                <select onClick={(e) => e.stopPropagation()} name="pets" id="pet-select">
+                                    {options.map((e) => {
+                                        return <option onClick={() => {
+                                            console.log(e.value)
+                                            handleVariableChange(e, e.value)
+                                        }} value={e.value}>{e.value}</option>
+                                    })}
+                                </select>
+                                // <Select
+                                //     value={sustainedHits}
+                                //     onChange={handleVariableChange}
+                                //     size="md"
+                                //     variant="outlined"
+                                //     sx={{
+                                //         width: '25%',
+                                //         alignContent: 'center',
+                                //         padding: '0.5rem'
+                                //     }}
+                                // >
+                                //     {options.map((ele) => {
+                                //         return <Option key={ele.key} value={ele.value} >{ele.value}</Option>
+                                //     })}
+                                // </Select>
+                            ) : null}
+                            <CheckBoxOutlineBlankIcon />
+                            {checked ? <CheckIcon fontSize="large" style={{ position: "absolute", width: "1.25em", right: "0%" }} /> : null}
+                        </div>
 
-                        </Chip>
-                        {name === "Sustained Hits" ? <Select
-                            value={sustainedHits}
-                            onChange={handleVariableChange}
-                            size="md"
-                            variant="outlined"
-                            sx={{
-                                width: '25%',
-                                alignContent: 'center',
-                                padding: '0.5rem'
-                            }}
-                        >
-                            {options.map((ele) => {
-                                return <Option key={ele.key} value={ele.value} >{ele.value}</Option>
-                            })}
-                        </Select> : null}
-                    </div>
+                    </li>
+
+                    // <div key={index} className={name === "Sustained Hits" ? style.sustainedHits : ""}>
+                    //     <Chip
+                    //         key={name}
+                    //         variant="plain"
+                    //         color={checked ? 'primary' : 'neutral'}
+                    //     >
+                    //         <Checkbox
+                    //             variant="outlined"
+                    //             color={checked ? 'primary' : 'neutral'}
+                    //             disableIcon
+                    //             overlay
+                    //             label={name}
+                    //             checked={checked}
+                    //             onChange={(event) => {
+                    //                 setSelected((names) =>
+                    //                     !event.target.checked
+                    //                         ? names.filter((n) => n !== name)
+                    //                         : [...names, name],
+                    //                 );
+                    //             }}
+                    //         />
+
+                    //     </Chip>
+                    //     {name === "Sustained Hits" ? <Select
+                    //         value={sustainedHits}
+                    //         onChange={handleVariableChange}
+                    //         size="md"
+                    //         variant="outlined"
+                    //         sx={{
+                    //             width: '25%',
+                    //             alignContent: 'center',
+                    //             padding: '0.5rem'
+                    //         }}
+                    //     >
+                    //         {options.map((ele) => {
+                    //             return <Option key={ele.key} value={ele.value} >{ele.value}</Option>
+                    //         })}
+                    //     </Select> : null}
+                    // </div>
                 );
             })}
-        </div>
+        </ul >
     )
 }
+
+// function ListItem({ name, setSelected }) {
+//     const [checked, setChecked] = useState(false);
+
+//     return (
+//         <li onClick={() => {
+//             setSelected((names) => {
+//                 !checked ? names.filter((n) => n !== name) : [...names, name]
+
+//             }
+
+//             );
+//         }}>
+//             <label>{name}</label>
+//             <div>
+//                 <CheckBoxOutlineBlankIcon />
+//                 {checked ? <CheckIcon fontSize="large" className={style.checkmark} /> : null}
+//             </div>
+
+//         </li>
+
+//     )
+// }

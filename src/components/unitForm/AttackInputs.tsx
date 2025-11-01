@@ -30,25 +30,28 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
             />
             <div className={style.weaponStats}>
                 <InputField
-                    placeholder="WS/BS"
+                    title="WS/BS"
                     value={attackStats.weaponSkill}
                     setValue={(value) => handleAttackChange(index, 'weaponSkill', value)}
                     min={2}
                     max={6}
+                    width="100%"
                 />
                 <InputField
-                    placeholder="Strength"
+                    title="Strength"
                     value={attackStats.strength}
                     setValue={(value) => handleAttackChange(index, 'strength', value)}
                     min={1}
                     max={20}
+                    width="100%"
                 />
                 <InputField
-                    placeholder="AP"
+                    title="AP"
                     value={attackStats.armourPiercing}
                     setValue={(value) => handleAttackChange(index, 'armourPiercing', value)}
                     min={0}
                     max={6}
+                    width="100%"
                 />
             </div>
             <VariableInputField
