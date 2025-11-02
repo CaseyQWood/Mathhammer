@@ -6,6 +6,14 @@
   padding: 1rem;
 }
 
+@media screen and (min-width: 768px) {
+  .unitForm__wrapper {
+    width: 35%;
+    background-color: #ffecd1;
+    border-radius: 0 1rem 1rem 0;
+  }
+}
+
 .defensiveStats__wrapper {
   display: flex;
   flex-direction: column;
@@ -79,4 +87,30 @@
   flex-direction: row;
   justify-content: space-between;
   width: 35%;
+}
+
+.selectNative,
+.selectCustom {
+  position: relative;
+  width: 22rem;
+  height: 4rem;
+}
+
+.selectCustom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+@media (hover: hover) {
+  .selectCustom {
+    display: block;
+  }
+}
+
+.selectNative {
+}
+
+.jsSelectNative {
 }

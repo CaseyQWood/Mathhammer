@@ -34,6 +34,7 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
         _event: unknown,
         newVal: string | null,
     ) => {
+        _event.stopPropagation()
         setSustainedHits(newVal);
     };
 
@@ -90,17 +91,28 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
                         <label>{name}</label>
                         <div className={checked && name === "Sustained Hits" ? style.sustainedHits : ""}>
                             {checked && name === "Sustained Hits" ? (
-                                <select onClick={(e) => e.stopPropagation()} name="pets" id="pet-select">
-                                    {options.map((e) => {
-                                        return <option onClick={() => {
-                                            console.log(e.value)
-                                            handleVariableChange(e, e.value)
-                                        }} value={e.value}>{e.value}</option>
-                                    })}
-                                </select>
+                                <>
+                                    <select
+                                        className={`${style.selectNative} ${style.jsSelectNative}`}
+                                        aria-labelledby="jobLabel"
+                                        onClick={(e) => e.stopPropagation()}
+                                        name="pets"
+                                        id="pet-select"
+                                    >
+                                        {options.map((e) => {
+                                            return <option onClick={() => {
+                                                console.log(e.value)
+                                                handleVariableChange(e, e.value)
+                                            }} value={e.value}>{e.value}</option>
+                                        })}
+                                    </select>
+                                    <div class={style.selectCustom} aria-hidden="true"></div></>
                                 // <Select
                                 //     value={sustainedHits}
-                                //     onChange={handleVariableChange}
+                                //     onChange={(e, newVal) => {
+                                //         e?.stopPropagation()
+                                //         handleVariableChange(e, newVal)
+                                //     }}
                                 //     size="md"
                                 //     variant="outlined"
                                 //     sx={{

@@ -81,17 +81,25 @@ export default function HomePage() {
         });
     }, [])
 
+    const handleFormSubmit = useCallback(() => {
+        runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
+            setSimData(results)
+            setOpenModal(true)
+        })
+    }, [])
+
+
 
     return (
         <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
             <Aside />
             <motion.h2>Calculate</motion.h2>
-            <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} />
+            <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit(simCount, attackStats, defenseStats, modifiers) }} />
             {openModal && simData ?
                 <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                 : null
             }
-            <button
+            {/* <button
                 onClick={() => {
                     runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
                         setSimData(results)
@@ -100,7 +108,7 @@ export default function HomePage() {
                 }}
             >
                 Submit
-            </button >
+            </button > */}
             <motion.nav>Nav</motion.nav>
         </motion.div>
     )

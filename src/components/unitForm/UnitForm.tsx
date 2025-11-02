@@ -4,6 +4,7 @@ import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
 import type { DefenseStats, AttackStats, Modifiers } from "../../types/unitStats"
+import { runSimulation } from '../../utils/runSimulation';
 
 
 interface UnitFormProps {
@@ -19,9 +20,10 @@ interface UnitFormProps {
         variable: string | null;
         value: boolean | number;
     }) => void
+    handleFormSubmit: () => void
 }
 
-export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange }: UnitFormProps) {
+export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
@@ -42,6 +44,13 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleD
                     )
                 })}
             </div>
+            <button
+                onClick={() => {
+                    handleFormSubmit()
+                }}
+            >
+                Submit
+            </button >
         </div >
     )
 }
