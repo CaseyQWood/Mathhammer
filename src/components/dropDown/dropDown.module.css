@@ -2,6 +2,7 @@
   background-color: rgb(21, 97, 109);
   border-radius: 1rem;
   padding: 1rem;
+  overflow: scroll;
 }
 
 .preview {
@@ -10,6 +11,16 @@
   justify-content: space-between;
 }
 
+.preview svg {
+  height: 2rem;
+}
+
 .dropDown__wrapper h3 {
   margin: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .dropDown__wrapper {
+    /* height: 4rem; */
+  }
 }

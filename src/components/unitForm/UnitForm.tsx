@@ -27,7 +27,7 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleD
 
     return (
         <div className={style.unitForm__wrapper} >
-            <div className={style.dropDown__wrapper}>
+            <div className={style.unitInputs__wrapper}>
                 <DropDown color="primary" title="Defence Stats">
                     <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
                 </DropDown>

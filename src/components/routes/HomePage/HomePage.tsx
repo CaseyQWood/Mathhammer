@@ -94,22 +94,14 @@ export default function HomePage() {
         <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
             <Aside />
             <motion.h2>Calculate</motion.h2>
-            <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit(simCount, attackStats, defenseStats, modifiers) }} />
-            {openModal && simData ?
-                <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
-                : null
-            }
-            {/* <button
-                onClick={() => {
-                    runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
-                        setSimData(results)
-                        setOpenModal(true)
-                    })
-                }}
-            >
-                Submit
-            </button > */}
+            <div className={styles.workspace} style={{ height: "100%", maxHeight: "65vh" }}>
+                <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit(simCount, attackStats, defenseStats, modifiers) }} />
+                {openModal && simData ?
+                    <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
+                    : null
+                }
+            </div>
             <motion.nav>Nav</motion.nav>
-        </motion.div>
+        </motion.div >
     )
 }

@@ -11,6 +11,7 @@
   transform: translate(-50%, -50%);
   border-radius: 1rem;
   z-index: 20;
+  overflow: scroll;
 }
 
 .results__span {
@@ -29,4 +30,33 @@
   overflow: auto;
   border-radius: 1rem;
   text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .resultsModal {
+    position: static;
+    flex-direction: row;
+    top: 0%;
+    left: 0%;
+    transform: translate(0%, 0%);
+    z-index: 1;
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .resultsModal button {
+    position: absolute;
+    bottom: 8%;
+  }
+
+  .results__span {
+    flex-direction: column;
+    margin: auto;
+    width: 25%;
+    gap: 2rem;
+  }
+
+  .results__span div {
+    width: auto;
+  }
 }

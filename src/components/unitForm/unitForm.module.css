@@ -4,13 +4,19 @@
   justify-content: space-between;
   height: 100%;
   padding: 1rem;
+  overflow: scroll;
 }
 
 @media screen and (min-width: 768px) {
   .unitForm__wrapper {
-    width: 35%;
+    width: 40%;
     background-color: #ffecd1;
     border-radius: 0 1rem 1rem 0;
+  }
+
+  .unitForm__wrapper button {
+    background-color: #196774;
+    color: #ffecd1;
   }
 }
 
@@ -43,7 +49,7 @@
   text-align: center;
 }
 
-.dropDown__wrapper {
+.unitInputs__wrapper {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -107,10 +113,4 @@
   .selectCustom {
     display: block;
   }
-}
-
-.selectNative {
-}
-
-.jsSelectNative {
 }

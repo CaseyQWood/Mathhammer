@@ -106,7 +106,7 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
                                             }} value={e.value}>{e.value}</option>
                                         })}
                                     </select>
-                                    <div class={style.selectCustom} aria-hidden="true"></div></>
+                                    <div className={style.selectCustom} aria-hidden="true"></div></>
                                 // <Select
                                 //     value={sustainedHits}
                                 //     onChange={(e, newVal) => {
