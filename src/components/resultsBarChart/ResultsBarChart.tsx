@@ -93,9 +93,9 @@ export default function ResultsBarChart({ results, setOpenModal }: BarChartProps
                     }
                 }]}
                 series={[{ data: resultsValue }]}
-                height={500}
                 colors={orangePalette}
                 sx={() => ({
+                    height: "100%",
 
                     [`.${axisClasses.root}`]: {
                         [`.${axisClasses.tick}, .${axisClasses.line}`]: {

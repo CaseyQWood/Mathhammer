@@ -10,7 +10,6 @@ interface VariableInputFieldProps {
 }
 
 export default function VariableInputField({ index, title, stateKey, handleChange }: VariableInputFieldProps) {
-    // const options: string[] = ["0", "D3", "2d3", "3D3", "D6", "2D6", "3d6"]
     const options = [
         { key: crypto.randomUUID(), value: "0" },
         { key: crypto.randomUUID(), value: "D3" },

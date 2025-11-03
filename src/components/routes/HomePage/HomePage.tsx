@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import styles from './homePage.module.css'
 import UnitForm from "../../unitForm"
 import Aside from "../../aside"
@@ -61,6 +61,7 @@ export default function HomePage() {
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => {
+            console.log("HandleChange: ", prevStats)
             const newStats = [...prevStats];
             newStats[profileIndex] = {
                 ...newStats[profileIndex],
@@ -81,7 +82,12 @@ export default function HomePage() {
         });
     }, [])
 
+    useEffect(() => {
+        console.log("Attack Change: ", attackStats)
+    }, [attackStats])
+
     const handleFormSubmit = useCallback(() => {
+        console.log("Run Simulation: ", attackStats)
         runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
             setSimData(results)
             setOpenModal(true)
