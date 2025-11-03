@@ -61,7 +61,7 @@ export default function HomePage() {
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => {
-            console.log("HandleChange: ", prevStats)
+
             const newStats = [...prevStats];
             newStats[profileIndex] = {
                 ...newStats[profileIndex],
@@ -69,6 +69,7 @@ export default function HomePage() {
             };
             return newStats;
         });
+        console.log("HandleChange: ", attackStats)
     }, []);
 
     const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
@@ -82,9 +83,8 @@ export default function HomePage() {
         });
     }, [])
 
-    useEffect(() => {
-        console.log("Attack Change: ", attackStats)
-    }, [attackStats])
+    useEffect(() => { console.log("TEST3: ", attackStats) }, [attackStats])
+
 
     const handleFormSubmit = useCallback(() => {
         console.log("Run Simulation: ", attackStats)
@@ -92,7 +92,7 @@ export default function HomePage() {
             setSimData(results)
             setOpenModal(true)
         })
-    }, [])
+    }, [attackStats, defenseStats, modifiers])
 
 
 

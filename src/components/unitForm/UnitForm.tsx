@@ -3,6 +3,7 @@ import DropDown from "../dropDown/DropDown";
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
+import { useEffect } from 'react';
 import type { DefenseStats, AttackStats, Modifiers } from "../../types/unitStats"
 
 
@@ -23,6 +24,8 @@ interface UnitFormProps {
 }
 
 export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
+
+    useEffect(() => { console.log("TEST2: ", attackStats) }, [attackStats])
 
     return (
         <div className={style.unitForm__wrapper} >
