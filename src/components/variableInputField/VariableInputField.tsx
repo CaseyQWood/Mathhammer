@@ -58,6 +58,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
                 <Select
                     value={value.variable}
                     onChange={(e, newVal) => {
+                        e?.stopPropagation()
                         handleVariableChange(newVal)
                     }}
                     size="md"

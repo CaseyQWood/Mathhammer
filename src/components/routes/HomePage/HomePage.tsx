@@ -95,7 +95,7 @@ export default function HomePage() {
             <Aside />
             <motion.h2>Calculate</motion.h2>
             <div className={styles.workspace} style={{ height: "100%", maxHeight: "65vh" }}>
-                <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit(simCount, attackStats, defenseStats, modifiers) }} />
+                <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
                 {openModal && simData ?
                     <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                     : null

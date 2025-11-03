@@ -27,7 +27,7 @@ const itemVariants = {
     },
 }
 
-const AsideItem = ({ i }) => {
+const AsideItem = ({ i }: { i: number }) => {
     // ...
     return (
         <motion.li

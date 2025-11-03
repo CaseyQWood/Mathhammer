@@ -4,7 +4,6 @@ import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
 import type { DefenseStats, AttackStats, Modifiers } from "../../types/unitStats"
-import { runSimulation } from '../../utils/runSimulation';
 
 
 interface UnitFormProps {

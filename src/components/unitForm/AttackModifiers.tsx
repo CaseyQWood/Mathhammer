@@ -1,6 +1,5 @@
 import style from "./unitForm.module.css"
 import { useEffect, useState } from "react";
-import { Chip, Checkbox, Select, Option, List, ListItem, ListSubheader, ListItemButton } from "@mui/joy";
 import type { Modifiers } from "../../types/unitStats";
 import CheckIcon from '@mui/icons-material/Check';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -34,7 +33,7 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
         _event: unknown,
         newVal: string | null,
     ) => {
-        _event.stopPropagation()
+
         setSustainedHits(newVal);
     };
 
@@ -101,7 +100,6 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
                                     >
                                         {options.map((e) => {
                                             return <option onClick={() => {
-                                                console.log(e.value)
                                                 handleVariableChange(e, e.value)
                                             }} value={e.value}>{e.value}</option>
                                         })}
