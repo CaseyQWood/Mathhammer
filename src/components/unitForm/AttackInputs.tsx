@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import type { AttackStats } from "../../types/unitStats";
 import InputField from "../inputField";
 import VariableInputField from "../variableInputField";
@@ -11,8 +10,6 @@ interface AttackStatsProps {
 }
 
 export default function AttackInputs({ index, attackStats, handleAttackChange }: AttackStatsProps) {
-
-    useEffect(() => { console.log("TEST1: ", attackStats) }, [attackStats])
 
     return (
         <div className={style.attackingStats__wrapper}>
