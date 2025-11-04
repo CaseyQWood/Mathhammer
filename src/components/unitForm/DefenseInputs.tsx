@@ -9,7 +9,7 @@ interface DefenseStatsProps {
 
 export default function DefenseInputs({ defenseStats, handleDefenseChange }: DefenseStatsProps) {
   return (
-    <div className={style.defensiveStats__wrapper}>
+    <div onClick={(e) => e.stopPropagation()} className={style.defensiveStats__wrapper}>
       <InputField
         title="Toughness"
         value={defenseStats.toughness}

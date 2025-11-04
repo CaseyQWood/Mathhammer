@@ -1,32 +1,33 @@
-import { useState } from 'react';
-import { Sheet } from '@mui/joy';
+import { Routes, Route, useNavigate, useLocation } from 'react-router';
+import { AnimatePresence } from 'motion/react';
 import './App.css'
-import ResultsBarChart from './components/resultsBarChart';
-import UnitForm from './components/unitForm/UnitForm';
-import Header from './components/header';
-type WoundTallies = Record<number, number>;
+import LoginScreen from './components/routes/Login'
+import HomePage from './components/routes/HomePage'
+
+// import Header from './components/header';
+import { motion } from "motion/react"
+
+
 
 
 function App() {
-  const [simData, setSimData] = useState<WoundTallies>()
-  const [openAside, setOpenAside] = useState<boolean>(false)
+  // const [openAside, setOpenAside] = useState<boolean>(false)
+  const navigate = useNavigate();
+  const location = useLocation()
 
   return (
-    <Sheet >
-      <Header openAside={openAside} setOpenAside={setOpenAside} />
-      <div id="main">
-        {openAside ? <aside>aside</aside> : null}
-        <article>
-          <UnitForm setSimData={setSimData} />
-          {simData ?
-            <ResultsBarChart results={simData} />
-            : null
-          }
-        </article>
-
-      </div>
-      <footer>Footer</footer>
-    </Sheet>
+    <div key="test" id='main'>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={location.pathname}
+        >
+          <Routes location={location}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} />
+          </Routes>
+        </motion.main>
+      </AnimatePresence>
+    </div >
   )
 }
 

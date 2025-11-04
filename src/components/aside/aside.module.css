@@ -1,0 +1,96 @@
+aside {
+  position: absolute;
+  width: 10rem;
+  height: 100%;
+  background-color: #ff7d00;
+}
+
+aside ul {
+  margin: 0;
+  height: auto;
+  margin: 5rem 0 0 0;
+  padding: 0;
+}
+
+/* ul li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  margin-bottom: 20px;
+  cursor: pointer;
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  background-color: #001524;
+} */
+
+/*
+Hamburger
+*/
+
+.buttonNav {
+  height: 6rem;
+  left: 2.8rem;
+  position: absolute;
+  top: 3rem;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 6rem;
+}
+
+.buttonNav .inner,
+.buttonNav .inner::before,
+.buttonNav .inner::after {
+  background-color: #000;
+  content: "";
+  display: block;
+  height: 2px;
+  width: 40px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.buttonNav .inner {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.buttonNav .inner::before {
+  margin-top: -10px;
+  position: absolute;
+}
+
+.buttonNav .inner::after {
+  margin-top: 10px;
+  position: absolute;
+}
+
+.buttonNav.buttonClose .inner {
+  background-color: transparent;
+  left: 54%;
+}
+
+.buttonNav.buttonClose .inner::before,
+.buttonNav.buttonClose .inner::after {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  -webkit-transform-origin: 0 50%;
+  -ms-transform-origin: 0 50%;
+  transform-origin: 0 50%;
+  width: 29px;
+}
+
+.buttonNav.buttonClose .inner::after {
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}

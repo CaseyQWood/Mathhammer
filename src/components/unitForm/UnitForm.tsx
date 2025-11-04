@@ -1,163 +1,127 @@
-import { useCallback, useState } from "react";
-import type { DefenseStats, AttackStats, WoundTallies, Modifiers } from "../../types/unitStats";
 import style from './unitForm.module.css'
-import { Button, Accordion, AccordionGroup, AccordionSummary, AccordionDetails, Divider, IconButton } from "@mui/joy";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DropDown from "../dropDown/DropDown";
 import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
-import { runSimulation } from "../../utils/runSimulation";
+import type { DefenseStats, AttackStats, Modifiers } from "../../types/unitStats"
+
 
 interface UnitFormProps {
-    setSimData: (result: WoundTallies) => void
+    defenseStats: DefenseStats
+    attackStats: AttackStats[]
+    modifiers: Modifiers[]
+    handleDefenseChange: (key: string, value: number) => void
+    handleAttackChange: (profileIndex: number, key: string, value: boolean | number | null | {
+        variable: string;
+        value: boolean | number;
+    }) => void
+    handleModifiersChange: (profileIndex: number, key: string, value: boolean | number | null | {
+        variable: string | null;
+        value: boolean | number;
+    }) => void
+    handleFormSubmit: () => void
 }
 
-const accordionStyles = {
-    borderRadius: "1rem"
-}
-
-export default function UnitForm({ setSimData }: UnitFormProps) {
-    const simCount = 1
-    const defaultAttackStats = {
-        models: 1,
-        attacks: {
-            variable: "0",
-            value: 4
-        },
-        weaponSkill: 3,
-        strength: 4,
-        armourPiercing: 1,
-        damage: {
-            variable: "0",
-            value: 1
-        }
-    }
-    const defaultModifiers = {
-        lethalHits: false,
-        sustainedHits: { value: false, variable: "1" },
-        devastatingWounds: false,
-        torrent: false,
-        reRollHit: false,
-        reRollOneToHit: false,
-        reRollWound: false,
-        reRollOneToWound: false
-    }
-    const [defenseStats, setdefenseStats] = useState<DefenseStats>({
-        toughness: 4,
-        save: 3,
-        invulnerable: 0,
-        feelNoPain: 0,
-    })
-    const handleDefenseChange = (key: string, value: number) => {
-        setdefenseStats(prevStats => ({
-            ...prevStats,
-            [key]: value
-        }));
-    };
-    const [attackStats, setAttackStats] = useState<AttackStats[]>([{
-        models: 1,
-        attacks: {
-            variable: "0",
-            value: 4
-        },
-        weaponSkill: 3,
-        strength: 4,
-        armourPiercing: 1,
-        damage: {
-            variable: "0",
-            value: 1
-        }
-    }])
-
-    const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
-        setAttackStats(prevStats => {
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
-            };
-            return newStats;
-        });
-    }, []);
-
-    const [modifiers, setModifiers] = useState<Modifiers[]>([{
-        lethalHits: false,
-        sustainedHits: { value: false, variable: "1" },
-        devastatingWounds: false,
-        torrent: false,
-        reRollHit: false,
-        reRollOneToHit: false,
-        reRollWound: false,
-        reRollOneToWound: false
-    }])
-
-    const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
-        setModifiers(prevStats => {
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
-            };
-            return newStats;
-        });
-    }, [])
+export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
 
     return (
         <div className={style.unitForm__wrapper} >
-            <AccordionGroup
-                color="neutral"
-                size="lg"
-                variant="plain"
-                sx={{ gap: "1rem" }}
-            >
-                <Accordion variant="soft" sx={accordionStyles}>
-                    <AccordionSummary>Defence Stats</AccordionSummary>
-                    <AccordionDetails>
-                        <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
-                    </AccordionDetails>
-                </Accordion>
-                <Divider />
+            <div className={style.unitInputs__wrapper}>
+                <DropDown color="primary" title="Defence Stats">
+                    <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
+                </DropDown>
 
                 {attackStats.map((ele, index) => {
                     return (
-                        <Accordion key={index} variant="soft" sx={accordionStyles}>
-                            <AccordionSummary>Attack Stats</AccordionSummary>
-                            <AccordionDetails>
+                        <DropDown color="secondary" title="Attack Stats">
+                            <div onClick={(e) => e.stopPropagation()}>
                                 <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
                                 <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
-                            </AccordionDetails>
-                        </Accordion>
+                            </div>
+
+                        </DropDown>
                     )
                 })}
-                <IconButton
-                    size="lg"
-                    onClick={() => {
-                        setAttackStats([...attackStats, defaultAttackStats])
-                        setModifiers([...modifiers, defaultModifiers])
-                    }}
-                    sx={{
-                        width: "25%",
-                        margin: "0 auto",
-                    }}
-                >
-                    <AddCircleOutlineIcon color="primary" />
-
-                </IconButton>
-                <Divider />
-                <Button
-                    fullWidth={false}
-                    variant="soft"
-                    color="warning"
-                    onClick={() => {
-                        runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
-                            setSimData(results)
-                        })
-                    }}
-
-                >
-                    Submit
-                </Button >
-            </AccordionGroup>
+            </div>
+            <button
+                onClick={() => {
+                    handleFormSubmit()
+                }}
+            >
+                Submit
+            </button >
         </div >
     )
 }
+
+
+
+
+/*<form onClick={(e) => e.stopPropagation()} id="unit-form" aria-describedby="form-help">
+                                <p id="form-help" >Fields marked with * are required.</p>
+
+
+                                <fieldset>
+                                    <legend>Core profile</legend>
+                                    <div >
+                                        <div>
+                                            <label htmlFor="models">Models *</label>
+                                            <input id="models" name="models" type="number" inputMode="numeric" min="1" step="1" required aria-describedby="models-hint" />
+                                            <div id="models-hint" >Number of models in the unit (min 1).</div>
+                                        </div>
+
+
+                                        <div>
+                                            <label htmlFor="attacks">Attacks *</label>
+                                            <input id="attacks" name="attacks" type="number" inputMode="numeric" min="0" step="1" required aria-describedby="attacks-hint" />
+                                            <div id="attacks-hint" >Attacks per model (min 0).</div>
+                                        </div>
+
+
+                                        <div>
+                                            <label htmlFor="ws">WS *</label>
+                                            <select id="ws" name="ws" required aria-describedby="ws-hint">
+                                                <option value="" disabled selected>Select</option>
+                                                <option value="2+">2+</option>
+                                                <option value="3+">3+</option>
+                                                <option value="4+">4+</option>
+                                                <option value="5+">5+</option>
+                                                <option value="6+">6+</option>
+                                            </select>
+                                            <div id="ws-hint" >Weapon Skill (roll needed to hit).</div>
+                                        </div>
+
+
+                                        <div>
+                                            <label htmlFor="strength">S *</label>
+                                            <input id="strength" name="strength" type="number" inputMode="numeric" min="1" step="1" required aria-describedby="s-hint" />
+                                            <div id="s-hint" >Strength value (min 1).</div>
+                                        </div>
+
+
+                                        <div>
+                                            <label htmlFor="ap">AP *</label>
+                                            <input id="ap" name="ap" type="number" inputMode="numeric" min="-6" max="0" step="1" required aria-describedby="ap-hint" />
+                                            <div id="ap-hint" >Armor Penetration (negative numbers allowed, e.g., -1).</div>
+                                        </div>
+
+
+                                        <div>
+                                            <label htmlFor="damage">Damage *</label>
+                                            <input id="damage" name="damage" type="text" required aria-describedby="damage-hint" placeholder="1, 2, D3, D6…" pattern="^(?:[1-9]\d*|D[2-9]|D10|D12)$" />
+                                            <div id="damage-hint" >Whole number or die code (D3, D6, D10, D12).</div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+
+                                <div >
+                                    <button type="reset">Reset</button>
+                                    <button type="submit">Save stats</button>
+                                </div>
+
+
+                                <output id="form-output" htmlFor="models attacks ws strength ap damage" aria-live="polite"></output>
+                            </form>
+
+                            */

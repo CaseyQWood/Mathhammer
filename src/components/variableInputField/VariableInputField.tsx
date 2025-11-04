@@ -10,7 +10,6 @@ interface VariableInputFieldProps {
 }
 
 export default function VariableInputField({ index, title, stateKey, handleChange }: VariableInputFieldProps) {
-    // const options: string[] = ["0", "D3", "2d3", "3D3", "D6", "2D6", "3d6"]
     const options = [
         { key: crypto.randomUUID(), value: "0" },
         { key: crypto.randomUUID(), value: "D3" },
@@ -27,7 +26,6 @@ export default function VariableInputField({ index, title, stateKey, handleChang
     })
 
     const handleVariableChange = (
-        _event: unknown,
         newVal: string | null,
     ) => {
         setValue(prev => ({
@@ -39,6 +37,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
     const handleValueChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
+        e.preventDefault()
         const num = Number(e.target.value);
         setValue(prev => ({
             ...prev,
@@ -57,7 +56,10 @@ export default function VariableInputField({ index, title, stateKey, handleChang
             <div className={style.input__wrapper} >
                 <Select
                     value={value.variable}
-                    onChange={handleVariableChange}
+                    onChange={(e, newVal) => {
+                        e?.stopPropagation()
+                        handleVariableChange(newVal)
+                    }}
                     size="md"
                     variant="outlined"
                     sx={{
@@ -77,9 +79,12 @@ export default function VariableInputField({ index, title, stateKey, handleChang
                     size="md"
                     variant="outlined"
                     type="number"
+
                     onFocus={e => e.target.select()}
                     value={value.value}
-                    onChange={handleValueChange}
+                    onChange={(e) => {
+                        handleValueChange(e)
+                    }}
                     slotProps={{
                         input: {
                             min: 1,
