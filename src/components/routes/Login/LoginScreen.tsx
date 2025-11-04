@@ -1,6 +1,6 @@
 import { motion } from "motion/react"
 import styles from "./loginScreen.module.css"
-
+import { useState } from "react";
 
 interface LoginScreenProps {
     login: () => void;
@@ -9,6 +9,27 @@ interface LoginScreenProps {
 
 export default function LoginScreen({ login }: LoginScreenProps) {
 
+    const exitAnimation = {
+
+        bottom: 0,
+        width: "100%",
+        borderRadius: 0,
+
+    }
+
+    const sidebarVariants = {
+        loggedIn: {
+            clipPath: `rect(auto auto auto auto)`,
+            // ... transition
+        },
+        loggedOut: {
+            clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
+            // ... transition
+        },
+        hidden: { clipPath: "rect(65% auto auto auto)" }
+    }
+
+    const [loggedIn, setloggedIn] = useState(false)
 
     return (
         <motion.section className={styles.loginSection}>
@@ -18,10 +39,23 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                 <h2>Table Top Calculator</h2>
                 <span>Make more informed choices</span>
             </motion.div>
-            <motion.form transition={{ duration: 0.5, ease: "easeInOut" }} key="login-modal" initial={{ y: "100%" }} exit={{ y: "-55%", borderRadius: 0 }} animate={{ y: 0 }}>
+            <motion.form
+                // key="login-modal"
+                // initial={{ y: "100%" }}
+                // transition={{ duration: 0.5, ease: "easeInOut" }}
+                // exit={exitAnimation}
+                // animate={{ y: 0 }}
+                variants={sidebarVariants}
+                initial="loggedOut"
+                animate={loggedIn ? "loggedIn" : "loggedOut"}
+                exit="loggedIn"
+            >
                 <motion.button exit={{ opacity: 0 }} type="button">Login</motion.button>
                 <motion.button exit={{ opacity: 0 }} type="button">Sign Up</motion.button>
-                <motion.button exit={{ opacity: 0 }} type="button" onClick={() => login()}>Guest</motion.button>
+                <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
+                    login()
+                    setloggedIn(!loggedIn)
+                }}>Guest</motion.button>
             </motion.form>
         </motion.section>
     )
