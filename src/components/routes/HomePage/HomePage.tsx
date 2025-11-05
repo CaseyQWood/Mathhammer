@@ -2,7 +2,7 @@ import { motion } from "motion/react"
 import { useState, useCallback } from "react"
 import styles from './homePage.module.css'
 import UnitForm from "../../unitForm"
-import Aside from "../../aside"
+// import Aside from "../../aside"
 import ResultsBarChart from "../../resultsBarChart"
 import { runSimulation } from "../../../utils/runSimulation";
 import type { DefenseStats, AttackStats, Modifiers } from "../../../types/unitStats"
@@ -95,16 +95,16 @@ export default function HomePage() {
 
     return (
         <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
-            <Aside />
+            {/* <Aside /> */}
             <motion.h2>Calculate</motion.h2>
-            <div className={styles.workspace} style={{ height: "100%", maxHeight: "65vh" }}>
+            <div className={styles.workspace}>
                 <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
                 {openModal && simData ?
                     <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                     : null
                 }
             </div>
-            <motion.nav>Nav</motion.nav>
+            {/* <motion.nav>Nav</motion.nav> */}
         </motion.div >
     )
 }
