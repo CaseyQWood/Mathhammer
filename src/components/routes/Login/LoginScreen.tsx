@@ -7,6 +7,21 @@ interface LoginScreenProps {
 }
 
 
+/*
+    The exit animations on desktop was wierd
+    because I was using position: absolute and setting the width to just 50% the fade into the next 
+    screen wasnt working correcty. I want the dark blue to consume the screen 
+    but what was happening is that it would just vertically assend like it was on mobile and the 
+    left and right spaces where not covered
+
+    To try and solve I am trying to use the same kind of logic as the aside where I cut back 
+    a full screen element to be the intended size and resize it during the animation
+
+    I currently have the new attempt commented out and the original buggy implementation left
+
+*/
+
+
 export default function LoginScreen({ login }: LoginScreenProps) {
 
     const exitAnimation = {
@@ -17,17 +32,17 @@ export default function LoginScreen({ login }: LoginScreenProps) {
 
     }
 
-    const sidebarVariants = {
-        loggedIn: {
-            clipPath: `rect(auto auto auto auto)`,
-            // ... transition
-        },
-        loggedOut: {
-            clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
-            // ... transition
-        },
-        hidden: { clipPath: "rect(65% auto auto auto)" }
-    }
+    // const sidebarVariants = {
+    //     loggedIn: {
+    //         clipPath: `rect(auto auto auto auto)`,
+    //         // ... transition
+    //     },
+    //     loggedOut: {
+    //         clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
+    //         // ... transition
+    //     },
+    //     hidden: { clipPath: "rect(65% auto auto auto)" }
+    // }
 
     const [loggedIn, setloggedIn] = useState(false)
 
@@ -40,15 +55,15 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                 <span>Make more informed choices</span>
             </motion.div>
             <motion.form
-                // key="login-modal"
-                // initial={{ y: "100%" }}
-                // transition={{ duration: 0.5, ease: "easeInOut" }}
-                // exit={exitAnimation}
-                // animate={{ y: 0 }}
-                variants={sidebarVariants}
-                initial="loggedOut"
-                animate={loggedIn ? "loggedIn" : "loggedOut"}
-                exit="loggedIn"
+                key="login-modal"
+                initial={{ y: "100%" }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                exit={exitAnimation}
+                animate={{ y: 0 }}
+            // variants={sidebarVariants}
+            // initial="loggedOut"
+            // animate={loggedIn ? "loggedIn" : "loggedOut"}
+            // exit="loggedIn"
             >
                 <motion.button exit={{ opacity: 0 }} type="button">Login</motion.button>
                 <motion.button exit={{ opacity: 0 }} type="button">Sign Up</motion.button>
