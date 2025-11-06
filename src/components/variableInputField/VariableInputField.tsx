@@ -4,12 +4,17 @@ import { useEffect, useState } from 'react'
 
 interface VariableInputFieldProps {
     index: number;
-    title: string
-    stateKey: string
+    title: string;
+    valueObject: {
+        variable: string;
+        value: number;
+    }
+    stateKey: string;
     handleChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 
-export default function VariableInputField({ index, title, stateKey, handleChange }: VariableInputFieldProps) {
+export default function VariableInputField({ index, title, valueObject, stateKey, handleChange }: VariableInputFieldProps) {
+    console.log("Value Object: ", valueObject)
     const options = [
         { key: crypto.randomUUID(), value: "0" },
         { key: crypto.randomUUID(), value: "D3" },
@@ -20,10 +25,7 @@ export default function VariableInputField({ index, title, stateKey, handleChang
         { key: crypto.randomUUID(), value: "3D6" },
 
     ]
-    const [value, setValue] = useState({
-        variable: "0",
-        value: 1
-    })
+    const [value, setValue] = useState(valueObject)
 
     const handleVariableChange = (
         newVal: string | null,
@@ -44,6 +46,10 @@ export default function VariableInputField({ index, title, stateKey, handleChang
             value: Number.isNaN(num) ? prev.value : num,
         }));
     };
+
+    useEffect(() => {
+        setValue(valueObject);
+    }, [valueObject]);
 
 
     useEffect(() => {
@@ -79,15 +85,15 @@ export default function VariableInputField({ index, title, stateKey, handleChang
                     size="md"
                     variant="outlined"
                     type="number"
-
                     onFocus={e => e.target.select()}
                     value={value.value}
                     onChange={(e) => {
+                        console.log("variable field INPUT: ", e)
                         handleValueChange(e)
                     }}
                     slotProps={{
                         input: {
-                            min: 1,
+                            min: 0,
                             max: 14,
                             step: 1,
                         },

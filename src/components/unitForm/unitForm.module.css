@@ -7,6 +7,10 @@
   overflow: scroll;
 }
 
+.unitForm__wrapper button {
+  margin-top: 1rem;
+}
+
 @media screen and (min-width: 768px) {
   .unitForm__wrapper {
     width: 40%;

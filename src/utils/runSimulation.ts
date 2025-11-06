@@ -13,6 +13,7 @@ export async function runSimulation(
   defenseStats: DefenseStats,
   modifiers: Modifiers[]
 ): Promise<WoundTallies> {
+  console.log("Run Sim: ", attackStats);
   // creates an array of promises the length of model count for each unit type
   // sums all the damage from each modelType and adds to unitDamage
   const results: number[] = [];

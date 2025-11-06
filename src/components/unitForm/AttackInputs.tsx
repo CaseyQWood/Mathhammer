@@ -10,6 +10,7 @@ interface AttackStatsProps {
 }
 
 export default function AttackInputs({ index, attackStats, handleAttackChange }: AttackStatsProps) {
+    console.log("Attack Inputs: ", attackStats)
 
     return (
         <div className={style.attackingStats__wrapper}>
@@ -26,6 +27,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
                 title='Attacks'
                 index={index}
                 stateKey="attacks"
+                valueObject={attackStats.damage}
                 handleChange={handleAttackChange}
             />
             <div className={style.weaponStats}>
@@ -57,7 +59,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
             <VariableInputField
                 title='Damage'
                 index={index}
-                // value={attackStats.damage}
+                valueObject={attackStats.damage}
                 stateKey="damage"
                 handleChange={handleAttackChange}
             />

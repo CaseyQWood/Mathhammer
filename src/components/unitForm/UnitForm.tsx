@@ -23,7 +23,7 @@ interface UnitFormProps {
 }
 
 export default function UnitForm({ defenseStats, attackStats, modifiers, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
-
+    console.log("Unit Form: ", attackStats)
     return (
         <div className={style.unitForm__wrapper} >
             <div className={style.unitInputs__wrapper}>

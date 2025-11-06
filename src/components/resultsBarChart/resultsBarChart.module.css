@@ -12,6 +12,7 @@
   border-radius: 1rem;
   z-index: 20;
   overflow: scroll;
+  height: 90%;
 }
 
 .results__span {
@@ -42,6 +43,7 @@
     z-index: 1;
     width: 50%;
     margin: 0 auto;
+    height: 100%;
   }
 
   .resultsModal button {

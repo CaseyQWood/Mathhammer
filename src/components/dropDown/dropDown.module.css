@@ -1,7 +1,7 @@
 .dropDown__wrapper {
   background-color: rgb(21, 97, 109);
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 0.75rem;
   overflow: scroll;
 }
 
