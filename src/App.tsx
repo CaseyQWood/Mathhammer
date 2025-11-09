@@ -1,8 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router';
 import { AnimatePresence } from 'motion/react';
 import './App.css'
-// import LoginScreen from './components/routes/Login'
-import HomePage from './components/routes/HomePage'
+// import LoginScreen from '@/features/auth/components/LoginScreen'
+import HomePage from '@/routes/HomePage'
 
 // import Header from './components/header';
 import { motion } from "motion/react"

@@ -1,0 +1,65 @@
+import type { AttackStats } from "@/types/unitStats";
+import InputField from "@/components/ui/inputField/InputField";
+import VariableInputField from "@/components/ui/variableInputField/VariableInputField";
+import style from './unitForm.module.css'
+
+interface AttackStatsProps {
+    index: number
+    attackStats: AttackStats
+    handleAttackChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
+}
+
+export default function AttackInputs({ index, attackStats, handleAttackChange }: AttackStatsProps) {
+
+    return (
+        <div className={style.attackingStats__wrapper}>
+            <InputField
+                title="Models"
+                value={attackStats.models}
+                setValue={(value) => handleAttackChange(index, 'models', value)}
+                min={1}
+                max={20}
+            />
+            <VariableInputField
+                title='Attacks'
+                index={index}
+                stateKey="attacks"
+                valueObject={attackStats.attacks}
+                handleChange={handleAttackChange}
+            />
+            <div className={style.weaponStats}>
+                <InputField
+                    title="WS/BS"
+                    value={attackStats.weaponSkill}
+                    setValue={(value) => handleAttackChange(index, 'weaponSkill', value)}
+                    min={2}
+                    max={6}
+                    width="100%"
+                />
+                <InputField
+                    title="Strength"
+                    value={attackStats.strength}
+                    setValue={(value) => handleAttackChange(index, 'strength', value)}
+                    min={1}
+                    max={20}
+                    width="100%"
+                />
+                <InputField
+                    title="AP"
+                    value={attackStats.armourPiercing}
+                    setValue={(value) => handleAttackChange(index, 'armourPiercing', value)}
+                    min={0}
+                    max={6}
+                    width="100%"
+                />
+            </div>
+            <VariableInputField
+                title='Damage'
+                index={index}
+                valueObject={attackStats.damage}
+                stateKey="damage"
+                handleChange={handleAttackChange}
+            />
+        </div>
+    );
+}
