@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 // Mock the exact module specifiers used by `hitPhase.ts`
-vi.mock('../../src/lib/diceUtils', () => ({
+vi.mock('@/lib/diceUtils', () => ({
   rollD6: vi.fn(),
   variableCalculator: vi.fn(),
 }))
 
-import { rollD6, variableCalculator } from '../../src/lib/diceUtils'
-import { processHitPhase } from '../../src/lib/phaseFunctions/hitPhase'
+import { rollD6, variableCalculator } from '@/lib/diceUtils'
+import { processHitPhase } from '@/lib/phaseFunctions/hitPhase'
 
 const mockRollSequence = (values) => {
   let i = 0
@@ -32,7 +32,7 @@ describe('processHitPhase', () => {
 
     expect(res.successfulHits).toBe(2) // 5 and 4 hit on WS4
     expect(res.lethalHits).toBe(0)
-    expect(res.extraAttacks).toBe(0)
+    expect(res.sustainedHits).toBe(0)
     expect(res.hitRolls).toEqual([5, 3, 4])
   })
 
@@ -83,7 +83,7 @@ describe('processHitPhase', () => {
       lethalHits: true,
     })
 
-    expect(res.extraAttacks).toBe(2)
+    expect(res.sustainedHits).toBe(2)
     expect(res.successfulHits).toBe(1) 
     expect(res.lethalHits).toBe(1) // 6 is a lethal hit
     expect(res.hitRolls).toEqual([6])
@@ -103,7 +103,7 @@ describe('processHitPhase', () => {
 
     expect(res.successfulHits).toBe(3) // Since torrent bypasses the miss checks, all three are counted as successful hits
     expect(res.lethalHits).toBe(0)  
-    expect(res.extraAttacks).toBe(0) 
+    expect(res.sustainedHits).toBe(0) 
     expect(res.hitRolls).toEqual([])
   })
 
@@ -121,7 +121,7 @@ describe('processHitPhase', () => {
 
     expect(res.successfulHits).toBe(0) // None hit (1, 2, 3 < 4)
     expect(res.lethalHits).toBe(0)
-    expect(res.extraAttacks).toBe(0)
+    expect(res.sustainedHits).toBe(0)
   })
 
   it('handles lethal hits correctly', () => {
@@ -137,6 +137,6 @@ describe('processHitPhase', () => {
 
     expect(res.successfulHits).toBe(1) // All hit (6, 4, 6 >= 4)
     expect(res.lethalHits).toBe(2) // Two 6s are lethal hits
-    expect(res.extraAttacks).toBe(0)
+    expect(res.sustainedHits).toBe(0)
   })
 })

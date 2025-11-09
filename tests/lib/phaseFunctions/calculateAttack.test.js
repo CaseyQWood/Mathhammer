@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'vitest'
-import { calculateToWoundThreshold, variableCalculator } from '../../src/lib/calculateAttack'
+import { calculateToWoundThreshold, variableCalculator } from '@/lib/calculateAttack'
 
 describe('calculateToWoundThreshold', () => {
   test('returns 4 when strength equals toughness', () => {

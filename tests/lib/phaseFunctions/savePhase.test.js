@@ -1,17 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 // Mock the exact module specifiers used by `savePhase.ts`
-vi.mock('../../src/lib/diceUtils', () => ({
+vi.mock('@/lib/diceUtils', () => ({
   rollD6: vi.fn(),
   variableCalculator: vi.fn(),
 }))
-vi.mock('../../src/lib/damageUtils', () => ({
+vi.mock('@/lib/damageUtils', () => ({
   getSaveThreshold: vi.fn(),
 }))
 
-import { rollD6, variableCalculator } from '../../src/lib/diceUtils'
-import { getSaveThreshold } from '../../src/lib/damageUtils'
-import { processSavePhase } from '../../src/lib/phaseFunctions/savePhase'
+import { rollD6, variableCalculator } from '@/lib/diceUtils'
+import { getSaveThreshold } from '@/lib/damageUtils'
+import { processSavePhase } from '@/lib/phaseFunctions/savePhase'
 
 const mockRollSequence = (values) => {
   let i = 0

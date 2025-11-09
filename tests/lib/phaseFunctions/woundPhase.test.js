@@ -1,16 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 // Mock the exact module specifiers used by `woundPhase.ts`
-vi.mock('../../src/lib/diceUtils', () => ({
+vi.mock('@/lib/diceUtils', () => ({
   rollD6: vi.fn(),
 }))
-vi.mock('../../src/lib/statUtils', () => ({
+vi.mock('@/lib/statUtils', () => ({
   calculateToWoundThreshold: vi.fn(),
 }))
 
-import { rollD6 } from '../../src/lib/diceUtils'
-import { calculateToWoundThreshold } from '../../src/lib/statUtils'
-import { processWoundPhase } from '../../src/lib/phaseFunctions/woundPhase'
+import { rollD6 } from '@/lib/diceUtils'
+import { calculateToWoundThreshold } from '@/lib/statUtils'
+import { processWoundPhase } from '@/lib/phaseFunctions/woundPhase'
 
 const mockRollSequence = (values) => {
   let i = 0
