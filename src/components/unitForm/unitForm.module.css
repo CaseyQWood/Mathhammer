@@ -7,8 +7,17 @@
   overflow: scroll;
 }
 
-.unitForm__wrapper button {
-  margin-top: 1rem;
+.submitButton {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.8em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #ffecd1;
+  color: #001524;
+  cursor: pointer;
+  transition: border-color 0.25s;
 }
 
 @media screen and (min-width: 768px) {
@@ -18,7 +27,7 @@
     border-radius: 0 1rem 1rem 0;
   }
 
-  .unitForm__wrapper button {
+  .submitButton {
     background-color: #196774;
     color: #ffecd1;
   }

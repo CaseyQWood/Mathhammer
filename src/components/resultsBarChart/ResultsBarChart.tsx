@@ -113,7 +113,7 @@ export default function ResultsBarChart({ results, setOpenModal }: BarChartProps
 
                 })}
             />
-            <button onClick={() => setOpenModal(false)}>
+            <button className="button" onClick={() => setOpenModal(false)}>
                 Close
             </button>
         </div>

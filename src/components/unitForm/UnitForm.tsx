@@ -34,7 +34,7 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleD
                 {attackStats.map((ele, index) => {
                     return (
                         <DropDown color="secondary" title="Attack Stats">
-                            <div onClick={(e) => e.stopPropagation()}>
+                            <div className={style.form} onClick={(e) => e.stopPropagation()}>
                                 <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
                                 <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
                             </div>
@@ -43,7 +43,7 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleD
                     )
                 })}
             </div>
-            <button
+            <button className={style.submitButton}
                 onClick={() => {
                     handleFormSubmit()
                 }}

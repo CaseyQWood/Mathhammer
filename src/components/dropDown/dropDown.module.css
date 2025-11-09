@@ -5,6 +5,10 @@
   overflow: scroll;
 }
 
+.dropDown__wrapper:last-child {
+  margin-bottom: 1rem;
+}
+
 .preview {
   display: flex;
   flex-direction: row;
@@ -17,6 +21,10 @@
 
 .dropDown__wrapper h3 {
   margin: 0;
+}
+
+.children__wrapper {
+  margin-top: 3%;
 }
 
 @media screen and (min-width: 768px) {
