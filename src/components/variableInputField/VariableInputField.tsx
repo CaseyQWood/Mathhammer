@@ -12,19 +12,20 @@ interface VariableInputFieldProps {
     stateKey: string;
     handleChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
+const options = [
+    { value: "0" },
+    { value: "D3" },
+    { value: "2D3" },
+    { value: "3D3" },
+    { value: "D6" },
+    { value: "2D6" },
+    { value: "3D6" },
+
+]
 
 export default function VariableInputField({ index, title, valueObject, stateKey, handleChange }: VariableInputFieldProps) {
     console.log("Value Object: ", valueObject)
-    const options = [
-        { key: crypto.randomUUID(), value: "0" },
-        { key: crypto.randomUUID(), value: "D3" },
-        { key: crypto.randomUUID(), value: "2D3" },
-        { key: crypto.randomUUID(), value: "3D3" },
-        { key: crypto.randomUUID(), value: "D6" },
-        { key: crypto.randomUUID(), value: "2D6" },
-        { key: crypto.randomUUID(), value: "3D6" },
-
-    ]
+    
     const [value, setValue] = useState(valueObject)
 
     const handleVariableChange = (
@@ -74,8 +75,8 @@ export default function VariableInputField({ index, title, valueObject, stateKey
                         padding: '0.5rem'
                     }}
                 >
-                    {options.map((ele) => {
-                        return <Option key={ele.key} value={ele.value} >{ele.value}</Option>
+                    {options.map((ele, index) => {
+                        return <Option key={`${ele.value}--${index}`} value={ele.value} >{ele.value}</Option>
                     })}
                 </Select>
                 <div className={style.plusSign}>

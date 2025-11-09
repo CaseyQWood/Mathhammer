@@ -27,7 +27,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
                 title='Attacks'
                 index={index}
                 stateKey="attacks"
-                valueObject={attackStats.damage}
+                valueObject={attackStats.attacks}
                 handleChange={handleAttackChange}
             />
             <div className={style.weaponStats}>

@@ -1,7 +1,6 @@
 .homePageWrapper {
   position: relative;
   display: flex;
-  justify-content: center;
   background-color: #001524;
   flex-direction: column;
   height: 100%;
@@ -24,6 +23,11 @@
   .workspace {
     display: flex;
     flex-direction: row;
-    height: 80%;
+    height: 100%;
+    padding-bottom: 5%;
+  }
+
+  .homePageWrapper h2 {
+    margin: 2% auto;
   }
 }

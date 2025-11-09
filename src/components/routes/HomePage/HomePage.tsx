@@ -1,5 +1,5 @@
 import { motion } from "motion/react"
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback } from "react"
 import styles from './homePage.module.css'
 import UnitForm from "../../unitForm"
 // import Aside from "../../aside"
@@ -91,12 +91,6 @@ export default function HomePage() {
         })
     }, [attackStats, defenseStats, modifiers])
 
-    // useEffect(() => {
-    //     console.log("attackStats:  ", attackStats)
-    //     console.log("defenseStats:  ", defenseStats)
-    //     console.log("modifiers:  ", modifiers)
-
-    // }, [attackStats, defenseStats, modifiers])
 
 
     return (
