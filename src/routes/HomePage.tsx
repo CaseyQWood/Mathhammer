@@ -60,7 +60,6 @@ export default function HomePage() {
     };
 
     const handleAddAttackProfile = useCallback(() => {
-        // console.log("Proto Attack Stats", attackStats)
         setAttackStats(prevStats => [
             ...prevStats,
             defaultAttackStats
@@ -69,13 +68,9 @@ export default function HomePage() {
             ...prevStats,
             defaultModifiers
         ])
-        // console.log("After Change", attackStats)
 
     }, [attackStats, defaultModifiers]);
 
-    useEffect(() => {
-        console.log("attack Stats added: ", attackStats)
-    }, [attackStats])
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackStats(prevStats => {
