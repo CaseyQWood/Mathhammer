@@ -1,5 +1,5 @@
 import { calculateAttack } from "./calculateAttack";
-import type { AttackStats, DefenseStats, Modifiers } from "@/types/unitStats";
+import type { AttackProfile, DefenseStats } from "@/types/unitStats";
 
 type WoundTallies = Record<number, number>;
 
@@ -10,9 +10,8 @@ function sumArray(arr: number[]) {
 
 export async function runSimulation(
   iterations: number,
-  attackStats: AttackStats[],
-  defenseStats: DefenseStats,
-  modifiers: Modifiers[]
+  attackProfiles: AttackProfile[],
+  defenseStats: DefenseStats
 ): Promise<WoundTallies> {
   // creates an array of promises the length of model count for each unit type
   // sums all the damage from each modelType and adds to unitDamage
@@ -20,9 +19,10 @@ export async function runSimulation(
   for (let i = 0; i < iterations; i++) {
     let unitDamage: number = 0;
     // runs calculations for each modelType
-    for (let j = 0; j < attackStats.length; j++) {
-      const modelAttacks = Array.from({ length: attackStats[j].models }, () =>
-        calculateAttack(attackStats[j], defenseStats, modifiers[j])
+    for (let j = 0; j < attackProfiles.length; j++) {
+      const profile = attackProfiles[j];
+      const modelAttacks = Array.from({ length: profile.attackStats.models }, () =>
+        calculateAttack(profile.attackStats, defenseStats, profile.modifiers)
       );
       await Promise.all(modelAttacks).then((modelDamage) => {
         unitDamage = unitDamage + sumArray(modelDamage);

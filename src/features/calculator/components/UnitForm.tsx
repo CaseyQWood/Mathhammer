@@ -4,13 +4,12 @@ import DefenseInputs from './DefenseInputs'
 import AttackInputs from "./AttackInputs";
 import AttackModifiers from "./AttackModifiers";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import type { DefenseStats, AttackStats, Modifiers } from "@/types/unitStats"
+import type { DefenseStats, AttackProfile } from "@/types/unitStats"
 
 
 interface UnitFormProps {
     defenseStats: DefenseStats
-    attackStats: AttackStats[]
-    modifiers: Modifiers[]
+    attackProfiles: AttackProfile[]
     handleDefenseChange: (key: string, value: number) => void
     handleAttackChange: (profileIndex: number, key: string, value: boolean | number | null | {
         variable: string;
@@ -24,7 +23,7 @@ interface UnitFormProps {
     handleAddAttackProfile: () => void;
 }
 
-export default function UnitForm({ defenseStats, attackStats, modifiers, handleAddAttackProfile, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
+export default function UnitForm({ defenseStats, attackProfiles, handleAddAttackProfile, handleDefenseChange, handleAttackChange, handleModifiersChange, handleFormSubmit }: UnitFormProps) {
     return (
         <div className={style.unitForm__wrapper} >
             <div className={style.unitInputs__wrapper}>
@@ -32,12 +31,12 @@ export default function UnitForm({ defenseStats, attackStats, modifiers, handleA
                     <DefenseInputs defenseStats={defenseStats} handleDefenseChange={handleDefenseChange} />
                 </DropDown>
 
-                {attackStats.map((ele, index) => {
+                {attackProfiles.map((profile, index) => {
                     return (
                         <DropDown color="secondary" title="Attack Stats">
                             <div className={style.form} onClick={(e) => e.stopPropagation()}>
-                                <AttackInputs index={Number(index)} attackStats={ele} handleAttackChange={handleAttackChange} />
-                                <AttackModifiers index={Number(index)} modifiers={modifiers[index]} handleModifiersChange={handleModifiersChange} />
+                                <AttackInputs index={Number(index)} attackStats={profile.attackStats} handleAttackChange={handleAttackChange} />
+                                <AttackModifiers index={Number(index)} modifiers={profile.modifiers} handleModifiersChange={handleModifiersChange} />
                             </div>
 
                         </DropDown>

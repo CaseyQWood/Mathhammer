@@ -1,11 +1,11 @@
 import { motion } from "motion/react"
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback } from "react"
 import styles from './homePage.module.css'
 import UnitForm from "@/features/calculator/components/UnitForm"
 // import Aside from "@/components/layout/aside/Aside"
 import ResultsBarChart from "@/features/calculator/components/ResultsBarChart"
 import { runSimulation } from "@/lib/runSimulation";
-import type { DefenseStats, AttackStats, Modifiers } from "@/types/unitStats"
+import type { DefenseStats, AttackProfile } from "@/types/unitStats"
 
 
 type WoundTallies = Record<number, number>;
@@ -17,29 +17,31 @@ const defaultDefenceStats = {
     invulnerable: 0,
     feelNoPain: 0,
 }
-const defaultAttackStats = {
-    models: 1,
-    attacks: {
-        variable: "0",
-        value: 1
+const defaultAttackProfile: AttackProfile = {
+    attackStats: {
+        models: 1,
+        attacks: {
+            variable: "0",
+            value: 1
+        },
+        weaponSkill: 3,
+        strength: 4,
+        armourPiercing: 1,
+        damage: {
+            variable: "0",
+            value: 1
+        }
     },
-    weaponSkill: 3,
-    strength: 4,
-    armourPiercing: 1,
-    damage: {
-        variable: "0",
-        value: 1
+    modifiers: {
+        lethalHits: false,
+        sustainedHits: { value: false, variable: "1" },
+        devastatingWounds: false,
+        torrent: false,
+        reRollHit: false,
+        reRollOneToHit: false,
+        reRollWound: false,
+        reRollOneToWound: false
     }
-}
-const defaultModifiers = {
-    lethalHits: false,
-    sustainedHits: { value: false, variable: "1" },
-    devastatingWounds: false,
-    torrent: false,
-    reRollHit: false,
-    reRollOneToHit: false,
-    reRollWound: false,
-    reRollOneToWound: false
 }
 
 
@@ -48,8 +50,7 @@ export default function HomePage() {
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)
-    const [attackStats, setAttackStats] = useState<AttackStats[]>([defaultAttackStats])
-    const [modifiers, setModifiers] = useState<Modifiers[]>([defaultModifiers])
+    const [attackProfiles, setAttackProfiles] = useState<AttackProfile[]>([defaultAttackProfile])
 
 
     const handleDefenseChange = (key: string, value: number) => {
@@ -60,49 +61,49 @@ export default function HomePage() {
     };
 
     const handleAddAttackProfile = useCallback(() => {
-        setAttackStats(prevStats => [
-            ...prevStats,
-            defaultAttackStats
+        setAttackProfiles(prevProfiles => [
+            ...prevProfiles,
+            defaultAttackProfile
         ])
-        setModifiers(prevStats => [
-            ...prevStats,
-            defaultModifiers
-        ])
-
-    }, [attackStats, defaultModifiers]);
+    }, []);
 
 
     const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
-        setAttackStats(prevStats => {
-
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
+        setAttackProfiles(prevProfiles => {
+            const newProfiles = [...prevProfiles];
+            newProfiles[profileIndex] = {
+                ...newProfiles[profileIndex],
+                attackStats: {
+                    ...newProfiles[profileIndex].attackStats,
+                    [key]: value
+                }
             };
-            return newStats;
+            return newProfiles;
         });
     }, []);
 
     const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
-        setModifiers(prevStats => {
-            const newStats = [...prevStats];
-            newStats[profileIndex] = {
-                ...newStats[profileIndex],
-                [key]: value
+        setAttackProfiles(prevProfiles => {
+            const newProfiles = [...prevProfiles];
+            newProfiles[profileIndex] = {
+                ...newProfiles[profileIndex],
+                modifiers: {
+                    ...newProfiles[profileIndex].modifiers,
+                    [key]: value
+                }
             };
-            return newStats;
+            return newProfiles;
         });
     }, [])
 
 
 
     const handleFormSubmit = useCallback(() => {
-        runSimulation(simCount, attackStats, defenseStats, modifiers).then((results) => {
+        runSimulation(simCount, attackProfiles, defenseStats).then((results) => {
             setSimData(results)
             setOpenModal(true)
         })
-    }, [attackStats, defenseStats, modifiers])
+    }, [attackProfiles, defenseStats])
 
 
 
@@ -111,7 +112,7 @@ export default function HomePage() {
             {/* <Aside /> */}
             <motion.h2>Calculate</motion.h2>
             <div className={styles.workspace}>
-                <UnitForm defenseStats={defenseStats} attackStats={attackStats} modifiers={modifiers} handleAddAttackProfile={handleAddAttackProfile} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
+                <UnitForm defenseStats={defenseStats} attackProfiles={attackProfiles} handleAddAttackProfile={handleAddAttackProfile} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
                 {openModal && simData ?
                     <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                     : null

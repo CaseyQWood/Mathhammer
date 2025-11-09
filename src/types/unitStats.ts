@@ -18,6 +18,11 @@ export interface Modifiers {
   reRollOneToWound: boolean;
 }
 
+export interface AttackProfile {
+  attackStats: AttackStats;
+  modifiers: Modifiers;
+}
+
 export interface DefenseStats {
   toughness: number;
   save: number;
