@@ -42,13 +42,13 @@ export function processSavePhase(
 
   if (defenseStats.feelNoPain === 0) {
     return { 
-      wounds: woundTotal * (variableCalculator(attackStats.damage.variable) + attackStats.damage.value) , 
+      wounds: woundTotal, 
       diceRolls 
     }
   }
 
-  
-  for (let i = 0; i < woundTotal; i++) {
+  const totalDamage = variableCalculator(attackStats.damage.variable) + attackStats.damage.value
+  for (let i = 0; i < totalDamage; i++) {
     const saveRoll = rollD6()
     diceRolls.push(saveRoll)
     if (saveRoll < defenseStats.feelNoPain) {

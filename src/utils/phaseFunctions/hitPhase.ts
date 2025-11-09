@@ -14,7 +14,7 @@ export function processHitPhase(
 ): {
   successfulHits: number;
   lethalHits: number;
-  extraAttacks: number;
+  sustainedHits: number;
   hitRolls: number[];
 } {
 
@@ -22,13 +22,13 @@ export function processHitPhase(
 
   let successfulHits = 0;
   let lethalHits = 0;
-  let extraAttacks = 0;
+  let sustainedHits = 0;
   
   const hitRolls: number[] = [];
 
   if (modifiers.torrent) {
     successfulHits = baseAttacks
-    return { successfulHits, lethalHits, extraAttacks, hitRolls }
+    return { successfulHits, lethalHits, sustainedHits, hitRolls }
   }
 
   // Process all attacks (base + sustained hits)
@@ -60,7 +60,7 @@ export function processHitPhase(
       if ( toHitRoll === 6 ) {
         if (modifiers.sustainedHits.value) {
           const sustainedExtra = variableCalculator(modifiers.sustainedHits.variable);
-          extraAttacks += sustainedExtra;
+          sustainedHits += sustainedExtra;
           successfulHits++;
         }
         if (modifiers.lethalHits) {
@@ -73,5 +73,5 @@ export function processHitPhase(
     successfulHits++;
   }
 
-  return { successfulHits, lethalHits, extraAttacks, hitRolls };
+  return { successfulHits, lethalHits, sustainedHits, hitRolls };
 }
