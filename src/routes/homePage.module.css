@@ -1,0 +1,33 @@
+.homePageWrapper {
+  position: relative;
+  display: flex;
+  background-color: #001524;
+  flex-direction: column;
+  height: 100%;
+  width: 100vw;
+  overflow: auto;
+}
+
+.homePageWrapper h2 {
+  margin: 3% auto;
+  /* padding-left: 10rem; */
+}
+
+.workspace {
+  height: 100%;
+  padding: 1rem 0;
+  max-height: 90%;
+}
+
+@media screen and (min-width: 768px) {
+  .workspace {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: 5%;
+  }
+
+  .homePageWrapper h2 {
+    margin: 2% auto;
+  }
+}
