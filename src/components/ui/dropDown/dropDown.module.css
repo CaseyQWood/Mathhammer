@@ -4,6 +4,11 @@
   padding: 0.75rem;
   overflow: scroll;
   width: 100%;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .preview {
@@ -21,7 +26,10 @@
 }
 
 .children__wrapper {
-  margin-top: 3%;
+  background-color: darkorange;
+  padding: 1rem;
+  padding-top: 4rem;
+  transform: translateY(-2rem);
 }
 
 @media screen and (min-width: 768px) {
