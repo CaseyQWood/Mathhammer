@@ -4,25 +4,24 @@ import VariableInputField from "@/components/ui/variableInputField/VariableInput
 import style from './unitForm.module.css'
 
 interface AttackStatsProps {
-    index: number
+    profileId: string
     attackStats: AttackStats
-    handleAttackChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
+    handleAttackChange: (profileId: string, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 
-export default function AttackInputs({ index, attackStats, handleAttackChange }: AttackStatsProps) {
+export default function AttackInputs({ profileId, attackStats, handleAttackChange }: AttackStatsProps) {
 
     return (
         <div className={style.attackingStats__wrapper}>
             <InputField
                 title="Models"
                 value={attackStats.models}
-                setValue={(value) => handleAttackChange(index, 'models', value)}
+                setValue={(value) => handleAttackChange(profileId, 'models', value)}
                 min={1}
                 max={20}
             />
             <VariableInputField
-                title='Attacks'
-                index={index}
+                profileId={profileId}
                 stateKey="attacks"
                 valueObject={attackStats.attacks}
                 handleChange={handleAttackChange}
@@ -31,7 +30,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
                 <InputField
                     title="WS/BS"
                     value={attackStats.weaponSkill}
-                    setValue={(value) => handleAttackChange(index, 'weaponSkill', value)}
+                    setValue={(value) => handleAttackChange(profileId, 'weaponSkill', value)}
                     min={2}
                     max={6}
                     width="100%"
@@ -39,7 +38,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
                 <InputField
                     title="Strength"
                     value={attackStats.strength}
-                    setValue={(value) => handleAttackChange(index, 'strength', value)}
+                    setValue={(value) => handleAttackChange(profileId, 'strength', value)}
                     min={1}
                     max={20}
                     width="100%"
@@ -47,7 +46,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
                 <InputField
                     title="AP"
                     value={attackStats.armourPiercing}
-                    setValue={(value) => handleAttackChange(index, 'armourPiercing', value)}
+                    setValue={(value) => handleAttackChange(profileId, 'armourPiercing', value)}
                     min={0}
                     max={6}
                     width="100%"
@@ -55,7 +54,7 @@ export default function AttackInputs({ index, attackStats, handleAttackChange }:
             </div>
             <VariableInputField
                 title='Damage'
-                index={index}
+                profileId={profileId}
                 valueObject={attackStats.damage}
                 stateKey="damage"
                 handleChange={handleAttackChange}

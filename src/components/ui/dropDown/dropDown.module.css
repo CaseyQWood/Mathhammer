@@ -3,10 +3,7 @@
   border-radius: 1rem;
   padding: 0.75rem;
   overflow: scroll;
-}
-
-.dropDown__wrapper:last-child {
-  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .preview {

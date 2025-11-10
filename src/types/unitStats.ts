@@ -19,6 +19,7 @@ export interface Modifiers {
 }
 
 export interface AttackProfile {
+  id: string;
   attackStats: AttackStats;
   modifiers: Modifiers;
 }

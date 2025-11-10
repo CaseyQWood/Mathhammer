@@ -18,6 +18,7 @@ const defaultDefenceStats = {
     feelNoPain: 0,
 }
 const defaultAttackProfile: AttackProfile = {
+    id: "default-ID",
     attackStats: {
         models: 1,
         attacks: {
@@ -50,7 +51,10 @@ export default function HomePage() {
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)
-    const [attackProfiles, setAttackProfiles] = useState<AttackProfile[]>([defaultAttackProfile])
+    const [attackProfiles, setAttackProfiles] = useState<AttackProfile[]>([{
+        ...defaultAttackProfile,
+        id: `attack-profile-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }])
 
 
     const handleDefenseChange = (key: string, value: number) => {
@@ -63,36 +67,49 @@ export default function HomePage() {
     const handleAddAttackProfile = useCallback(() => {
         setAttackProfiles(prevProfiles => [
             ...prevProfiles,
-            defaultAttackProfile
+            {
+                ...defaultAttackProfile,
+                id: `attack-profile-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+            }
         ])
     }, []);
 
-
-    const handleAttackChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
+    const handleRemoveAttackProfile = useCallback((id: string) => {
         setAttackProfiles(prevProfiles => {
-            const newProfiles = [...prevProfiles];
-            newProfiles[profileIndex] = {
-                ...newProfiles[profileIndex],
-                attackStats: {
-                    ...newProfiles[profileIndex].attackStats,
-                    [key]: value
-                }
-            };
-            return newProfiles;
+            return prevProfiles.filter(profile => profile.id !== id);
         });
     }, []);
 
-    const handleModifiersChange = useCallback((profileIndex: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
+
+    const handleAttackChange = useCallback((profileId: string, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackProfiles(prevProfiles => {
-            const newProfiles = [...prevProfiles];
-            newProfiles[profileIndex] = {
-                ...newProfiles[profileIndex],
-                modifiers: {
-                    ...newProfiles[profileIndex].modifiers,
-                    [key]: value
-                }
-            };
-            return newProfiles;
+            return prevProfiles.map(profile => 
+                profile.id === profileId
+                    ? {
+                        ...profile,
+                        attackStats: {
+                            ...profile.attackStats,
+                            [key]: value
+                        }
+                    }
+                    : profile
+            );
+        });
+    }, []);
+
+    const handleModifiersChange = useCallback((profileId: string, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
+        setAttackProfiles(prevProfiles => {
+            return prevProfiles.map(profile => 
+                profile.id === profileId
+                    ? {
+                        ...profile,
+                        modifiers: {
+                            ...profile.modifiers,
+                            [key]: value
+                        }
+                    }
+                    : profile
+            );
         });
     }, [])
 
@@ -112,7 +129,7 @@ export default function HomePage() {
             {/* <Aside /> */}
             <motion.h2>Calculate</motion.h2>
             <div className={styles.workspace}>
-                <UnitForm defenseStats={defenseStats} attackProfiles={attackProfiles} handleAddAttackProfile={handleAddAttackProfile} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
+                <UnitForm defenseStats={defenseStats} attackProfiles={attackProfiles} handleAddAttackProfile={handleAddAttackProfile} handleRemoveAttackProfile={handleRemoveAttackProfile} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
                 {openModal && simData ?
                     <ResultsBarChart results={simData} setOpenModal={setOpenModal} />
                     : null

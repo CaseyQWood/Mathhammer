@@ -3,14 +3,14 @@ import style from './variableInputField.module.css'
 import { useEffect, useState } from 'react'
 
 interface VariableInputFieldProps {
-    index: number;
-    title: string;
+    profileId: string;
+    title?: string;
     valueObject: {
         variable: string;
         value: number;
     }
     stateKey: string;
-    handleChange: (index: number, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
+    handleChange: (profileId: string, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => void
 }
 const options = [
     { value: "0" },
@@ -23,7 +23,7 @@ const options = [
 
 ]
 
-export default function VariableInputField({ index, title, valueObject, stateKey, handleChange }: VariableInputFieldProps) {
+export default function VariableInputField({ profileId, title, valueObject, stateKey, handleChange }: VariableInputFieldProps) {
 
     const [value, setValue] = useState(valueObject)
 
@@ -53,8 +53,8 @@ export default function VariableInputField({ index, title, valueObject, stateKey
 
 
     useEffect(() => {
-        handleChange(index, stateKey, value)
-    }, [value, handleChange, stateKey, index])
+        handleChange(profileId, stateKey, value)
+    }, [value, handleChange, stateKey, profileId])
 
     return (
         <div className={style.variableInput__wrapper}>

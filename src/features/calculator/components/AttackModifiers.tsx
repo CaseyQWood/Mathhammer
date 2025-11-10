@@ -5,14 +5,14 @@ import CheckIcon from '@mui/icons-material/Check';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 interface AttackModifierProps {
-    index: number
+    profileId: string
     modifiers: Modifiers
-    handleModifiersChange: (index: number, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => void
+    handleModifiersChange: (profileId: string, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => void
 }
 
 // pull down modifiers to manage toggle 
 
-export default function AttackModifiers({ index, modifiers, handleModifiersChange }: AttackModifierProps) {
+export default function AttackModifiers({ profileId, modifiers, handleModifiersChange }: AttackModifierProps) {
     const [selected, setSelected] = useState<string[]>([]);
 
     const options = [
@@ -53,27 +53,27 @@ export default function AttackModifiers({ index, modifiers, handleModifiersChang
             const key = Object.values(modifiersData)[i]
             if (selected.includes(key)) {
                 if (Object.keys(modifiers)[i] === "sustainedHits") {
-                    handleModifiersChange(index, Object.keys(modifiers)[i], { value: true, variable: sustainedHits })
+                    handleModifiersChange(profileId, Object.keys(modifiers)[i], { value: true, variable: sustainedHits })
                     continue
                 }
 
-                handleModifiersChange(index, Object.keys(modifiers)[i], true)
+                handleModifiersChange(profileId, Object.keys(modifiers)[i], true)
                 continue
             }
 
             if (!selected.includes(key)) {
                 if (Object.keys(modifiers)[i] === "sustainedHits") {
-                    handleModifiersChange(index, Object.keys(modifiers)[i], { value: false, variable: sustainedHits })
+                    handleModifiersChange(profileId, Object.keys(modifiers)[i], { value: false, variable: sustainedHits })
                     continue
                 }
 
-                handleModifiersChange(index, Object.keys(modifiers)[i], false)
+                handleModifiersChange(profileId, Object.keys(modifiers)[i], false)
                 continue
 
 
             }
         }
-    }, [selected, handleModifiersChange, sustainedHits, index])
+    }, [selected, handleModifiersChange, sustainedHits, profileId])
 
     return (
         <ul className={style.list__wrapper}>

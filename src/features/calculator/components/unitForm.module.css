@@ -53,6 +53,12 @@
   gap: 1rem;
 }
 
+.attackProfile {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
 .weaponStats > * {
   width: 100%;
 }
@@ -74,6 +80,22 @@
   height: 3rem;
   width: 3rem;
   margin: 0 auto;
+}
+
+.minus {
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.minus svg {
+  width: 2rem;
+  height: auto;
+  background-color: #ffecd1;
+  padding: 0.5rem;
+  color: #001524;
+  border-radius: 50%;
 }
 
 .list__wrapper {
@@ -141,5 +163,10 @@
   }
   .sustainedHits select {
     margin-right: 2rem;
+  }
+  .minus svg {
+    background-color: transparent;
+    padding: 0;
+    color: #001524;
   }
 }
