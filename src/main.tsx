@@ -2,9 +2,17 @@ import { StrictMode } from 'react'
 import { BrowserRouter } from 'react-router';
 import { createRoot } from 'react-dom/client'
 import { CssVarsProvider } from '@mui/joy';
+import * as Sentry from "@sentry/react";
 import './index.css'
 import '@fontsource/inter';
 import App from './App.tsx'
+
+Sentry.init({
+  dsn: "https://e1ac630cc279ced2d4f04d78deb8a2c8@o4510332903096320.ingest.us.sentry.io/4510332904210432",
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
+  sendDefaultPii: true
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
