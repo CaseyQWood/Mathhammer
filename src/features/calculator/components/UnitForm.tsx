@@ -55,8 +55,8 @@ export default function UnitForm({ defenseStats, attackProfiles, handleAddAttack
                             {
                                 index != 0 && !isDropdownOpen ? <div className={style.minus}><RemoveIcon onClick={() => handleRemoveAttackProfile(profile.id)} /></div> : null
                             }
-                            <DropDown 
-                                color="secondary" 
+                            <DropDown
+                                color="secondary"
                                 title="Attack Stats"
                                 isOpen={isDropdownOpen}
                                 onToggle={() => handleDropdownToggle(profile.id)}
@@ -73,7 +73,6 @@ export default function UnitForm({ defenseStats, attackProfiles, handleAddAttack
                 })}
                 <AddCircleOutlineIcon
                     onClick={() => {
-                        console.log("click")
                         handleAddAttackProfile()
                     }}
                     className={style.addFormIcon}
@@ -82,7 +81,6 @@ export default function UnitForm({ defenseStats, attackProfiles, handleAddAttack
             <button className={style.submitButton}
                 onClick={() => {
                     handleFormSubmit()
-                    console.log("submit")
                 }}
             >
                 Submit

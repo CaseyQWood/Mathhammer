@@ -1,6 +1,5 @@
 import { rollD6, variableCalculator } from "../diceUtils";
 
-// Phase 1: Hit Phase - Returns counts of successful hits and lethal hits
 export function processHitPhase(
   baseAttacks: number,
   weaponSkill: number,
@@ -61,11 +60,13 @@ export function processHitPhase(
           modifiers.sustainedHits.variable
         );
         sustainedHits += sustainedExtra;
-        successfulHits++;
       }
       if (modifiers.lethalHits) {
         lethalHits++;
-        continue;
+        continue; // Lethal hits don't count as regular hits
+      } else if (modifiers.sustainedHits.value) {
+        successfulHits++;
+        continue; // Sustained hits count as regular hits, but don't double count
       }
     }
 

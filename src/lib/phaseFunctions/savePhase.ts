@@ -31,23 +31,28 @@ export function processSavePhase(
       defenseStats.invulnerable
     );
 
-    if (saveThreshold != 0 || saveThreshold > 6) {
+    if (saveThreshold >= 6) {
+      // Cannot save if over 6
+      totalFailedSaves++;
+      continue;
+    }
+
+    // for ever hit check if save
+    if (saveThreshold > 0 && saveThreshold <= 6) {
       const toSaveRoll = rollD6();
       diceRolls.push(toSaveRoll);
       if (toSaveRoll < saveThreshold) {
         totalFailedSaves++;
       }
-    } else {
-      continue;
     }
   }
 
-  const woundTotal =
-    (totalFailedSaves + devastatingHits) *
-    (variableCalculator(attackStats.damage.variable) +
-      attackStats.damage.value);
-
-  console.log("Wound Total: ", woundTotal);
+  let woundTotal = 0;
+  for (let i = 0; i < totalFailedSaves + devastatingHits; i++) {
+    const variable = variableCalculator(attackStats.damage.variable);
+    const totalDamage = variable + attackStats.damage.value;
+    woundTotal += totalDamage;
+  }
 
   if (defenseStats.feelNoPain === 0) {
     return {
@@ -57,8 +62,6 @@ export function processSavePhase(
     };
   }
 
-  // const totalDamage =
-  //   variableCalculator(attackStats.damage.variable) + attackStats.damage.value;
   for (let i = 0; i < woundTotal; i++) {
     const saveRoll = rollD6();
     feelNoPainRolls.push(saveRoll);

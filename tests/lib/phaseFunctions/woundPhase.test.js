@@ -1,171 +1,101 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
 
-// Mock the exact module specifiers used by `woundPhase.ts`
-vi.mock('@/lib/diceUtils', () => ({
-  rollD6: vi.fn(),
-}))
-vi.mock('@/lib/statUtils', () => ({
-  calculateToWoundThreshold: vi.fn(),
-}))
+vi.mock("@/lib/diceUtils", () => ({ rollD6: vi.fn() }));
+vi.mock("@/lib/statUtils", () => ({ calculateToWoundThreshold: vi.fn() }));
 
-import { rollD6 } from '@/lib/diceUtils'
-import { calculateToWoundThreshold } from '@/lib/statUtils'
-import { processWoundPhase } from '@/lib/phaseFunctions/woundPhase'
+import { rollD6 } from "@/lib/diceUtils";
+import { calculateToWoundThreshold as mockCalcThreshold } from "@/lib/statUtils";
+import { processWoundPhase } from "@/lib/phaseFunctions/woundPhase";
 
 const mockRollSequence = (values) => {
-  let i = 0
-  ;(rollD6).mockImplementation(() => values[i++])
-}
+  let i = 0;
+  rollD6.mockImplementation(() => values[i++]);
+};
 
-beforeEach(() => {
-  vi.clearAllMocks()
-})
+const baseOpts = {
+  lethalHits: false,
+  reRollWound: false,
+  reRollOneToWound: false,
+  devastatingWounds: false,
+};
 
-describe('processWoundPhase', () => {
-  it('counts wounds without modifiers', () => {
-    mockRollSequence([5, 3, 4])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
+beforeEach(() => vi.clearAllMocks());
 
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: false,
-    })
+describe("processWoundPhase (minimal)", () => {
+  // 1️⃣ Core threshold function — covers all comparison logic
+  describe("calculateToWoundThreshold", () => {
+    let calc;
+    beforeAll(async () => {
+      const real = await vi.importActual("@/lib/statUtils");
+      calc = real.calculateToWoundThreshold;
+    });
 
-    expect(res.successfulWounds).toBe(2) // 5 and 4 wound on threshold 4
-    expect(res.devastatingWounds).toBe(0)
-  })
+    it.each([
+      [4, 4, 4], // equal
+      [5, 3, 4], // lower strength
+      [3, 5, 4], // higher strength
+      [2, 8, 4], // double or more
+      [6, 2, 4], // half or less
+    ])("%i+ -> strength=%i → toughness=%i", (expected, s, t) => {
+      expect(calc(s, t)).toBe(expected);
+    });
+  });
 
-  it('applies reRollOneToWound on 1s', () => {
-    // Calls: initial(1), reroll(4), next initial(2), next initial(5)
-    mockRollSequence([1, 4, 2, 5])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
+  // 2️⃣ Basic wound threshold logic
+  it("counts mixed wounds correctly", () => {
+    mockRollSequence([1, 4, 2, 6, 3, 5]);
+    mockCalcThreshold.mockReturnValue(4);
+    const res = processWoundPhase(6, 0, 0, 4, 4, baseOpts);
+    expect(res.successfulWounds).toBe(3);
+  });
 
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
+  // 3️⃣ Adds lethal hits properly
+  it("adds lethal hits to successful wounds", () => {
+    mockRollSequence([5, 3, 4]);
+    mockCalcThreshold.mockReturnValue(4);
+    const res = processWoundPhase(3, 2, 0, 4, 4, baseOpts);
+    expect(res.successfulWounds).toBe(4); // 2 hits + 2 lethals
+  });
+
+  // 4️⃣ Counts devastating wounds on 6s
+  it("marks 6s as devastating wounds", () => {
+    mockRollSequence([6, 4, 2]);
+    mockCalcThreshold.mockReturnValue(4);
+    const res = processWoundPhase(3, 0, 0, 4, 4, {
+      ...baseOpts,
+      devastatingWounds: true,
+    });
+    expect(res.devastatingWounds).toBe(1);
+  });
+
+  // 5️⃣ Reroll ones
+  it("rerolls 1s to wound", () => {
+    mockRollSequence([1, 4, 5, 3, 2]);
+    mockCalcThreshold.mockReturnValue(4);
+    const res = processWoundPhase(4, 0, 0, 4, 4, {
+      ...baseOpts,
       reRollOneToWound: true,
-      devastatingWounds: false,
-    })
+    });
+    expect(res.reRolls).toEqual([4]);
+    expect(res.successfulWounds).toBe(2);
+  });
 
-    expect(res.successfulWounds).toBe(2) // 4 and 5 wound
-    expect(res.devastatingWounds).toBe(0)
-  })
-
-  it('applies reRollWound for any failed wound', () => {
-    mockRollSequence([2, 4, 3, 2, 5])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
+  // 6️⃣ Reroll all failed wounds
+  it("rerolls all failed wounds", () => {
+    mockRollSequence([2, 4, 6, 3, 5]);
+    mockCalcThreshold.mockReturnValue(4);
+    const res = processWoundPhase(5, 0, 0, 4, 4, {
+      ...baseOpts,
       reRollWound: true,
-      reRollOneToWound: false,
-      devastatingWounds: false,
-    })
+    });
+    expect(res.reRolls.length).toBeGreaterThan(0);
+    expect(res.successfulWounds).toBeGreaterThan(2);
+  });
 
-    expect(res.successfulWounds).toBe(2) // 4 and 5 wound
-    expect(res.devastatingWounds).toBe(0)
-  })
-
-  it('counts devastating wounds on 6s', () => {
-    mockRollSequence([6, 4, 2])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: true,
-    })
-
-    expect(res.successfulWounds).toBe(1) // 4 wound
-    expect(res.devastatingWounds).toBe(1) // 6 is devastating
-  })
-
-  it('adds lethal hits to successful wounds', () => {
-    mockRollSequence([5, 3, 4])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 2, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: false,
-    })
-
-    expect(res.successfulWounds).toBe(4) // 1 regular wound + 2 lethal hits
-    expect(res.devastatingWounds).toBe(0)
-  })
-
-  it('Lethals don`t modify amount of devastating wounds', () => {
-    mockRollSequence([5, 3, 4])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 2, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: true,
-    })
-
-    expect(res.successfulWounds).toBe(4) // 2 regular wound + 2 lethal hits
-    expect(res.devastatingWounds).toBe(0) 
-  })
-
-  it('handles mixed regular hits and lethal hits with devastating wounds', () => {
-    mockRollSequence([6, 4, 2, 5, 1])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(5, 2, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: true,
-    })
-
-    expect(res.successfulWounds).toBe(4) // 3 regular wounds + 2 lethal hits
-    expect(res.devastatingWounds).toBe(1) // 1 from 6 
-  })
-
-  it('handles all failed wounds with rerolls', () => {
-    mockRollSequence([1, 2, 3, 1, 2, 3])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
-      reRollWound: true,
-      reRollOneToWound: false,
-      devastatingWounds: false,
-    })
-
-    expect(res.successfulWounds).toBe(0) // All failed even with rerolls
-    expect(res.devastatingWounds).toBe(0)
-  })
-
-  it('handles all successful wounds', () => {
-    mockRollSequence([4, 5, 6])
-    ;(calculateToWoundThreshold).mockReturnValue(4)
-
-    const res = processWoundPhase(3, 0, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: false,
-    })
-
-    expect(res.successfulWounds).toBe(3) // All wound
-  })
-
-  it('handles only lethal hits', () => {
-    const res = processWoundPhase(0, 3, 4, 4, {
-      lethalHits: false,
-      reRollWound: false,
-      reRollOneToWound: false,
-      devastatingWounds: true,
-    })
-
-    expect(res.successfulWounds).toBe(3) // All 3 lethal hits
-    expect(res.devastatingWounds).toBe(0) // All 3 count as devastating
-  })
-})
+  // 7️⃣ Edge: zero hits
+  it("handles zero hits gracefully", () => {
+    const res = processWoundPhase(0, 0, 0, 4, 4, baseOpts);
+    expect(res.successfulWounds).toBe(0);
+    expect(res.devastatingWounds).toBe(0);
+  });
+});

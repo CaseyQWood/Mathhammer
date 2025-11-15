@@ -27,6 +27,7 @@ export async function calculateAttack(
   const woundResult = processWoundPhase(
     hitResult.successfulHits,
     hitResult.lethalHits,
+    hitResult.sustainedHits,
     attackStats.strength,
     defenseStats.toughness,
     {
@@ -44,7 +45,6 @@ export async function calculateAttack(
     defenseStats,
     attackStats
   );
-
   return saveResult.wounds;
 }
 

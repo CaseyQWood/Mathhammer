@@ -47,7 +47,7 @@ const defaultAttackProfile: AttackProfile = {
 
 
 export default function HomePage() {
-    const simCount = 10000
+    const simCount = 1
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)
@@ -83,7 +83,7 @@ export default function HomePage() {
 
     const handleAttackChange = useCallback((profileId: string, key: string, value: boolean | number | null | { variable: string; value: boolean | number; }) => {
         setAttackProfiles(prevProfiles => {
-            return prevProfiles.map(profile => 
+            return prevProfiles.map(profile =>
                 profile.id === profileId
                     ? {
                         ...profile,
@@ -99,7 +99,7 @@ export default function HomePage() {
 
     const handleModifiersChange = useCallback((profileId: string, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
         setAttackProfiles(prevProfiles => {
-            return prevProfiles.map(profile => 
+            return prevProfiles.map(profile =>
                 profile.id === profileId
                     ? {
                         ...profile,

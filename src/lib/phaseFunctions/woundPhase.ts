@@ -5,6 +5,7 @@ import { calculateToWoundThreshold } from "../statUtils";
 export function processWoundPhase(
   successfulHits: number,
   lethalHits: number,
+  sustainedHits: number,
   strength: number,
   toughness: number,
   modifiers: {
@@ -28,7 +29,7 @@ export function processWoundPhase(
   const reRolls: number[] = [];
 
   // Process regular hits (non-lethal)
-  for (let i = 0; i < successfulHits; i++) {
+  for (let i = 0; i < successfulHits + sustainedHits; i++) {
     let toWoundRoll = rollD6();
     diceRolls.push(toWoundRoll);
 
