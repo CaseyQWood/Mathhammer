@@ -4,16 +4,15 @@
 
 **_MVP_**
 
-- Users can run a simulation between attacker(s) and defender
-  - Returns the mean, 80% band and the chart of the results
-- Users can add/remove/edit models to the attacking "unit" and edit the defending stat brick
-- Has all included modifiers + fishing
-  - Include critical roll value for anti-\* abilities or 5+ to crit abilities
-  - +1/-1 to hit/wound <--- I dont think I need this
-- Has custom Domain
-- Mobile/Desktop compatible
-- release to testing group
-- reRoll saves
+- [x] Users can run a simulation between attacker(s) and defender
+- [x] Returns the mean, 80% band and the chart of the results
+- [x] Users can add/remove/edit models to the attacking "unit" and edit the defending stat brick
+- [ ] Has all included modifiers + fishing
+  - [ ] Include critical roll value for anti-\* abilities or 5+ to crit abilities
+- [x] Has custom Domain
+- [x] Mobile/Desktop compatible
+- [x] release to testing group
+- [ ] reRoll saves
 
 **_MMP_**
 
@@ -38,20 +37,20 @@
 
 ## TODO:
 
-- Styling for desktop + mobile
-
-- add remove attack stats button
-- Update variableCalculator to cover more cases as it also manages damage
 - add instance carousel
 - unify default value managment between components
 - make sure all components are controlled components
-- Setup saving units
 - determine if I should move to models killed VS wounds done. because some defenders have multiple wounds because of the non overflow when feel no pain is involved
 - Complete design
 - Mobile friendly up and down arrows for values ( do I think this is required ? )
-- improve mobile inputs
-- - configure the go button
+- Update the names and values in the meta tags to match ttCalculator rather then Mathhammer
 
 BUGS:
 
 - Proccess hits if a dice roll returns undefined it counts as a passing roll
+
+## User reviews
+
+- when inputting a value past max allowed should visually indicate that max is hit
+- 3 character variables are cut off on mobile
+- defence stants text should be white
