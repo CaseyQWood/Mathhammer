@@ -33,6 +33,10 @@
   }
 }
 
+.attackProfile {
+  display: flex;
+}
+
 .defensiveStats__wrapper {
   display: flex;
   flex-direction: column;
@@ -159,8 +163,7 @@
     margin-right: 2rem;
   }
   .minus svg {
-    background-color: transparent;
-    padding: 0;
-    color: #001524;
+    background-color: #196774;
+    color: #ffecd1;
   }
 }

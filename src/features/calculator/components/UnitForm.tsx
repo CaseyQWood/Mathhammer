@@ -51,7 +51,7 @@ export default function UnitForm({ defenseStats, attackProfiles, handleAddAttack
                 {attackProfiles.map((profile, index) => {
                     const isDropdownOpen = openDropdowns.has(profile.id)
                     return (
-                        <div key={profile.id} className={style.attackProfile}>
+                        <div key={profile.id} style={isDropdownOpen ? { display: "inline" } : { display: "flex" }} className={style.attackProfile}>
                             {
                                 index != 0 && !isDropdownOpen ? <div className={style.minus}><RemoveIcon onClick={() => handleRemoveAttackProfile(profile.id)} /></div> : null
                             }
