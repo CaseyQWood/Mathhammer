@@ -12,10 +12,10 @@ Sentry.init({
   // Setting this option to true will send default PII data to Sentry.
   // For example, automatic IP address collection on events
   sendDefaultPii: false, // 🔒 ensures no personal data like IPs is attached
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
+  // integrations: [
+  //   Sentry.browserTracingIntegration(),
+  //   Sentry.replayIntegration(),
+  // ],
   tracesSampleRate: 1.0,
 });
 
