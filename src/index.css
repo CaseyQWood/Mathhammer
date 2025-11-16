@@ -29,9 +29,9 @@ h1 {
   color: #001524;
   cursor: pointer;
   transition: border-color 0.25s;
-}
-.button:hover {
-  border-color: #646cff;
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 .button:focus,
 .button:focus-visible {

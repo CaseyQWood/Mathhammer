@@ -88,7 +88,6 @@ export default function VariableInputField({ profileId, title, valueObject, stat
                     onFocus={e => e.target.select()}
                     value={value.value}
                     onChange={(e) => {
-                        console.log("variable field INPUT: ", e)
                         handleValueChange(e)
                     }}
                     slotProps={{

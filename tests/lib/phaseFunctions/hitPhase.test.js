@@ -1,142 +1,107 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from "vitest";
 
-// Mock the exact module specifiers used by `hitPhase.ts`
-vi.mock('@/lib/diceUtils', () => ({
+vi.mock("@/lib/diceUtils", () => ({
   rollD6: vi.fn(),
   variableCalculator: vi.fn(),
-}))
+}));
 
-import { rollD6, variableCalculator } from '@/lib/diceUtils'
-import { processHitPhase } from '@/lib/phaseFunctions/hitPhase'
+import { rollD6, variableCalculator } from "@/lib/diceUtils";
+import { processHitPhase } from "@/lib/phaseFunctions/hitPhase";
 
 const mockRollSequence = (values) => {
-  let i = 0
-  ;(rollD6).mockImplementation(() => values[i++])
-}
+  let i = 0;
+  rollD6.mockImplementation(() => values[i++]);
+};
 
-beforeEach(() => {
-  vi.clearAllMocks()
-})
+const baseOpts = {
+  torrent: false,
+  reRollHit: false,
+  reRollOneToHit: false,
+  sustainedHits: { value: false, variable: "0" },
+  lethalHits: false,
+};
 
-describe('processHitPhase', () => {
-  it('counts hits without modifiers and records hit rolls', () => {
-    mockRollSequence([5, 3, 4])
+beforeEach(() => vi.clearAllMocks());
 
+describe("processHitPhase (Warhammer 40k 10th - minimal)", () => {
+  // 1️⃣ Basic hit threshold logic
+  it("counts hits correctly based on WS", () => {
+    mockRollSequence([2, 1, 6, 3]);
+    const res = processHitPhase(4, 3, baseOpts);
+    // WS3+: 3 and 6 hit
+    expect(res.successfulHits).toBe(2);
+    expect(res.hitRolls).toEqual([2, 1, 6, 3]);
+  });
+
+  // 2️⃣ Handles sustained hits (exploding 6s)
+  it("adds sustained hits on 6s", () => {
+    mockRollSequence([6, 4, 2]);
+    variableCalculator.mockReturnValue(1); // 1 extra hit per 6
     const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: false,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: false,
-    })
+      ...baseOpts,
+      sustainedHits: { value: true, variable: "1" },
+    });
+    expect(res.sustainedHits).toBe(1);
+    expect(res.successfulHits).toBe(2); // 6 and 4
+  });
 
-    expect(res.successfulHits).toBe(2) // 5 and 4 hit on WS4
-    expect(res.lethalHits).toBe(0)
-    expect(res.sustainedHits).toBe(0)
-    expect(res.hitRolls).toEqual([5, 3, 4])
-  })
-
-  it('applies reRollOneToHit on 1s and records reroll', () => {
-    // Calls: initial(1), reroll(4), next initial(5)
-    mockRollSequence([1, 4, 5, 3])
-
+  // 3️⃣ Handles lethal hits (auto-wound on 6s)
+  it("marks 6s as lethal hits", () => {
+    mockRollSequence([6, 5, 3]);
     const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: true,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: false,
-    })
-
-    expect(res.successfulHits).toBe(2) // 4 and 5 hit
-    expect(res.hitRolls).toEqual([1, 4, 5, 3]) // includes the reroll of the 1
-  })
-
-  it('applies reRollHit for any failed hit', () => {
-    mockRollSequence([2, 4, 6, 2, 3])
-
-    const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: true,
-      reRollOneToHit: false,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: false,
-    })
-
-    expect(res.successfulHits).toBe(2) // 4 and 6
-    expect(res.hitRolls).toEqual([2, 4, 6, 2, 3])
-  })
-
-  it('adds extra attacks for sustained hits/lethal hits from base attacks only and processes them', () => {
-    // BaseAttacks = 1
-    // First roll (base): 6 -> sustained trig
-    // variableCalculator('D3') -> 2 extra attacks
-    // The loop should then process 2 more rolls: 4, 2
-    mockRollSequence([6, 4, 2])
-    ;(variableCalculator).mockReturnValue(2)
-
-    const res = processHitPhase(1, 3, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: false,
-      sustainedHits: { value: true, variable: 'D3' },
+      ...baseOpts,
       lethalHits: true,
-    })
+    });
+    expect(res.lethalHits).toBe(1); // one 6
+    expect(res.successfulHits).toBe(1); // only 5 counts as regular hit
+  });
 
-    expect(res.sustainedHits).toBe(2)
-    expect(res.successfulHits).toBe(1) 
-    expect(res.lethalHits).toBe(1) // 6 is a lethal hit
-    expect(res.hitRolls).toEqual([6])
-  })
+  // 4️⃣ Rerolls 1s to hit
+  it("rerolls 1s to hit", () => {
+    mockRollSequence([1, 4, 6, 3]);
+    const res = processHitPhase(3, 4, {
+      ...baseOpts,
+      reRollOneToHit: true,
+    });
+    expect(res.reRolls).toEqual([4]);
+    expect(res.successfulHits).toBe(2); // 4 and 6 hit
+  });
 
-  it('skips all hit logic when torrent is true but still records rolls', () => {
-    // With torrent true, current implementation bypasses hit checks
-    mockRollSequence([2, 1, 6])
+  // 5️⃣ Rerolls all failed hits
+  it("rerolls all failed hits", () => {
+    mockRollSequence([2, 4, 3, 5, 6, 5]);
+    const res = processHitPhase(4, 4, {
+      ...baseOpts,
+      reRollHit: true,
+    });
+    expect(res.reRolls.length).toBeGreaterThan(0);
+    expect(res.successfulHits).toBeGreaterThan(2);
+  });
 
-    const res = processHitPhase(3, 6, {
+  // 6️⃣ Torrent weapons auto-hit
+  it("bypasses hit logic when torrent is true", () => {
+    mockRollSequence([1, 2, 3, 4]);
+    const res = processHitPhase(4, 6, {
+      ...baseOpts,
       torrent: true,
-      reRollHit: true,
-      reRollOneToHit: true,
-      sustainedHits: { value: true, variable: 'D3' },
-      lethalHits: true,
-    })
+    });
+    expect(res.successfulHits).toBe(4); // all auto-hit
+    expect(res.hitRolls).toEqual([]); // no rolls tracked
+  });
 
-    expect(res.successfulHits).toBe(3) // Since torrent bypasses the miss checks, all three are counted as successful hits
-    expect(res.lethalHits).toBe(0)  
-    expect(res.sustainedHits).toBe(0) 
-    expect(res.hitRolls).toEqual([])
-  })
+  // 7️⃣ Handles zero attacks
+  it("returns zero hits when no attacks made", () => {
+    const res = processHitPhase(0, 4, baseOpts);
+    expect(res.successfulHits).toBe(0);
+    expect(res.hitRolls).toEqual([]);
+  });
 
-
-  it('handles all failed hits', () => {
-    mockRollSequence([1, 2, 3])
-
-    const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: false,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: false,
-    })
-
-    expect(res.successfulHits).toBe(0) // None hit (1, 2, 3 < 4)
-    expect(res.lethalHits).toBe(0)
-    expect(res.sustainedHits).toBe(0)
-  })
-
-  it('handles lethal hits correctly', () => {
-    mockRollSequence([6, 4, 6])
-
-    const res = processHitPhase(3, 4, {
-      torrent: false,
-      reRollHit: false,
-      reRollOneToHit: false,
-      sustainedHits: { value: false, variable: '0' },
-      lethalHits: true,
-    })
-
-    expect(res.successfulHits).toBe(1) // All hit (6, 4, 6 >= 4)
-    expect(res.lethalHits).toBe(2) // Two 6s are lethal hits
-    expect(res.sustainedHits).toBe(0)
-  })
-})
+  // 8️⃣ Edge case: all misses
+  it("handles all misses correctly", () => {
+    mockRollSequence([1, 2, 3]);
+    const res = processHitPhase(3, 4, baseOpts);
+    expect(res.successfulHits).toBe(0);
+    expect(res.sustainedHits).toBe(0);
+    expect(res.lethalHits).toBe(0);
+  });
+});

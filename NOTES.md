@@ -9,10 +9,11 @@
 - Users can add/remove/edit models to the attacking "unit" and edit the defending stat brick
 - Has all included modifiers + fishing
   - Include critical roll value for anti-\* abilities or 5+ to crit abilities
-  - +1/-1 to hit/wound
+  - +1/-1 to hit/wound <--- I dont think I need this
 - Has custom Domain
 - Mobile/Desktop compatible
 - release to testing group
+- reRoll saves
 
 **_MMP_**
 
@@ -50,3 +51,7 @@
 - Mobile friendly up and down arrows for values ( do I think this is required ? )
 - improve mobile inputs
 - - configure the go button
+
+BUGS:
+
+- Proccess hits if a dice roll returns undefined it counts as a passing roll
