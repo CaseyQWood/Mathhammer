@@ -54,17 +54,17 @@ export default function AttackModifiers({
         []
     );
 
-    const toggleModifier = (key: string) => {
+    const toggleModifier = (key: keyof Modifiers) => {
         const current = modifiers[key];
         const isChecked = typeof current === "object" ? current.value : current;
 
         if (key === "sustainedHits") {
-            handleModifiersChange(profileId, key, {
+            handleModifiersChange(profileId, key as string, {
                 value: !isChecked,
                 variable: sustainedHits,
             });
         } else {
-            handleModifiersChange(profileId, key, !isChecked);
+            handleModifiersChange(profileId, key as string, !isChecked);
         }
     };
 
@@ -82,14 +82,15 @@ export default function AttackModifiers({
     return (
         <ul className={style.list__wrapper}>
             {Object.entries(modifiersData).map(([key, name], index) => {
-                const modifier = modifiers[key];
+                const modKey = key as keyof Modifiers;
+                const modifier = modifiers[modKey];
                 const checked =
                     typeof modifier === "object" ? modifier.value : modifier;
 
                 return (
                     <li
                         key={`${name}--${index}`}
-                        onClick={() => toggleModifier(key)}
+                        onClick={() => toggleModifier(modKey)}
                         className={style.listItem}
                     >
                         <label>{name}</label>
