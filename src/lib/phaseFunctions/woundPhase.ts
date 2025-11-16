@@ -34,7 +34,7 @@ export function processWoundPhase(
     diceRolls.push(toWoundRoll);
 
     // Handle wound phase with rerolls
-    if (toWoundRoll < toWound) {
+    if (toWoundRoll === 1 || toWoundRoll < toWound) {
       if (modifiers.reRollOneToWound && toWoundRoll === 1) {
         toWoundRoll = rollD6();
         reRolls.push(toWoundRoll);
