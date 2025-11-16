@@ -47,7 +47,7 @@ const defaultAttackProfile: AttackProfile = {
 
 
 export default function HomePage() {
-    const simCount = 1
+    const simCount = 25000
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
     const [defenseStats, setdefenseStats] = useState<DefenseStats>(defaultDefenceStats)

@@ -1,5 +1,5 @@
 import style from "./unitForm.module.css"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import type { Modifiers } from "@/types/unitStats";
 import CheckIcon from '@mui/icons-material/Check';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -37,7 +37,7 @@ export default function AttackModifiers({ profileId, modifiers, handleModifiersC
         setSustainedHits(newVal);
     };
 
-    const modifiersData = {
+    const modifiersData = useMemo(() => ({
         lethalHits: 'Lethal Hits',
         sustainedHits: 'Sustained Hits',
         devastatingWounds: 'devastating Wounds',
@@ -46,7 +46,7 @@ export default function AttackModifiers({ profileId, modifiers, handleModifiersC
         reRollOneToHit: "Re-roll 1 to Hit",
         reRollWound: 'Re-roll to Wound',
         reRollOneToWound: "Re-roll 1 to Wound"
-    }
+    }), [])
 
     useEffect(() => {
         for (let i = 0; i < Object.keys(modifiersData).length; i++) {
@@ -73,7 +73,7 @@ export default function AttackModifiers({ profileId, modifiers, handleModifiersC
 
             }
         }
-    }, [selected, handleModifiersChange, sustainedHits, profileId])
+    }, [selected, handleModifiersChange, sustainedHits, profileId, modifiers, modifiersData])
 
     return (
         <ul className={style.list__wrapper}>
