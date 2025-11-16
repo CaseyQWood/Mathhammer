@@ -3,23 +3,9 @@ import { BrowserRouter } from 'react-router';
 import { createRoot } from 'react-dom/client'
 import { CssVarsProvider } from '@mui/joy';
 import * as Sentry from "@sentry/react";
-import { v4 as uuidv4 } from "uuid";
 import './index.css'
 import '@fontsource/inter';
 import App from './App.tsx'
-
-function getAnonymousId() {
-  const key = "sentry_anon_id";
-  let anonId = localStorage.getItem(key);
-
-  // Generate if missing
-  if (!anonId) {
-    anonId = uuidv4();
-    localStorage.setItem(key, anonId);
-  }
-
-  return anonId;
-}
 
 Sentry.init({
   dsn: "https://e1ac630cc279ced2d4f04d78deb8a2c8@o4510332903096320.ingest.us.sentry.io/4510332904210432",
