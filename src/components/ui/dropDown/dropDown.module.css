@@ -29,7 +29,8 @@
   background-color: darkorange;
   padding: 1rem;
   padding-top: 4rem;
-  transform: translateY(-2rem);
+  transform: translateY(-1rem);
+  border-radius: 0 0 1rem 1rem;
 }
 
 @media screen and (min-width: 768px) {
