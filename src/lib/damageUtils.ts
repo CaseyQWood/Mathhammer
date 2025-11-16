@@ -1,4 +1,4 @@
-import { rollD6 } from './diceUtils';
+import { rollD6 } from "./diceUtils";
 
 // Pure function: Determine which save to use (normal or invulnerable)
 export function getSaveThreshold(
@@ -6,13 +6,13 @@ export function getSaveThreshold(
   armourPiercing: number,
   invulnerable: number
 ): number {
-  if (save > 0 && (save + armourPiercing) <= 6) {
-    if (invulnerable && save + armourPiercing >= invulnerable) {
-      return invulnerable;
-    }
-    return save + armourPiercing;
-   } 
-  return 0;
+  const modifiedArmour = save + armourPiercing;
+
+  if (invulnerable > 0 && invulnerable < modifiedArmour) {
+    return invulnerable;
+  }
+
+  return modifiedArmour;
 }
 
 // Pure function: Calculate damage after Feel No Pain
@@ -23,7 +23,7 @@ export function calculateDamageAfterFeelNoPain(
   if (feelNoPain === 0) {
     return attackDamage;
   }
-  
+
   let totalDamage = 0;
   for (let i = 0; i < attackDamage; i++) {
     if (rollD6() < feelNoPain) {
@@ -31,4 +31,4 @@ export function calculateDamageAfterFeelNoPain(
     }
   }
   return totalDamage;
-} 
+}

@@ -54,3 +54,5 @@ BUGS:
 - when inputting a value past max allowed should visually indicate that max is hit
 - 3 character variables are cut off on mobile
 - defence stants text should be white
+- Add Melta
+- Make sure that 1 always fails

@@ -21,8 +21,10 @@ export async function runSimulation(
     // runs calculations for each modelType
     for (let j = 0; j < attackProfiles.length; j++) {
       const profile = attackProfiles[j];
-      const modelAttacks = Array.from({ length: profile.attackStats.models }, () =>
-        calculateAttack(profile.attackStats, defenseStats, profile.modifiers)
+      const modelAttacks = Array.from(
+        { length: profile.attackStats.models },
+        () =>
+          calculateAttack(profile.attackStats, defenseStats, profile.modifiers)
       );
       await Promise.all(modelAttacks).then((modelDamage) => {
         unitDamage = unitDamage + sumArray(modelDamage);

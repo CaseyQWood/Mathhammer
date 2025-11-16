@@ -17,6 +17,7 @@ function getAnonymousId() {
   if (!anonId) {
     anonId = uuidv4();
     localStorage.setItem(key, anonId);
+
   }
 
   return anonId;
@@ -29,6 +30,8 @@ function App() {
   const location = useLocation()
   const anonId = getAnonymousId();
   Sentry.setTag("anon_user_id", anonId);
+  Sentry.setUser({ id: anonId })
+
   console.log("Test:  ", anonId)
 
   return (
