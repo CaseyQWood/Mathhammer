@@ -14,7 +14,10 @@ export function rollD3() {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
 
-export function variableCalculator(variable: string) {
+export function variableCalculator(variable: string): number {
+  if (typeof variable !== "string") return 0;
+  if (!variable) return 0;
+
   switch (variable) {
     case "0":
       return 0;
@@ -37,4 +40,4 @@ export function variableCalculator(variable: string) {
     default:
       return 0;
   }
-} 
+}

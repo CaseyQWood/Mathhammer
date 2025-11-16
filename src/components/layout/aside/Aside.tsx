@@ -37,7 +37,6 @@ const AsideItem = ({ i }: { i: number }) => {
             whileTap={{ scale: 0.95 }}
             onClick={(e) => {
                 e.stopPropagation()
-                console.log(`Clicked: ${i}`)
             }}
         >
             TEST

@@ -22,6 +22,7 @@ export default function AttackInputs({ profileId, attackStats, handleAttackChang
             />
             <VariableInputField
                 profileId={profileId}
+                title="Attacks"
                 stateKey="attacks"
                 valueObject={attackStats.attacks}
                 handleChange={handleAttackChange}

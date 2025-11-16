@@ -71,7 +71,7 @@ export default function ResultsBarChart({ results, setOpenModal }: BarChartProps
         <div className={styles.resultsModal}>
             <span className={styles.results__span}>
                 <div>
-                    Mean:<span>{mean}</span>
+                    Average:<span>{mean}</span>
                 </div>
                 <div>
                     80% Band: <span>{band.lower} - {band.upper}</span>
@@ -92,21 +92,26 @@ export default function ResultsBarChart({ results, setOpenModal }: BarChartProps
                             '#66bb6a']
                     }
                 }]}
+                // disableVoronoi={true}
+                slotProps={{ tooltip: { trigger: 'none' } }}
                 series={[{ data: resultsValue }]}
                 colors={orangePalette}
                 sx={() => ({
                     height: "100%",
+                    backgroundColor: "#ffecd1",
+                    padding: "1rem",
+                    borderRadius: "15px",
 
                     [`.${axisClasses.root}`]: {
                         [`.${axisClasses.tick}, .${axisClasses.line}`]: {
-                            stroke: '#ffffff',
+                            stroke: '#242424',
                             strokeWidth: 1,
                         },
                         [`.${axisClasses.tickLabel}`]: {
-                            fill: '#ffffff',
+                            fill: '#242424',
                         },
                         [`.${axisClasses.label}`]: {
-                            stroke: "#ffffff"
+                            stroke: "#242424"
                         },
 
                     },
