@@ -32,8 +32,6 @@ function App() {
   Sentry.setTag("anon_user_id", anonId);
   Sentry.setUser({ id: anonId })
 
-  console.log("Test:  ", anonId)
-
   return (
     <div key="test" id='main'>
       <AnimatePresence mode="wait" initial={false}>
