@@ -31,7 +31,7 @@ export function processSavePhase(
       defenseStats.invulnerable
     );
 
-    if (saveThreshold >= 6) {
+    if (saveThreshold > 6) {
       // Cannot save if over 6
       totalFailedSaves++;
       continue;
@@ -41,7 +41,7 @@ export function processSavePhase(
     if (saveThreshold > 0 && saveThreshold <= 6) {
       const toSaveRoll = rollD6();
       diceRolls.push(toSaveRoll);
-      if (toSaveRoll < saveThreshold) {
+      if (toSaveRoll === 1 || toSaveRoll < saveThreshold) {
         totalFailedSaves++;
       }
     }

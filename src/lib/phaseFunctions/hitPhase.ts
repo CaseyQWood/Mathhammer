@@ -35,7 +35,7 @@ export function processHitPhase(
     hitRolls.push(toHitRoll);
 
     // Handle hit phase with rerolls - checks for failure and if failed ends the loop for that attack
-    if (toHitRoll < weaponSkill) {
+    if (toHitRoll === 1 || toHitRoll < weaponSkill) {
       if (modifiers.reRollOneToHit && toHitRoll === 1) {
         toHitRoll = rollD6();
         reRolls.push(toHitRoll);
