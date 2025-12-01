@@ -17,9 +17,9 @@
   gap: 1rem;
   justify-content: flex-start;
   position: fixed;
-  /* bottom: -55%;
+  bottom: -55%;
   left: 0;
-  right: 0; */
+  right: 0;
 }
 
 .loginSection form button:nth-child(1) {
@@ -33,6 +33,10 @@
 .loginSection button {
   background-color: #15616d;
   color: #ffecd1;
+  margin: 0 20%;
+  border-radius: 15px;
+  height: 2.5rem;
+  border: none;
 }
 
 .logoWrapper {
@@ -83,11 +87,15 @@
   }
 
   .loginSection form {
-    /* width: 50%; */
+    width: 50%;
     margin: 0 auto;
   }
 
   .loginSection form button:nth-child(1) {
-    margin-top: 50%;
+    margin-top: 10%;
+  }
+
+  .logoWrapper .logo {
+    width: 25%;
   }
 }

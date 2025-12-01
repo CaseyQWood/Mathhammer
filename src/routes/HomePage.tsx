@@ -4,7 +4,7 @@ import styles from './homePage.module.css'
 import UnitForm from "@/features/calculator/components/UnitForm"
 // import Aside from "@/components/layout/aside/Aside"
 import ResultsBarChart from "@/features/calculator/components/ResultsBarChart"
-import { runSimulation } from "@/lib/runSimulation";
+import { runSimulation } from "@/features/calculator/functions/runSimulation";
 import type { DefenseStats, AttackProfile } from "@/types/unitStats"
 
 

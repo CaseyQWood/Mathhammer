@@ -1,8 +1,8 @@
-import { Routes, Route, useLocation } from 'react-router';
+import { Routes, Route, useLocation, useNavigate } from 'react-router';
 import { AnimatePresence } from 'motion/react';
 import './App.css'
 import * as Sentry from "@sentry/react";
-// import LoginScreen from '@/features/auth/components/LoginScreen'
+import LoginScreen from '@/features/auth/components/LoginScreen'
 import HomePage from '@/routes/HomePage'
 // import Header from './components/header';
 import { motion } from "motion/react"
@@ -26,7 +26,7 @@ function getAnonymousId() {
 
 function App() {
   // const [openAside, setOpenAside] = useState<boolean>(false)
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation()
   const anonId = getAnonymousId();
   Sentry.setTag("anon_user_id", anonId);
@@ -39,8 +39,8 @@ function App() {
           key={location.pathname}
         >
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
-            {/* <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} /> */}
+            <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
         </motion.main>
       </AnimatePresence>
