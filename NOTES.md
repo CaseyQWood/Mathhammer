@@ -16,14 +16,19 @@
 
 **_MMP_**
 
-- All previous steps
-- Implement findings from MVP
-- User can login/logout
-- User state is saved ( maybe via session storage or one of the other browser storage options )
-- Monitization
-  - Will need to run some rough estimates on incomeVScost predictions
-  - Google ads
-  - Subscription model
+- [ ] All previous steps
+- [ ] setup stging env
+  - [ ] Update stats
+    - [ ] add wounds to defensive stats
+    - [ ] reRoll Saves
+    - [ ] Include critical roll value for anti-\* abilities or 5+ to crit abilities
+- [ ] User can login/logout
+- [ ] Animations added
+- [ ] User state is saved ( maybe via session storage or one of the other browser storage options )
+- [ ] Monitization
+  - [ ] Will need to run some rough estimates on incomeVScost predictions
+  - [ ] Google ads
+  - [ ] Subscription model
 
 **_MLP_**
 
