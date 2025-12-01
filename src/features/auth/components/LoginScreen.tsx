@@ -1,4 +1,5 @@
 import { motion } from "motion/react"
+import { createClient } from "@supabase/supabase-js"
 import styles from "./loginScreen.module.css"
 import { useState } from "react";
 
@@ -18,6 +19,8 @@ interface LoginScreenProps {
     a full screen element to be the intended size and resize it during the animation
 
     I currently have the new attempt commented out and the original buggy implementation left
+
+    ^^^^^^^^^^^^^^^^^^ I kind of fixed up the style and I think I could make it work as is ^^^^^^^^^^^^^^^^^^^^^^
 
 */
 
