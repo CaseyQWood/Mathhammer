@@ -52,10 +52,8 @@ function App() {
   useEffect(() => {
     // Check if we have token_hash in URL (magic link callback)
     const params = new URLSearchParams(window.location.search);
-    console.log("Params", params)
 
     const token_hash = params.get("token_hash");
-    console.log("has token hash:  ", hasTokenHash)
 
     const type = params.get("type");
     if (token_hash) {
@@ -76,6 +74,7 @@ function App() {
     }
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Get Session:  ", session)
       setSession(session);
     });
     // Listen for auth changes
@@ -84,7 +83,6 @@ function App() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-    console.log("Session:  ", session)
     return () => subscription.unsubscribe();
   }, []);
 
@@ -102,15 +100,10 @@ function App() {
   async function handleLogin() {
     setLoading(true)
 
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    })
+    //ToDo: manage guest accounts some how
 
-    const user = localStorage.getItem(userKey);
-    console.log("User data:  ", user)
-    if (user) {
-      navigate("/home")
-    }
+
+    navigate("/home")
 
     setLoading(false)
 

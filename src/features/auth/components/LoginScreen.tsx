@@ -1,7 +1,8 @@
 import { motion } from "motion/react"
-import { createClient } from "@supabase/supabase-js"
 import styles from "./loginScreen.module.css"
 import { useState } from "react";
+import GoogleLoginButton from "./GoogleLoginButton";
+import InputField from "@/components/ui/inputField/InputField";
 
 interface LoginScreenProps {
     login: () => void;
@@ -24,30 +25,38 @@ interface LoginScreenProps {
 
 */
 
+// ToDo: This is a better way to manage animation states and I should move over to this
+// const sidebarVariants = {
+//     loggedIn: {
+//         clipPath: `rect(auto auto auto auto)`,
+//         // ... transition
+//     },
+//     loggedOut: {
+//         clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
+//         // ... transition
+//     },
+//     hidden: { clipPath: "rect(65% auto auto auto)" }
+// }
+
+export const Views = {
+    Greeting: "GREETING_VIEW",
+    Login: "LOGIN_VIEW",
+    SignUp: "SIGNUP_VIEW",
+} as const;
+
+type ViewType = typeof Views[keyof typeof Views]
+
+const exitAnimation = {
+
+    bottom: 0,
+    width: "100%",
+    borderRadius: 0,
+
+}
 
 export default function LoginScreen({ login }: LoginScreenProps) {
-
-    const exitAnimation = {
-
-        bottom: 0,
-        width: "100%",
-        borderRadius: 0,
-
-    }
-
-    // const sidebarVariants = {
-    //     loggedIn: {
-    //         clipPath: `rect(auto auto auto auto)`,
-    //         // ... transition
-    //     },
-    //     loggedOut: {
-    //         clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
-    //         // ... transition
-    //     },
-    //     hidden: { clipPath: "rect(65% auto auto auto)" }
-    // }
-
     const [loggedIn, setloggedIn] = useState(false)
+    const [formView, setFormView] = useState<ViewType>(Views.Greeting)
 
     return (
         <motion.section className={styles.loginSection}>
@@ -68,13 +77,97 @@ export default function LoginScreen({ login }: LoginScreenProps) {
             // animate={loggedIn ? "loggedIn" : "loggedOut"}
             // exit="loggedIn"
             >
-                <motion.button exit={{ opacity: 0 }} type="button">Login</motion.button>
-                <motion.button exit={{ opacity: 0 }} type="button">Sign Up</motion.button>
-                <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
-                    login()
-                    setloggedIn(!loggedIn)
-                }}>Guest</motion.button>
+                {formView === Views.Greeting ?
+                    <>
+                        <GoogleLoginButton />
+                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => setFormView(Views.Login)}>Sign Up</motion.button>
+                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
+                            login()
+                            setloggedIn(!loggedIn)
+                        }}>Guest</motion.button>
+                    </> :
+                    formView === Views.Login ?
+                        <>
+                            <h2 className="form-title">Welcome Back</h2>
+
+                            <div className={styles.formGroup}>
+                                <label htmlFor="loginEmail">Email Address</label>
+                                <input type="email" id="loginEmail" name="loginEmail" required
+                                    placeholder="you@example.com" />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label htmlFor="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" name="loginPassword" required
+                                    placeholder="••••••••" />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <a href="#">
+                                    Create Account
+                                </a>
+                                <a href="#">
+                                    Forgot Password?
+                                </a>
+                            </div>
+
+                            <button type="submit" className="submit-button mt-8" >
+                                Log In
+                            </button>
+
+                            <a href="#" onClick={() => setFormView(Views.Greeting)}>
+                                Back
+                            </a>
+                        </> :
+                        formView === Views.SignUp ?
+                            <>
+                                <h2 className="form-title">Create Account</h2>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="signupName">Full Name</label>
+                                    <input type="text" id="signupName" name="signupName" required
+                                        placeholder="Jane Doe" />
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="signupEmail">Email Address</label>
+                                    <input type="email" id="signupEmail" name="signupEmail" required
+                                        placeholder="you@example.com" />
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="signupPassword">Password</label>
+                                    <input type="password" id="signupPassword" name="signupPassword" required
+                                        placeholder="Minimum 8 characters" />
+                                </div>
+
+                                <div className="flex-row-center pt-2" >
+                                    <div className="flex-row-center" >
+                                        <input id="terms" name="terms" type="checkbox" required />
+                                    </div>
+                                    <div className="ml-2" >
+                                        I agree to the <a href="#">Terms of Service</a> and Privacy Policy.
+                                    </div>
+                                </div>
+
+                                <button type="submit" >
+                                    Sign Up
+                                </button>
+                            </> :
+                            <div>Error loading form</div>
+                }
             </motion.form>
         </motion.section>
     )
 }
+
+
+/*
+    I will have a form that contains the below views
+        InputFields for each view
+            - [Greeting view] - Social Login, Sign in/Sign up, Guest
+            - [Login view] - UserName, Password
+            - [Forgot Password] - Email
+            - [Sign up view] - UserName, Password, ConfirmPassword
+
+*/
