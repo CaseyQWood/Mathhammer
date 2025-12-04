@@ -1,11 +1,21 @@
 import { motion } from "motion/react"
 import styles from "./loginScreen.module.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GoogleLoginButton from "./GoogleLoginButton";
-import InputField from "@/components/ui/inputField/InputField";
+// import InputField from "@/components/ui/inputField/InputField";
+// import { createClient } from "@supabase/supabase-js";
+
+
+// const supabase = createClient(
+//     import.meta.env.VITE_SUPABASE_URL,
+//     import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+// );
 
 interface LoginScreenProps {
-    login: () => void;
+    handleGuestLogin: () => void;
+    signUp: (email, password) => void;
+    signIn: (email, password) => void;
+
 }
 
 
@@ -54,9 +64,24 @@ const exitAnimation = {
 
 }
 
-export default function LoginScreen({ login }: LoginScreenProps) {
+export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginScreenProps) {
     const [loggedIn, setloggedIn] = useState(false)
     const [formView, setFormView] = useState<ViewType>(Views.Greeting)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    // const [ConfirmPassword, setCongirmPassword] = useState("");
+
+    function handleLogin(e) {
+        e.preventDefault();
+        signIn(email, password)
+    }
+
+
+    function handleSignUp(e) {
+        e.preventDefault();
+        signUp(email, password)
+    }
+
 
     return (
         <motion.section className={styles.loginSection}>
@@ -80,9 +105,9 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                 {formView === Views.Greeting ?
                     <>
                         <GoogleLoginButton />
-                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => setFormView(Views.Login)}>Sign Up</motion.button>
+                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => setFormView(Views.Login)}>Sign Up/In</motion.button>
                         <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
-                            login()
+                            handleGuestLogin()
                             setloggedIn(!loggedIn)
                         }}>Guest</motion.button>
                     </> :
@@ -92,18 +117,16 @@ export default function LoginScreen({ login }: LoginScreenProps) {
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="loginEmail">Email Address</label>
-                                <input type="email" id="loginEmail" name="loginEmail" required
-                                    placeholder="you@example.com" />
+                                <input type="email" id="loginEmail" name="loginEmail" required value={email} onChange={(val) => setEmail(val.target.value)} />
                             </div>
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="loginPassword">Password</label>
-                                <input type="password" id="loginPassword" name="loginPassword" required
-                                    placeholder="••••••••" />
+                                <input type="password" id="loginPassword" name="loginPassword" required value={password} onChange={(val) => setPassword(val.target.value)} />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <a href="#">
+                                <a href="#" onClick={() => setFormView(Views.SignUp)}>
                                     Create Account
                                 </a>
                                 <a href="#">
@@ -111,7 +134,7 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                                 </a>
                             </div>
 
-                            <button type="submit" className="submit-button mt-8" >
+                            <button type="submit" onClick={(e) => handleLogin(e)} >
                                 Log In
                             </button>
 
@@ -125,20 +148,17 @@ export default function LoginScreen({ login }: LoginScreenProps) {
 
                                 <div className={styles.formGroup}>
                                     <label htmlFor="signupName">Full Name</label>
-                                    <input type="text" id="signupName" name="signupName" required
-                                        placeholder="Jane Doe" />
+                                    <input type="text" id="signupName" name="signupName" required />
                                 </div>
 
                                 <div className={styles.formGroup}>
                                     <label htmlFor="signupEmail">Email Address</label>
-                                    <input type="email" id="signupEmail" name="signupEmail" required
-                                        placeholder="you@example.com" />
+                                    <input type="email" id="signupEmail" name="signupEmail" required value={email} onChange={(val) => setEmail(val.target.value)} />
                                 </div>
 
                                 <div className={styles.formGroup}>
                                     <label htmlFor="signupPassword">Password</label>
-                                    <input type="password" id="signupPassword" name="signupPassword" required
-                                        placeholder="Minimum 8 characters" />
+                                    <input type="password" id="signupPassword" name="signupPassword" required value={password} onChange={(val) => setPassword(val.target.value)} />
                                 </div>
 
                                 <div className="flex-row-center pt-2" >
@@ -150,7 +170,7 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                                     </div>
                                 </div>
 
-                                <button type="submit" >
+                                <button type="submit" onClick={(e) => handleSignUp(e)} >
                                     Sign Up
                                 </button>
                             </> :
