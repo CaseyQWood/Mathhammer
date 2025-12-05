@@ -1,50 +1,65 @@
 import { motion } from "motion/react"
 import styles from "./loginScreen.module.css"
 import { useState } from "react";
+import GoogleLoginButton from "../features/auth/components/GoogleLoginButton";
+import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from 'react-router';
 
-interface LoginScreenProps {
-    login: () => void;
+const Views = {
+    Greeting: "GREETING_VIEW",
+    Login: "LOGIN_VIEW",
+    SignUp: "SIGNUP_VIEW",
+} as const;
+
+type ViewType = typeof Views[keyof typeof Views]
+
+const exitAnimation = {
+    bottom: 0,
+    width: "100%",
+    borderRadius: 0,
+
 }
 
+export default function LoginScreen() {
+    const [loggedIn, setloggedIn] = useState(false)
+    const [formView, setFormView] = useState<ViewType>(Views.Greeting)
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const navigate = useNavigate()
+    const { signInWithEmail, signUpNewUser } = useAuth();
 
-/*
-    The exit animations on desktop was wierd
-    because I was using position: absolute and setting the width to just 50% the fade into the next 
-    screen wasnt working correcty. I want the dark blue to consume the screen 
-    but what was happening is that it would just vertically assend like it was on mobile and the 
-    left and right spaces where not covered
+    const handleGuestLogin = async () => {
+        navigate('/home')
+    };
 
-    To try and solve I am trying to use the same kind of logic as the aside where I cut back 
-    a full screen element to be the intended size and resize it during the animation
+    async function handleLogin(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
+        e.preventDefault();
+        const { data, error } = await signInWithEmail(email, password)
 
-    I currently have the new attempt commented out and the original buggy implementation left
+        if (error) {
+            console.log(error.message)
+            return
+        }
 
-*/
-
-
-export default function LoginScreen({ login }: LoginScreenProps) {
-
-    const exitAnimation = {
-
-        bottom: 0,
-        width: "100%",
-        borderRadius: 0,
-
+        if (data) {
+            navigate("/home")
+        }
     }
 
-    // const sidebarVariants = {
-    //     loggedIn: {
-    //         clipPath: `rect(auto auto auto auto)`,
-    //         // ... transition
-    //     },
-    //     loggedOut: {
-    //         clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
-    //         // ... transition
-    //     },
-    //     hidden: { clipPath: "rect(65% auto auto auto)" }
-    // }
+    async function handleSignUp(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
+        e.preventDefault();
+        const { data, error } = await signUpNewUser(email, password)
 
-    const [loggedIn, setloggedIn] = useState(false)
+        if (error) {
+            console.log(error.message)
+            return
+        }
+
+        if (data) {
+            navigate("/home")
+        }
+    }
+
 
     return (
         <motion.section className={styles.loginSection}>
@@ -60,17 +75,68 @@ export default function LoginScreen({ login }: LoginScreenProps) {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 exit={exitAnimation}
                 animate={{ y: 0 }}
-            // variants={sidebarVariants}
-            // initial="loggedOut"
-            // animate={loggedIn ? "loggedIn" : "loggedOut"}
-            // exit="loggedIn"
+
             >
-                <motion.button exit={{ opacity: 0 }} type="button">Login</motion.button>
-                <motion.button exit={{ opacity: 0 }} type="button">Sign Up</motion.button>
-                <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
-                    login()
-                    setloggedIn(!loggedIn)
-                }}>Guest</motion.button>
+                {formView === Views.Greeting ?
+                    <>
+                        <GoogleLoginButton />
+                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => setFormView(Views.Login)}>Sign Up/In</motion.button>
+                        <motion.button exit={{ opacity: 0 }} type="button" onClick={() => {
+                            handleGuestLogin()
+                            setloggedIn(!loggedIn)
+                        }}>Guest</motion.button>
+                    </> :
+                    formView === Views.Login ?
+                        <>
+                            <h2>Welcome Back</h2>
+
+                            <div className={styles.formGroup}>
+                                <label htmlFor="loginEmail">Email Address</label>
+                                <input type="email" id="loginEmail" name="loginEmail" required value={email} onChange={(val) => setEmail(val.target.value)} />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label htmlFor="loginPassword">Password</label>
+                                <input type="password" id="loginPassword" name="loginPassword" required value={password} onChange={(val) => setPassword(val.target.value)} />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <a href="#" onClick={() => setFormView(Views.SignUp)}>
+                                    Create Account
+                                </a>
+                                <a href="#">
+                                    Forgot Password?
+                                </a>
+                            </div>
+
+                            <button type="submit" onClick={(e) => handleLogin(e)} >
+                                Log In
+                            </button>
+
+                            <a href="#" onClick={() => setFormView(Views.Greeting)}>
+                                Back
+                            </a>
+                        </> :
+                        formView === Views.SignUp ?
+                            <>
+                                <h2>Create Account</h2>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="signupEmail">Email Address</label>
+                                    <input type="email" id="signupEmail" name="signupEmail" required value={email} onChange={(val) => setEmail(val.target.value)} />
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label htmlFor="signupPassword">Password</label>
+                                    <input type="password" id="signupPassword" name="signupPassword" required value={password} onChange={(val) => setPassword(val.target.value)} />
+                                </div>
+
+                                <button type="submit" onClick={(e) => handleSignUp(e)} >
+                                    Sign Up
+                                </button>
+                            </> :
+                            <div>Error loading form</div>
+                }
             </motion.form>
         </motion.section>
     )

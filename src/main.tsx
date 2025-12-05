@@ -6,6 +6,7 @@ import * as Sentry from "@sentry/react";
 import './index.css'
 import '@fontsource/inter';
 import App from './App.tsx'
+import { AuthProvider } from './context/AuthProvider.tsx';
 
 Sentry.init({
   dsn: import.meta.env.SENTRY_DSN,
@@ -23,7 +24,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <CssVarsProvider defaultMode="dark" disableNestedContext>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </CssVarsProvider>
     </BrowserRouter>
   </StrictMode>,

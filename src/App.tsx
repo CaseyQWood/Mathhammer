@@ -1,36 +1,12 @@
 import { Routes, Route, useLocation } from 'react-router';
-import { AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "motion/react"
 import './App.css'
-import * as Sentry from "@sentry/react";
-// import LoginScreen from '@/features/auth/components/LoginScreen'
+import LoginScreen from '@/routes/LoginScreen'
 import HomePage from '@/routes/HomePage'
-// import Header from './components/header';
-import { motion } from "motion/react"
-import { v4 as uuidv4 } from "uuid";
-
-
-function getAnonymousId() {
-  const key = "sentry_anon_id";
-  let anonId = localStorage.getItem(key);
-
-  // Generate if missing
-  if (!anonId) {
-    anonId = uuidv4();
-    localStorage.setItem(key, anonId);
-
-  }
-
-  return anonId;
-}
-
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function App() {
-  // const [openAside, setOpenAside] = useState<boolean>(false)
-  // const navigate = useNavigate();
   const location = useLocation()
-  const anonId = getAnonymousId();
-  Sentry.setTag("anon_user_id", anonId);
-  Sentry.setUser({ id: anonId })
 
   return (
     <div key="test" id='main'>
@@ -39,8 +15,10 @@ function App() {
           key={location.pathname}
         >
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
-            {/* <Route path="/" element={<LoginScreen key="login-screen" login={() => navigate("/home")} />} /> */}
+            <Route path="/" element={<LoginScreen key="login-screen" />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<HomePage />} />
+            </Route>
           </Routes>
         </motion.main>
       </AnimatePresence>
