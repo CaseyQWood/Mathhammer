@@ -45,8 +45,12 @@ const defaultAttackProfile: AttackProfile = {
     }
 }
 
+interface HomePageProps {
+    logout: () => void
+}
 
-export default function HomePage() {
+
+export default function HomePage({ logout }: HomePageProps) {
     const simCount = 25000
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()
@@ -57,12 +61,19 @@ export default function HomePage() {
     }])
 
 
+    const handleLogout = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        e.preventDefault()
+        logout()
+    }
+
+
     const handleDefenseChange = (key: string, value: number) => {
         setdefenseStats(prevStats => ({
             ...prevStats,
             [key]: value
         }));
     };
+
 
     const handleAddAttackProfile = useCallback(() => {
         setAttackProfiles(prevProfiles => [
@@ -73,6 +84,7 @@ export default function HomePage() {
             }
         ])
     }, []);
+
 
     const handleRemoveAttackProfile = useCallback((id: string) => {
         setAttackProfiles(prevProfiles => {
@@ -97,6 +109,7 @@ export default function HomePage() {
         });
     }, []);
 
+
     const handleModifiersChange = useCallback((profileId: string, key: string, value: boolean | number | null | { variable: string | null; value: boolean | number; }) => {
         setAttackProfiles(prevProfiles => {
             return prevProfiles.map(profile =>
@@ -114,7 +127,6 @@ export default function HomePage() {
     }, [])
 
 
-
     const handleFormSubmit = useCallback(() => {
         runSimulation(simCount, attackProfiles, defenseStats).then((results) => {
             setSimData(results)
@@ -127,7 +139,7 @@ export default function HomePage() {
     return (
         <motion.div className={styles.homePageWrapper} initial={{ backgroundColor: "#001524" }} key="home">
             {/* <Aside /> */}
-            <motion.h2>Calculate</motion.h2>
+            <motion.h2>Calculate <button onClick={(e) => handleLogout(e)}>Logout</button></motion.h2>
             <div className={styles.workspace}>
                 <UnitForm defenseStats={defenseStats} attackProfiles={attackProfiles} handleAddAttackProfile={handleAddAttackProfile} handleRemoveAttackProfile={handleRemoveAttackProfile} handleDefenseChange={handleDefenseChange} handleAttackChange={handleAttackChange} handleModifiersChange={handleModifiersChange} handleFormSubmit={() => { handleFormSubmit() }} />
                 {openModal && simData ?

@@ -1,52 +1,15 @@
 import { motion } from "motion/react"
 import styles from "./loginScreen.module.css"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GoogleLoginButton from "./GoogleLoginButton";
-// import InputField from "@/components/ui/inputField/InputField";
-// import { createClient } from "@supabase/supabase-js";
 
-
-// const supabase = createClient(
-//     import.meta.env.VITE_SUPABASE_URL,
-//     import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-// );
 
 interface LoginScreenProps {
     handleGuestLogin: () => void;
-    signUp: (email, password) => void;
-    signIn: (email, password) => void;
+    signUp: (email: string, password: string) => void;
+    signIn: (email: string, password: string) => void;
 
 }
-
-
-/*
-    The exit animations on desktop was wierd
-    because I was using position: absolute and setting the width to just 50% the fade into the next 
-    screen wasnt working correcty. I want the dark blue to consume the screen 
-    but what was happening is that it would just vertically assend like it was on mobile and the 
-    left and right spaces where not covered
-
-    To try and solve I am trying to use the same kind of logic as the aside where I cut back 
-    a full screen element to be the intended size and resize it during the animation
-
-    I currently have the new attempt commented out and the original buggy implementation left
-
-    ^^^^^^^^^^^^^^^^^^ I kind of fixed up the style and I think I could make it work as is ^^^^^^^^^^^^^^^^^^^^^^
-
-*/
-
-// ToDo: This is a better way to manage animation states and I should move over to this
-// const sidebarVariants = {
-//     loggedIn: {
-//         clipPath: `rect(auto auto auto auto)`,
-//         // ... transition
-//     },
-//     loggedOut: {
-//         clipPath: "rect(60% 75% auto 25% round 1rem 1rem 0rem 0rem)",
-//         // ... transition
-//     },
-//     hidden: { clipPath: "rect(65% auto auto auto)" }
-// }
 
 export const Views = {
     Greeting: "GREETING_VIEW",
@@ -57,7 +20,6 @@ export const Views = {
 type ViewType = typeof Views[keyof typeof Views]
 
 const exitAnimation = {
-
     bottom: 0,
     width: "100%",
     borderRadius: 0,
@@ -69,15 +31,14 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
     const [formView, setFormView] = useState<ViewType>(Views.Greeting)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    // const [ConfirmPassword, setCongirmPassword] = useState("");
 
-    function handleLogin(e) {
+    function handleLogin(e: React.MouseEvent<HTMLButtonElement>): void {
         e.preventDefault();
         signIn(email, password)
     }
 
 
-    function handleSignUp(e) {
+    function handleSignUp(e: React.MouseEvent<HTMLButtonElement>): void {
         e.preventDefault();
         signUp(email, password)
     }
@@ -97,10 +58,7 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 exit={exitAnimation}
                 animate={{ y: 0 }}
-            // variants={sidebarVariants}
-            // initial="loggedOut"
-            // animate={loggedIn ? "loggedIn" : "loggedOut"}
-            // exit="loggedIn"
+
             >
                 {formView === Views.Greeting ?
                     <>
@@ -147,11 +105,6 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
                                 <h2 className="form-title">Create Account</h2>
 
                                 <div className={styles.formGroup}>
-                                    <label htmlFor="signupName">Full Name</label>
-                                    <input type="text" id="signupName" name="signupName" required />
-                                </div>
-
-                                <div className={styles.formGroup}>
                                     <label htmlFor="signupEmail">Email Address</label>
                                     <input type="email" id="signupEmail" name="signupEmail" required value={email} onChange={(val) => setEmail(val.target.value)} />
                                 </div>
@@ -159,15 +112,6 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
                                 <div className={styles.formGroup}>
                                     <label htmlFor="signupPassword">Password</label>
                                     <input type="password" id="signupPassword" name="signupPassword" required value={password} onChange={(val) => setPassword(val.target.value)} />
-                                </div>
-
-                                <div className="flex-row-center pt-2" >
-                                    <div className="flex-row-center" >
-                                        <input id="terms" name="terms" type="checkbox" required />
-                                    </div>
-                                    <div className="ml-2" >
-                                        I agree to the <a href="#">Terms of Service</a> and Privacy Policy.
-                                    </div>
                                 </div>
 
                                 <button type="submit" onClick={(e) => handleSignUp(e)} >
@@ -180,14 +124,3 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
         </motion.section>
     )
 }
-
-
-/*
-    I will have a form that contains the below views
-        InputFields for each view
-            - [Greeting view] - Social Login, Sign in/Sign up, Guest
-            - [Login view] - UserName, Password
-            - [Forgot Password] - Email
-            - [Sign up view] - UserName, Password, ConfirmPassword
-
-*/

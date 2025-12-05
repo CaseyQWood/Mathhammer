@@ -1,164 +1,37 @@
-import { useState, useEffect, use } from "react";
 import { Routes, Route, useLocation, useNavigate } from 'react-router';
-import { AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from "motion/react"
 import './App.css'
-import * as Sentry from "@sentry/react";
 import LoginScreen from '@/features/auth/components/LoginScreen'
 import HomePage from '@/routes/HomePage'
-// import Header from './components/header';
-import { motion } from "motion/react"
-import { v4 as uuidv4 } from "uuid";
 import useAuthentication from "@/hooks/useAuthentication";
-
-function getAnonymousId() {
-  const key = "sentry_anon_id";
-  let anonId = localStorage.getItem(key);
-
-  // Generate if missing
-  if (!anonId) {
-    anonId = uuidv4();
-    localStorage.setItem(key, anonId);
-
-  }
-
-  return anonId;
-}
-
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function App() {
-  // const [openAside, setOpenAside] = useState<boolean>(false)
   const navigate = useNavigate();
   const location = useLocation()
-  const anonId = getAnonymousId();
-  Sentry.setTag("anon_user_id", anonId);
-  Sentry.setUser({ id: anonId })
 
   const { session, signInWithEmail, signUpNewUser, logout } = useAuthentication()
 
-
-  // const [email, setEmail] = useState("caseywood252@gmail.com");
-  // const [session, setSession] = useState(null);
-
-  // // Check URL params on initial render
-  // const params = new URLSearchParams(window.location.search);
-  // const hasTokenHash = params.get("token_hash");
-  // const [verifying, setVerifying] = useState(!!hasTokenHash);
-  // const [authError, setAuthError] = useState(null);
-  // const [authSuccess, setAuthSuccess] = useState(false);
-
-  // useEffect(() => {
-  //   console.log("verifying: ", verifying)
-  //   console.log("authError: ", authError)
-  //   console.log("authSuccess: ", authSuccess)
-  // }, [verifying, authError, authSuccess])
-
-  // useEffect(() => {
-  //   // Check if we have token_hash in URL (magic link callback)
-  //   const params = new URLSearchParams(window.location.search);
-
-  //   const token_hash = params.get("token_hash");
-
-  //   const type = params.get("type");
-  //   if (token_hash) {
-  //     // Verify the OTP token
-  //     supabase.auth.verifyOtp({
-  //       token_hash,
-  //       type: type || "email",
-  //     }).then(({ error }) => {
-  //       if (error) {
-  //         setAuthError(error.message);
-  //       } else {
-  //         setAuthSuccess(true);
-  //         // Clear URL params
-  //         window.history.replaceState({}, document.title, "/");
-  //       }
-  //       setVerifying(false);
-  //     });
-  //   }
-  //   // Check for existing session
-  //   supabase.auth.getSession().then(({ data: { session } }) => {
-  //     console.log("Get Session:  ", session)
-  //     setSession(session);
-  //   });
-  //   // Listen for auth changes
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((_event, session) => {
-  //     setSession(session);
-  //   });
-  //   return () => subscription.unsubscribe();
-  // }, []);
-
-
-
-
-
-  // -------------------------
-  const userKey = import.meta.env.VITE_SUPABASE_USER_userKEY;
-  const [loading, setLoading] = useState(false);
-  // const [email, setEmail] = useState("");
-
-
-  // async function handleLogin() {
-  //   setLoading(true)
-
-  //   //ToDo: manage guest accounts some how
-
-
-  //   navigate("/home")
-
-  //   setLoading(false)
-
-  // }
-
   const handleGuestLogin = async () => {
-    // event.preventDefault();
-    setLoading(true);
-    logout()
-    // const { error } = await supabase.auth.signInWithOtp({
-    //   email,
-    //   options: {
-    //     emailRedirectTo: window.location.origin,
-    //   }
-    // });
-    // if (error) {
-    //   alert(error.error_description || error.message);
-    // } else {
-    //   alert("Check your email for the login link!");
-    // }
-    // navigate('/home')
-    setLoading(false);
+    navigate('/home')
   };
 
-  // const handleLogout = async () => {
-  //   await supabase.auth.signOut();
-  //   setSession(null);
-  // };
+  const handleSignIn = async (email: string, password: string) => {
+    if (session) {
+      navigate("/home")
+    }
+    const { data, error } = await signInWithEmail(email, password)
 
-  // async function signUpNewUser(email, password) {
-  //   const { data, error } = await supabase.auth.signUp({
-  //     email: email,
-  //     password: password,
-  //     options: {
-  //       emailRedirectTo: 'https://example.com/welcome',
-  //     },
-  //   })
-  //   console.log("Sign up: ", data, " error: ", error)
-  // }
+    if (error) {
+      console.log(error.message)
+      return
+    }
 
-  // async function signInWithEmail(email = 'caseywood252@gmail.com', password = "Test1234") {
-  //   const { data, error } = await supabase.auth.signInWithPassword({
-  //     email: email,
-  //     password: password,
-  //   })
-  //   console.log("Sign In: ", data, " error: ", error)
+    if (data) {
+      navigate("/home")
+    }
 
-  // }
-
-  useEffect(() => {
-    console.log("session: ", session)
-  }, [session])
-
+  }
 
 
   return (
@@ -168,8 +41,10 @@ function App() {
           key={location.pathname}
         >
           <Routes location={location}>
-            <Route path="/" element={<LoginScreen key="login-screen" handleGuestLogin={() => handleGuestLogin()} signIn={signInWithEmail} signUp={signUpNewUser} />} />
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<LoginScreen key="login-screen" handleGuestLogin={() => handleGuestLogin()} signIn={handleSignIn} signUp={signUpNewUser} />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<HomePage logout={logout} />} />
+            </Route>
           </Routes>
         </motion.main>
       </AnimatePresence>
