@@ -3,6 +3,7 @@ import { useState, useCallback } from "react"
 import styles from './homePage.module.css'
 import UnitForm from "@/features/calculator/components/UnitForm"
 // import Aside from "@/components/layout/aside/Aside"
+import { useAuth } from "../context/AuthProvider";
 import ResultsBarChart from "@/features/calculator/components/ResultsBarChart"
 import { runSimulation } from "@/features/calculator/functions/runSimulation";
 import type { DefenseStats, AttackProfile } from "@/types/unitStats"
@@ -45,12 +46,10 @@ const defaultAttackProfile: AttackProfile = {
     }
 }
 
-interface HomePageProps {
-    logout: () => void
-}
 
 
-export default function HomePage({ logout }: HomePageProps) {
+export default function HomePage() {
+    const { logout } = useAuth()
     const simCount = 25000
     const [openModal, setOpenModal] = useState(false)
     const [simData, setSimData] = useState<WoundTallies>()

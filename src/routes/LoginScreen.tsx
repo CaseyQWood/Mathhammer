@@ -1,17 +1,11 @@
 import { motion } from "motion/react"
 import styles from "./loginScreen.module.css"
 import { useState } from "react";
-import GoogleLoginButton from "./GoogleLoginButton";
+import GoogleLoginButton from "../features/auth/components/GoogleLoginButton";
+import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from 'react-router';
 
-
-interface LoginScreenProps {
-    handleGuestLogin: () => void;
-    signUp: (email: string, password: string) => void;
-    signIn: (email: string, password: string) => void;
-
-}
-
-export const Views = {
+const Views = {
     Greeting: "GREETING_VIEW",
     Login: "LOGIN_VIEW",
     SignUp: "SIGNUP_VIEW",
@@ -26,21 +20,44 @@ const exitAnimation = {
 
 }
 
-export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginScreenProps) {
+export default function LoginScreen() {
     const [loggedIn, setloggedIn] = useState(false)
     const [formView, setFormView] = useState<ViewType>(Views.Greeting)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate()
+    const { signInWithEmail, signUpNewUser } = useAuth();
 
-    function handleLogin(e: React.MouseEvent<HTMLButtonElement>): void {
+    const handleGuestLogin = async () => {
+        navigate('/home')
+    };
+
+    async function handleLogin(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
         e.preventDefault();
-        signIn(email, password)
+        const { data, error } = await signInWithEmail(email, password)
+
+        if (error) {
+            console.log(error.message)
+            return
+        }
+
+        if (data) {
+            navigate("/home")
+        }
     }
 
-
-    function handleSignUp(e: React.MouseEvent<HTMLButtonElement>): void {
+    async function handleSignUp(e: React.MouseEvent<HTMLButtonElement>): Promise<void> {
         e.preventDefault();
-        signUp(email, password)
+        const { data, error } = await signUpNewUser(email, password)
+
+        if (error) {
+            console.log(error.message)
+            return
+        }
+
+        if (data) {
+            navigate("/home")
+        }
     }
 
 
