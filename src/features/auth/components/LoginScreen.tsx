@@ -71,7 +71,7 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
                     </> :
                     formView === Views.Login ?
                         <>
-                            <h2 className="form-title">Welcome Back</h2>
+                            <h2>Welcome Back</h2>
 
                             <div className={styles.formGroup}>
                                 <label htmlFor="loginEmail">Email Address</label>
@@ -102,7 +102,7 @@ export default function LoginScreen({ handleGuestLogin, signUp, signIn }: LoginS
                         </> :
                         formView === Views.SignUp ?
                             <>
-                                <h2 className="form-title">Create Account</h2>
+                                <h2>Create Account</h2>
 
                                 <div className={styles.formGroup}>
                                     <label htmlFor="signupEmail">Email Address</label>
