@@ -97,6 +97,11 @@ export default function useAuthentication(): AuthContextType {
         return { data, error }
     }
 
-    return { signInWithEmail, signUpNewUser, logout, session, authSuccess, authError, verifying, loading }
+    function login() {
+        const userId = crypto.randomUUID()
+        localStorage.setItem("userId", userId)
+    }
+
+    return { signInWithEmail, signUpNewUser, logout, login, session, authSuccess, authError, verifying, loading }
 
 }

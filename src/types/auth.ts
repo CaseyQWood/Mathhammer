@@ -12,6 +12,8 @@ export interface AuthContextType {
     error: AuthError | null;
   }>;
 
+  login: () => void;
+
   signUpNewUser: (
     email: string,
     password: string
